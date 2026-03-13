@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDUCIA - Реєстрація</title>
+    <style>
+        /* Фон сторінки (як фон презентації на скріншоті) */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #6baab0 0%, #8bcacc 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        /* Контейнер форми (стилізований під екран застосунку FIDUCIA) */
+        .signup-container {
+            background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 50%);
+            padding: 45px 30px;
+            border-radius: 40px; /* Сильне заокруглення, як у телефону */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 320px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Назва та слоган */
+        .logo-title {
+            font-size: 34px;
+            font-weight: 300;
+            color: #1a2b3c;
+            margin-bottom: 2px;
+            letter-spacing: 2px;
+        }
+
+        .slogan {
+            font-size: 11px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-style: italic;
+            letter-spacing: 0.5px;
+        }
+
+        /* Стилі для полів вводу (як білі блоки на ваших екранах) */
+        .form-group {
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #5a6a7a;
+            font-size: 13px;
+            padding-left: 12px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px 16px;
+            background-color: #ffffff;
+            border: none;
+            color: #2c3e50;
+            border-radius: 20px; /* Заокруглені кути полів */
+            box-sizing: border-box;
+            outline: none;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15); /* М'яка тінь, як у блоків у додатку */
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* Кнопка (як "Start practice" на макеті) */
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
+            color: white;
+            border: none;
+            border-radius: 30px; /* Форма пігулки */
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
+        }
+
+        /* Посилання на логін */
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .login-link a {
+            color: #5eb5d5;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <div class="logo-title">FIDUCIA</div>
+        <div class="slogan">trust in Ai trust in you</div>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Ім'я користувача</label>
+                <input type="text" id="username" name="username" placeholder="Введіть ім'я" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Електронна пошта</label>
+                <input type="email" id="email" name="email" placeholder="mail@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit">Створити акаунт</button>
+        </form>
+
+        <div class="login-link">
+            Вже маєте акаунт? <a href="/login/">Увійти</a>
+        </div>
+    </div>
+
+</body>
+</html>
