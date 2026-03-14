@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+
+    <style>
+        /* Загальні стилі */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #eef2f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            color: #555;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* Стилі картки репетиції */
+        .rehearsal {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .rehearsal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .rehearsal span {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        /* Стилі кнопки */
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 18px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #218838;
+        }
+
+        /* Порожній стан */
+        .empty-message {
+            text-align: center;
+            font-size: 18px;
+            color: #777;
+            margin-top: 30px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Dashboard</h1>
+    <h2>Список репетицій</h2>
+
+    {% for rehearsal in rehearsals %}
+    <div class="rehearsal">
+        <span>{{ rehearsal.name }}</span>
+        <button>Почати репетицію</button>
+    </div>
+    {% empty %}
+    <p class="empty-message">Репетицій ще немає</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
