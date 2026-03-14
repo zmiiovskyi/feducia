@@ -69,6 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'feducia_project.wsgi.application'
 
+LOGIN_REDIRECT_URL = "/"
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
