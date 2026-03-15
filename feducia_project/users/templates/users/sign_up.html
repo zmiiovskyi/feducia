@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FIDUCIA - Реєстрація</title>
+    <title>FIDUCIA - Sign Up</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -131,25 +131,25 @@
             {% csrf_token %}
 
             <div class="form-group">
-                <label for="username">Ім'я користувача</label>
-                <input type="text" id="username" name="username" placeholder="Введіть ім'я" required>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
             </div>
 
             <div class="form-group">
-                <label for="email">Електронна пошта</label>
+                <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="mail@example.com" required>
             </div>
 
             <div class="form-group">
-                <label for="password">Пароль</label>
+                <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
-            <button type="submit">Створити акаунт</button>
+            <button type="submit">Create Account</button>
         </form>
 
         <div class="login-link">
-            Вже маєте акаунт? <a href="/login/">Увійти</a>
+            Already have an account? <a href="/login/">Log in</a>
         </div>
     </div>
 
