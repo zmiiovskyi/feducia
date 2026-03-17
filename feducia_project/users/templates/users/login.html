@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
-<head>
+<html lang="en"> <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiducia - Login</title>
@@ -9,9 +8,7 @@
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', sans-serif;
-
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
-
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -125,21 +122,16 @@
             {% csrf_token %}
 
             <div class="input-group">
-                <label>Ім'я користувача</label>
-                <input type="text" name="username" placeholder="Введіть ім'я" required>
-            </div>
+                <label>Username</label> <input type="text" name="username" placeholder="Enter your name" required> </div>
 
             <div class="input-group">
-                <label>Пароль</label>
-                <input type="password" name="password" placeholder="********" required>
+                <label>Password</label> <input type="password" name="password" placeholder="********" required>
             </div>
 
-            <button type="submit">Увійти</button>
-        </form>
+            <button type="submit">Login</button> </form>
 
         <div class="signup-link">
-            Ще не маєте акаунту? <a href="#">Зареєструватися</a>
-        </div>
+            Don't have an account yet? <a href="#">Sign Up</a> </div>
     </div>
 
 </body>
