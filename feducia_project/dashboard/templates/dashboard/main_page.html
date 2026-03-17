@@ -2,101 +2,166 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard</title>
+    <title>Fiducia</title>
 
     <style>
-        /* Загальні стилі */
         body {
-            font-family: 'Arial', sans-serif;
-            background: #eef2f7;
             margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+            color: #1d3557;
         }
 
+        /* Хедер */
+        .header {
+            position: relative;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            letter-spacing: 6px;
+        }
+
+        .subtitle {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        /* Аватар справа */
+        .avatar {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #89c4d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Меню під аватаром */
+        .menu {
+            position: absolute;
+            right: 20px;
+            top: 75px;
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            width: 180px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #1d3557;
+            border-radius: 6px;
+        }
+
+        .menu a:hover {
+            background: #f2f2f2;
+        }
+
+        /* Контент */
         .container {
-            max-width: 800px;
-            margin: 40px auto;
+            max-width: 700px;
+            margin: 20px auto;
             padding: 0 20px;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
+        .card {
+            background: #ffffffdd;
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        h2 {
-            color: #555;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        /* Стилі картки репетиції */
         .rehearsal {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin: 15px 0;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 10px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .rehearsal:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-
-        .rehearsal span {
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        /* Стилі кнопки */
         button {
-            background: #28a745;
+            background: #89c4d9;
             color: white;
             border: none;
-            border-radius: 5px;
             padding: 10px 18px;
-            font-size: 16px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
         button:hover {
-            background: #218838;
+            opacity: 0.85;
         }
 
-        /* Порожній стан */
-        .empty-message {
+        .empty {
             text-align: center;
-            font-size: 18px;
-            color: #777;
-            margin-top: 30px;
+            opacity: 0.7;
         }
-
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="header">
 
-    <h1>Dashboard</h1>
-    <h2>Список репетицій</h2>
+    <!-- Лого -->
+    <div class="logo">FIDUSIA</div>
+    <div class="subtitle">trust in ai trust in you</div>
 
-    {% for rehearsal in rehearsals %}
-    <div class="rehearsal">
-        <span>{{ rehearsal.name }}</span>
-        <button>Почати репетицію</button>
+    <!-- Аватар -->
+    <div class="avatar" onclick="toggleMenu()">
+        U
     </div>
-    {% empty %}
-    <p class="empty-message">Репетицій ще немає</p>
-    {% endfor %}
+
+    <!-- Меню -->
+    <div class="menu" id="menu">
+        <a href="#">Профіль</a>
+        <a href="#">Про нас</a>
+        <a href="#">Налаштування</a>
+        <a href="#">Вийти</a>
+    </div>
 
 </div>
+
+<div class="container">
+    <div class="card">
+
+        <h3>Список репетицій</h3>
+
+        {% for rehearsal in rehearsals %}
+        <div class="rehearsal">
+            <span>{{ rehearsal.name }}</span>
+            <button>Почати</button>
+        </div>
+        {% empty %}
+        <p class="empty">Репетицій ще немає</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById("menu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+    }
+</script>
 
 </body>
 </html>
