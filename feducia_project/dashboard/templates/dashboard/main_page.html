@@ -1,166 +1,187 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Fiducia</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDUCIA - Dashboard</title>
     <style>
+        /* Фон сторінки та базові налаштування */
         body {
-            margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
-            color: #1d3557;
-        }
-
-
-        .header {
-            position: relative;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .logo {
-            font-size: 28px;
-            letter-spacing: 6px;
-        }
-
-        .subtitle {
-            font-size: 12px;
-            opacity: 0.6;
-            margin-top: 5px;
-        }
-
-
-        .avatar {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: #89c4d9;
+            min-height: 100vh;
+            margin: 0;
+            color: #2c3e50;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+            flex-direction: column;
         }
 
-
-        .menu {
-            position: absolute;
-            right: 20px;
-            top: 75px;
-            background: white;
-            border-radius: 12px;
-            padding: 10px;
-            display: none;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            width: 180px;
-        }
-
-        .menu a {
-            display: block;
-            padding: 10px;
-            text-decoration: none;
-            color: #1d3557;
-            border-radius: 6px;
-        }
-
-        .menu a:hover {
-            background: #f2f2f2;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-
-        .card {
-            background: #ffffffdd;
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .rehearsal {
-            background: white;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
+        /* Навігація зверху */
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 20px 40px;
         }
 
-        button {
-            background: #89c4d9;
+        /* Блок з логотипом та слоганом */
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 28px;
+            font-weight: 300;
+            color: #1a2b3c;
+            letter-spacing: 2px;
+            margin: 0;
+        }
+
+        .header-slogan {
+            font-size: 10px;
+            color: #5a6a7a;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* Меню справа */
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #5eb5d5;
+        }
+
+        /* Центральне вікно дашборда */
+        .dashboard-container {
+            background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%);
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            flex-grow: 1;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Шапка центрального вікна (Заголовок + Кнопка) */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #d0e4f0;
+        }
+
+        .dashboard-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a2b3c;
+            margin: 0;
+        }
+
+        /* Головна кнопка (Почати репетицію) */
+        .btn-primary {
+            padding: 12px 24px;
+            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
             color: white;
             border: none;
-            padding: 10px 18px;
-            border-radius: 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
+            box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
         }
 
-        button:hover {
-            opacity: 0.85;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
         }
 
-        .empty {
+        /* Дизайн порожнього списку (Empty State) */
+        .empty-state {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 60px 20px;
             text-align: center;
-            opacity: 0.7;
+            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #8ad3e6;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            color: #2c3e50;
+        }
+        .empty-state p {
+            margin: 0;
+            font-size: 14px;
+            color: #7f8c8d;
+            max-width: 300px;
+            line-height: 1.5;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="header">
-
-
-    <div class="logo">FIDUSIA</div>
-    <div class="subtitle">trust in ai trust in you</div>
-
-
-    <div class="avatar" onclick="toggleMenu()">
-        U
-    </div>
-
-
-    <div class="menu" id="menu">
-        <a href="#">Профіль</a>
-        <a href="#">Про нас</a>
-        <a href="#">Налаштування</a>
-        <a href="#">Вийти</a>
-    </div>
-
-</div>
-
-<div class="container">
-    <div class="card">
-
-        <h3>Список репетицій</h3>
-
-        {% for rehearsal in rehearsals %}
-        <div class="rehearsal">
-            <span>{{ rehearsal.name }}</span>
-            <button>Почати</button>
+    <header class="navbar">
+        <div class="logo-container">
+            <div class="logo-title">FIDUCIA</div>
+            <div class="header-slogan">Trust in AI trust in you</div>
         </div>
-        {% empty %}
-        <p class="empty">Репетицій ще немає</p>
-        {% endfor %}
+        <nav class="nav-links">
+            <a href="/about">About Us</a>
+            <a href="/contacts">Contacts</a>
+            <a href="/settings">Settings</a>
+            <a href="/profile" style="font-weight: 700; color: #5eb5d5;">Profile</a>
+        </nav>
+    </header>
 
-    </div>
-</div>
+    <main class="dashboard-container">
 
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById("menu");
-        menu.style.display = menu.style.display === "block" ? "none" : "block";
-    }
-</script>
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">My Rehearsals</h1>
+            <a href="/new-rehearsal" class="btn-primary">+ New Rehearsal</a>
+        </div>
+
+        <div class="empty-state">
+            <div class="empty-icon">🎙️</div>
+            <h3>No rehearsals yet</h3>
+            <p>You haven't recorded any practice sessions. Click the button above to start your first rehearsal with FIDUCIA!</p>
+        </div>
+
+    </main>
 
 </body>
 </html>
