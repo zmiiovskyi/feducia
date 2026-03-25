@@ -1,4 +1,4 @@
-from video_analysis import SimpleVideoAnalyzer
+from video_analysis import VideoAnalyzer
 
 
 VIDEO_PATH = "test_video.mp4"
@@ -6,7 +6,7 @@ MODEL_PATH = "pose_landmarker_lite.task"
 OUTPUT_JSON_PATH = "analysis_result.json"
 
 
-analyzer = SimpleVideoAnalyzer(MODEL_PATH)
+analyzer = VideoAnalyzer(MODEL_PATH)
 
 try:
     result = analyzer.analyze(VIDEO_PATH, frame_step=3)

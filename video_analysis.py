@@ -14,7 +14,7 @@ LEFT_WRIST_IDX = 15
 RIGHT_WRIST_IDX = 16
 
 
-class SimpleVideoAnalyzer:
+class VideoAnalyzer:
     def __init__(self, model_path):
         base_options = python.BaseOptions(model_asset_path=model_path)
 
@@ -81,7 +81,7 @@ class SimpleVideoAnalyzer:
         if not cap.isOpened():
             return {
                 "success": False,
-                "error": "Не вдалося відкрити відео"
+                "error": "Failed to open video"
             }
 
         shoulder_diffs = []
