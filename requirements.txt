@@ -1,3 +1,7 @@
-asgiref==3.11.1
 Django==6.0.3
-sqlparse==0.5.5
+mediapipe==0.10.33
+opencv-contrib-python==4.13.0.92
+numpy==2.4.3
+matplotlib==3.10.8
+pillow==12.1.1
+sounddevice==0.5.5
