@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiducia - Get in Touch</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%) no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #1d3557;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            transform: translateX(-5px);
+        }
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            width: 820px;
+            max-height: 90vh;
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.06);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-y: auto;
+        }
+
+        h1 {
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 10px;
+            color: #1d3557;
+            font-size: 32px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-style: italic;
+            font-size: 12px;
+            color: #457b9d;
+            margin-bottom: 30px;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            text-align: left;
+            margin-top: auto;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.6);
+            padding: 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .icon-circle {
+            width: 45px;
+            height: 45px;
+            background: #ffffff;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        .info-text h3 {
+            margin: 0;
+            font-size: 14px;
+            color: #1d3557;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-text p {
+            margin: 3px 0 0 0;
+            font-size: 13px;
+            color: #457b9d;
+        }
+
+        .form-container {
+            background: white;
+            padding: 25px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container h2 {
+            margin-top: 0;
+            color: #1d3557;
+            font-size: 18px;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1d3557;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #e0f2f7;
+            background: #fcfdfe;
+            margin-bottom: 15px;
+            outline: none;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 90px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 20px;
+            border: none;
+            background-color: #89c4d9;
+            color: white;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 6px 15px rgba(137, 196, 217, 0.3);
+            margin-top: auto;
+        }
+
+        button:hover {
+            background-color: #72bcd4;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <a href="/dashboard/" class="back-btn">← Back</a>
+
+    <div class="main-card">
+        <div>
+            <h1>GET IN TOUCH</h1>
+            <div class="subtitle">trust in ai trust in you</div>
+        </div>
+
+        <div class="content-grid">
+            <div class="info-section">
+                <div class="info-card">
+                    <div class="icon-circle">📞</div>
+                    <div class="info-text">
+                        <h3>Phone</h3>
+                        <p>+380965234923</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="icon-circle">✉️</div>
+                    <div class="info-text">
+                        <h3>Email Us</h3>
+                        <p>fiducia.futurum@gmail.com</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="icon-circle">📍</div>
+                    <div class="info-text">
+                        <h3>Location</h3>
+                        <p>Mechanics and Mathematics Faculty, LNU<br>Lviv, Ukraine</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <h2>Send a Message</h2>
+                <form>
+                    <label>Your Name</label>
+                    <input type="text" placeholder="John Doe">
+
+                    <label>Email Address</label>
+                    <input type="email" placeholder="john@example.com">
+
+                    <label>Message</label>
+                    <textarea placeholder="How can we help you?"></textarea>
+
+                    <button type="submit">SEND MESSAGE</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
