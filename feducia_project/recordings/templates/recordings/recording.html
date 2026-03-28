@@ -1,57 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'recordings/css/recording.css' %}">
     <title>FIDUCIA - Record Rehearsal</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
-            display: flex; flex-direction: column; align-items: center;
-            height: 100vh; margin: 0; overflow: hidden;
-        }
-        .header-space { width: 100%; height: 60px; flex-shrink: 0; }
-        .back-button {
-            position: absolute; top: 20px; left: 20px; text-decoration: none;
-            color: #2c3e50; font-size: 16px; font-weight: 600;
-            background: rgba(255, 255, 255, 0.7); padding: 10px 20px;
-            border-radius: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease; z-index: 10;
-        }
-        .back-button:hover { background: #ffffff; transform: translateY(-2px); }
-        .video-container {
-            flex: 1; width: 100%; max-width: 1100px; padding: 0 20px;
-            box-sizing: border-box; display: flex; justify-content: center;
-            align-items: center; min-height: 0;
-        }
-        #camera-preview {
-            width: 100%; height: 100%; max-height: 72vh; object-fit: cover;
-            border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-            background-color: rgba(0, 0, 0, 0.1); transform: scaleX(-1);
-        }
-        .center-container {
-            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(15px);
-            padding: 20px 40px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            text-align: center; max-width: 450px; width: 90%; flex-shrink: 0;
-            margin-top: 15px; margin-bottom: 20px;
-        }
-        .subtitle { font-size: 15px; font-weight: 500; color: #2c3e50; margin-top: 0; margin-bottom: 15px; }
-        .action-buttons { display: flex; justify-content: center; gap: 20px; }
-        .btn {
-            padding: 15px 35px; border: none; border-radius: 30px; font-size: 16px;
-            font-weight: 600; cursor: pointer; color: white; transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); text-decoration: none;
-        }
-        .btn:active { transform: scale(0.95); }
-        .btn-start { background: linear-gradient(90deg, #8ad3e6, #5eb5d5); }
-        .btn-start:hover { box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4); transform: translateY(-2px); }
-        .btn-stop { background: linear-gradient(90deg, #ff7e7e, #ff5252); }
-        .btn-stop:hover { box-shadow: 0 10px 25px rgba(255, 82, 82, 0.4); transform: translateY(-2px); }
-        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-    </style>
 </head>
 <body>
+    <form style="display: none;">
+    {% csrf_token %}
+    </form>
     <a href="/dashboard/" class="back-button">← Back</a>
     <div class="header-space"></div>
 
@@ -68,85 +27,6 @@
         </div>
     </div>
 
-    {% csrf_token %}
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const videoElement = document.getElementById('camera-preview');
-            const startBtn = document.getElementById('start-btn');
-            const stopBtn = document.getElementById('stop-btn');
-            const statusText = document.getElementById('status-text');
-
-            let mediaRecorder;
-            let recordedChunks = [];
-
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-                .then(stream => {
-                    videoElement.srcObject = stream;
-
-                    mediaRecorder = new MediaRecorder(stream);
-
-                    mediaRecorder.ondataavailable = function(event) {
-                        if (event.data.size > 0) {
-                            recordedChunks.push(event.data);
-                        }
-                    };
-
-                    mediaRecorder.onstop = function() {
-                        statusText.innerText = "Saving video...";
-
-                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                        recordedChunks = [];
-
-                        const formData = new FormData();
-                        formData.append('video_file', blob, 'rehearsal.webm');
-
-                        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-                        fetch('/recording/save-recording/', {
-                            method: 'POST',
-                            body: formData,
-                            headers: {
-                                'X-CSRFToken': csrfToken
-                            }
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                statusText.innerText = "Saved successfully! Ready for next recording.";
-                            } else {
-                                statusText.innerText = "Error saving video.";
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error:", error);
-                            statusText.innerText = "Network error while saving.";
-                        });
-                    };
-                })
-                .catch(err => {
-                    console.error("Camera error:", err);
-                    statusText.innerText = "Please allow camera access.";
-                });
-
-            startBtn.addEventListener('click', () => {
-                recordedChunks = [];
-                mediaRecorder.start();
-
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
-                statusText.innerText = "🔴 Recording... Speak clearly.";
-                statusText.style.color = "#ff5252";
-            });
-
-            stopBtn.addEventListener('click', () => {
-                mediaRecorder.stop();
-
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-                statusText.style.color = "#2c3e50";
-            });
-        });
-    </script>
-
+    <script src="{% static 'recordings/js/recording.js' %}"></script>
 </body>
 </html>
