@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDUCIA - About Us</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+            min-height: 100vh;
+            margin: 0;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 50px;
+        }
+
+        .navbar {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding: 20px 40px;
+            box-sizing: border-box;
+        }
+
+        .back-button {
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 16px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .content-container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 1000px;
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #1a2b3c;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .intro-text {
+            text-align: center;
+            font-size: 18px;
+            color: #5a6a7a;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .highlight {
+            color: #5eb5d5;
+            font-weight: 600;
+        }
+
+        .grid-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .info-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 10px 25px rgba(130, 180, 210, 0.15);
+        }
+
+        .info-card h2 {
+            color: #1a2b3c;
+            margin-top: 0;
+            font-size: 24px;
+            border-bottom: 2px solid #e0f2f7;
+            padding-bottom: 10px;
+        }
+
+        .info-card p, .info-card ul {
+            color: #5a6a7a;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .info-card ul {
+            padding-left: 20px;
+        }
+
+        .team-section h2 {
+            text-align: center;
+            color: #1a2b3c;
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        /* ІДЕАЛЬНА СІТКА 3 КОЛОНКИ */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 колонки однакової ширини */
+            gap: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(130, 180, 210, 0.15);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(130, 180, 210, 0.25);
+        }
+
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #e0f2f7 0%, #89c4d9 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 18px;
+        }
+
+        /* Адаптивність для менших екранів */
+        @media (max-width: 768px) {
+            .grid-section {
+                grid-template-columns: 1fr;
+            }
+            .team-grid {
+                grid-template-columns: 1fr 1fr; /* 2 колонки на планшетах */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: 1fr; /* 1 колонка на телефонах */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <a href="/dashboard/" class="back-button">← Back</a>
+    </header>
+
+    <div class="content-container">
+        <h1>About FIDUCIA</h1>
+        
+        <p class="intro-text">
+            We are a passionate team of students from the <span class="highlight">Mechanics and Mathematics Faculty of LNU</span>. 
+            We are working hard to bring our innovative project to life, with the invaluable support and guidance of our mentor, <span class="highlight">arc-lena</span>.
+        </p>
+
+        <div class="grid-section">
+            <div class="info-card">
+                <h2>The Problem</h2>
+                <p>Public speaking anxiety is the <b>#1 social fear</b>. According to statistics:</p>
+                <ul>
+                    <li>75% of the population suffers from fear of public speaking.</li>
+                    <li>30% of students lose points during presentations due to anxiety.</li>
+                    <li>This fear often leads to lost business deals and hinders career growth.</li>
+                </ul>
+            </div>
+
+            <div class="info-card">
+                <h2>Our Solution</h2>
+                <p><b>FIDUCIA</b> is an AI-assistant designed specifically for public speaking. It helps you overcome anxiety and improve your skills by analyzing:</p>
+                <ul>
+                    <li><b>Body Language:</b> Posture, gestures, and eye contact.</li>
+                    <li><b>Voice:</b> Tone, pace, and clarity.</li>
+                </ul>
+                <p>Perfect for students, business professionals, and educators!</p>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <h2>Meet Our Team</h2>
+            <div class="team-grid">
+                
+                <div class="team-member">
+                    <div class="member-avatar">👩‍💼</div>
+                    <div class="member-name">Daria Dumanska</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">👩‍💻</div>
+                    <div class="member-name">Liubov Vovkanets</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">👨‍💻</div>
+                    <div class="member-name">Mykhailo Zmiiovskyi</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">👨‍💼</div>
+                    <div class="member-name">Vitalii Otkydach</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">👨🏻‍🔧</div>
+                    <div class="member-name">Pavlo Pfister</div>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">🌟</div>
+                    <div class="member-name">arc-lena</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
