@@ -8,3 +8,6 @@ def profile_page(request):
 
 def about_view(request):
     return render(request, 'dashboard/about_us.html')
+
+def contacts_view(request):
+    return render(request, 'dashboard/contacts.html')
