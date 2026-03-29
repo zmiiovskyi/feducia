@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIDUCIA - User Profile</title>
     <style>
+        /* Усі твої стилі залишаються без змін */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
@@ -14,201 +15,52 @@
             display: flex;
             flex-direction: column;
         }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-        }
-
-        .btn-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #f7fbff;
-            color: #0d4a70;
-            padding: 10px 24px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-back:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-        .nav-links a {
-            text-decoration: none;
-            color: #2c3e50;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        .nav-links a:hover {
-            color: #5eb5d5;
-        }
-        .nav-links a.active {
-            font-weight: 700;
-            color: #5eb5d5;
-            border-bottom: 2px solid #5eb5d5;
-            padding-bottom: 2px;
-        }
-
-        .profile-container {
-            background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%);
-            padding: 40px;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            flex-grow: 1;
-            margin-bottom: 40px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .profile-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #d0e4f0;
-        }
-
-        .profile-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a2b3c;
-            margin: 0;
-        }
-
-        .btn-change {
-            padding: 12px 24px;
-            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .btn-change:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
-        }
-
-        .user-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 10px 0 30px 0;
-            flex-grow: 1;
-        }
-
-        .avatar-circle {
-            width: 110px;
-            height: 110px;
-            background: linear-gradient(135deg, #9caebb, #7b8b9e);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 8px 20px rgba(123, 139, 158, 0.25);
-            margin-bottom: 15px;
-        }
-
-        .user-name {
-            font-size: 18px;
-            font-weight: 500;
-            color: #1a2b3c;
-            margin-bottom: 5px;
-        }
-
-        .user-joined-date {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #8fa0b3;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        .user-joined-date svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        .stats-pill {
-            display: flex;
-            gap: 30px;
-            background: #ffffff;
-            border: 1px solid #f0f4f8;
-            padding: 12px 30px;
-            border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-            color: #5a6a7a;
-            font-size: 14px;
-        }
-
-        .stats-pill div {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .stats-pill b {
-            color: #1a2b3c;
-            font-weight: 600;
-        }
-
-        .profile-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #d0e4f0;
-            margin-top: 20px;
-        }
-
-        .footer-action {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #5a6a7a;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .footer-action:hover {
-            color: #1a2b3c;
-        }
-
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; }
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; background-color: #f7fbff; color: #0d4a70; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-size: 16px; font-weight: 500; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-back:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #2c3e50; font-size: 15px; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #5eb5d5; }
+        .nav-links a.active { font-weight: 700; color: #5eb5d5; border-bottom: 2px solid #5eb5d5; padding-bottom: 2px; }
+        .profile-container { background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%); padding: 40px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); width: 90%; max-width: 800px; margin: 20px auto; flex-grow: 1; margin-bottom: 40px; display: flex; flex-direction: column; }
+        .profile-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #d0e4f0; }
+        .profile-title { font-size: 24px; font-weight: 600; color: #1a2b3c; margin: 0; }
+        .btn-change { padding: 12px 24px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5); color: white; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-change:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4); }
+        .user-center { display: flex; flex-direction: column; align-items: center; margin: 10px 0 30px 0; flex-grow: 1; }
+        .avatar-circle { width: 110px; height: 110px; background: linear-gradient(135deg, #9caebb, #7b8b9e); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(123, 139, 158, 0.25); margin-bottom: 15px; }
+        .user-name { font-size: 18px; font-weight: 500; color: #1a2b3c; margin-bottom: 5px; }
+        .user-email { display: flex; align-items: center; gap: 6px; color: #5a6a7a; font-size: 14px; margin-bottom: 5px; }
+        .user-joined-date { display: flex; align-items: center; gap: 6px; color: #8fa0b3; font-size: 13px; margin-bottom: 25px; }
+        .user-email svg, .user-joined-date svg { width: 14px; height: 14px; }
+        .stats-pill { display: flex; gap: 30px; background: #ffffff; border: 1px solid #f0f4f8; padding: 12px 30px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); color: #5a6a7a; font-size: 14px; }
+        .stats-pill div { display: flex; align-items: center; gap: 8px; }
+        .stats-pill b { color: #1a2b3c; font-weight: 600; }
+        .profile-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 25px; border-top: 1px solid #d0e4f0; margin-top: 20px; }
+        .footer-right { display: flex; gap: 25px; }
+        .footer-action { display: flex; align-items: center; gap: 8px; color: #5a6a7a; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer; }
+        .footer-action:hover { color: #1a2b3c; }
+        .btn-stop { display: flex; align-items: center; gap: 8px; padding: 10px 20px; background: linear-gradient(90deg, #ff7e7e, #ff5252); color: white; text-decoration: none; border-radius: 30px; font-size: 14px; font-weight: 500; transition: transform 0.2s ease, box-shadow 0.2s ease; cursor: pointer; }
+        .btn-stop:hover { box-shadow: 0 10px 25px rgba(255, 82, 82, 0.4); transform: translateY(-2px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13, 74, 112, 0.6); backdrop-filter: blur(4px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); text-align: center; max-width: 350px; width: 90%; animation: modalFadeIn 0.3s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-title { margin: 0 0 10px 0; color: #1a2b3c; font-size: 22px; font-weight: 600; }
+        .modal-title.danger { color: #ff5252; }
+        .modal-text { color: #5a6a7a; margin-bottom: 30px; font-size: 15px; line-height: 1.5; }
+        .modal-actions { display: flex; gap: 15px; justify-content: center; }
+        .btn-cancel { padding: 10px 24px; border: 1px solid #d0e4f0; background: white; color: #5a6a7a; border-radius: 30px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+        .btn-cancel:hover { background: #f0f4f8; color: #1a2b3c; }
+        .btn-confirm-logout { padding: 10px 24px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5); color: white; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; box-shadow: 0 5px 15px rgba(94, 181, 213, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-confirm-logout:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(94, 181, 213, 0.4); }
+        .btn-confirm-delete { padding: 10px 24px; background: linear-gradient(90deg, #ff7e7e, #ff5252); color: white; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .btn-confirm-delete:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 82, 82, 0.4); }
     </style>
 </head>
 <body>
 
     <header class="navbar">
-        <a href="/" class="btn-back">
-            <span>&larr;</span> Back
-        </a>
-
+        <a href="/" class="btn-back"><span>&larr;</span> Back</a>
         <nav class="nav-links">
             <a href="/about">About Us</a>
             <a href="/contacts">Contacts</a>
@@ -228,42 +80,98 @@
                 <svg width="50" height="50" viewBox="0 0 24 24" fill="#e0e6ed"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5z"/></svg>
             </div>
 
-            <div class="user-name">Name Surname</div>
+            <div class="user-name">
+                {% if user.first_name or user.last_name %}
+                    {{ user.first_name }} {{ user.last_name }}
+                {% else %}
+                    {{ user.username }}
+                {% endif %}
+            </div>
+
+            <div class="user-email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                {{ user.email }}
+            </div>
 
             <div class="user-joined-date">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                     <line x1="16" y1="2" x2="16" y2="6"></line>
                     <line x1="8" y1="2" x2="8" y2="6"></line>
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                 </svg>
-                Member since: Day Mon Year
+                Member since: {{ user.date_joined|date:"d M Y" }}
             </div>
 
-            <div class="stats-pill">
-                <div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
-                    Rehearsals: <b>1</b>
-                </div>
-                <div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    Total Time: <b>1h 30m</b>
-                </div>
             </div>
-        </div>
 
         <div class="profile-footer">
-            <a href="/logout/" class="footer-action">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                Log Out
+            <a href="#" id="deleteBtn" class="btn-stop">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+                Delete Account
             </a>
-            <a href="/change-password/" class="footer-action">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                Change Password
-            </a>
+
+            <div class="footer-right">
+                <a href="#" id="logoutBtn" class="footer-action">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    Log Out
+                </a>
+               <a href="{% url 'password_change' %}" class="footer-action">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Change Password
+                </a>
+            </div>
         </div>
 
     </main>
+
+    <div class="modal-overlay" id="logoutModal">
+        <div class="modal-content">
+            <h3 class="modal-title">Log Out</h3>
+            <p class="modal-text">Are you sure you want to log out of your account?</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelLogout">Cancel</button>
+                <a href="{% url 'logout' %}" class="btn-confirm-logout">Yes, Log Out</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-content">
+            <h3 class="modal-title danger">Delete Account</h3>
+            <p class="modal-text">Are you sure you want to permanently delete your account? All your data will be lost.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelDelete">Cancel</button>
+                <a href="{% url 'delete_account' %}" class="btn-confirm-delete">Yes, Delete</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutModal = document.getElementById('logoutModal');
+        const cancelLogout = document.getElementById('cancelLogout');
+
+        logoutBtn.addEventListener('click', (e) => { e.preventDefault(); logoutModal.style.display = 'flex'; });
+        cancelLogout.addEventListener('click', () => { logoutModal.style.display = 'none'; });
+        logoutModal.addEventListener('click', (e) => { if (e.target === logoutModal) logoutModal.style.display = 'none'; });
+
+        const deleteBtn = document.getElementById('deleteBtn');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+
+        deleteBtn.addEventListener('click', (e) => { e.preventDefault(); deleteModal.style.display = 'flex'; });
+        cancelDelete.addEventListener('click', () => { deleteModal.style.display = 'none'; });
+        deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) deleteModal.style.display = 'none'; });
+    </script>
 
 </body>
 </html>
