@@ -13,7 +13,7 @@ urlpatterns = [
     path('delete-account/', views.delete_account_view, name='delete_account'),
     path('change-password/', auth_views.PasswordChangeView.as_view(
         template_name='dashboard/change_password.html',
-        success_url='/profile/' # Куди перекинути після успішної зміни
+        success_url='/profile/'
     ), name='password_change'),
 
 ]
