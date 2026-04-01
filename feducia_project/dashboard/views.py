@@ -1,7 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from django.core.mail import send_mail
-from django.contrib import messages
+from django.shortcuts import render
 
 
 @login_required
@@ -37,3 +35,6 @@ def contacts_view(request):
             messages.error(request, f'Error: {e}')
 
     return render(request, "dashboard/contacts.html")
+
+def password_reset_view(request):
+    return render(request, 'dashboard/password_reset.html')
