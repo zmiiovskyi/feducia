@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"> <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiducia - Login</title>
@@ -45,19 +46,19 @@
         }
 
         .input-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            font-size: 13px;
+            font-size: 12px;
             color: #1d3557;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-left: 10px;
+            margin-left: 15px;
         }
 
         input {
@@ -77,6 +78,25 @@
             box-shadow: 0 4px 15px rgba(137, 196, 217, 0.2);
         }
 
+        .forgot-link-container {
+            text-align: center;
+            margin-top: 12px;
+            margin-bottom: 20px;
+        }
+
+        .forgot-link-container a {
+            font-size: 13px;
+            color: #72bcd4;
+            text-decoration: none;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .forgot-link-container a:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
         button {
             width: 100%;
             padding: 16px;
@@ -89,7 +109,6 @@
             letter-spacing: 2px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
             box-shadow: 0 8px 20px rgba(137, 196, 217, 0.4);
         }
 
@@ -119,19 +138,27 @@
         <div class="subtitle">trust in ai trust in you</div>
 
         <form method="post">
-            {% csrf_token %}
 
             <div class="input-group">
-                <label>Username</label> <input type="text" name="username" placeholder="Enter your name" required> </div>
-
-            <div class="input-group">
-                <label>Password</label> <input type="password" name="password" placeholder="********" required>
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your name" required>
             </div>
 
-            <button type="submit">Login</button> </form>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="********" required>
+
+                <div class="forgot-link-container">
+                    <a href="/password-reset/">Forgot password?</a>
+                </div>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
 
         <div class="signup-link">
-            Don't have an account yet? <a href="/signup/">Sign Up</a> </div>
+            Don't have an account yet? <a href="/signup/">Sign Up</a>
+        </div>
     </div>
 
 </body>
