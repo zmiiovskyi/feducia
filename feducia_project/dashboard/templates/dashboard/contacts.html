@@ -224,15 +224,16 @@
 
             <div class="form-container">
                 <h2>Send a Message</h2>
-                <form>
+                <form action="/contacts/" method="POST">
+                    {% csrf_token %}
                     <label>Your Name</label>
-                    <input type="text" placeholder="John Doe">
+                    <input type="text" name="name" placeholder="John Doe">
 
                     <label>Email Address</label>
-                    <input type="email" placeholder="john@example.com">
+                    <input type="email" name="email" placeholder="john@example.com">
 
                     <label>Message</label>
-                    <textarea placeholder="How can we help you?"></textarea>
+                    <textarea name="message" placeholder="How can we help you?"></textarea>
 
                     <button type="submit">SEND MESSAGE</button>
                 </form>
