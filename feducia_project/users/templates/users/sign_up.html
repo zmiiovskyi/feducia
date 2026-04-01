@@ -16,7 +16,6 @@
             color: #2c3e50;
         }
 
-        /* Контейнер форми  */
         .signup-container {
             background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 50%);
             padding: 45px 30px;
@@ -26,10 +25,8 @@
             max-width: 320px;
             text-align: center;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Назва та слоган */
         .logo-title {
             font-size: 34px;
             font-weight: 300;
@@ -45,7 +42,6 @@
             font-style: italic;
             letter-spacing: 0.5px;
         }
-
 
         .form-group {
             margin-bottom: 16px;
@@ -77,9 +73,44 @@
             transition: all 0.3s ease;
         }
 
-        input:focus {
-            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.4);
-            transform: translateY(-1px);
+        .privacy-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin: 20px 0 20px 10px;
+            gap: 10px;
+            font-size: 12px;
+            color: #556b7d;
+        }
+
+        .privacy-container input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #72b9d0;
+        }
+
+        .privacy-container label {
+            padding-left: 0;
+            cursor: pointer;
+            line-height: 1.4;
+            font-weight: normal;
+        }
+
+        .privacy-container a {
+            color: #72b9d0;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        #privacy-error {
+            color: #e74c3c;
+            font-size: 11px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: left;
+            padding-left: 12px;
         }
 
         button {
@@ -92,9 +123,8 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
             box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.2s ease;
         }
 
         button:hover {
@@ -102,7 +132,6 @@
             box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
         }
 
-        /* Посилання на логін */
         .login-link {
             text-align: center;
             margin-top: 25px;
@@ -115,10 +144,6 @@
             text-decoration: none;
             font-weight: 600;
         }
-
-        .login-link a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -127,9 +152,7 @@
         <div class="logo-title">FIDUCIA</div>
         <div class="slogan">trust in Ai trust in you</div>
 
-        <form method="POST" action="">
-            {% csrf_token %}
-
+        <form id="signup-form" method="POST" action="">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
@@ -145,6 +168,15 @@
                 <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
+            <div class="privacy-container">
+                <input type="checkbox" id="privacy_policy" name="privacy_policy">
+                <label for="privacy_policy">
+                    I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>
+                </label>
+            </div>
+
+            <div id="privacy-error">You must agree to the terms to continue.</div>
+
             <button type="submit">Create Account</button>
         </form>
 
@@ -152,6 +184,20 @@
             Already have an account? <a href="/login/">Log in</a>
         </div>
     </div>
+
+    <script>
+        document.getElementById("signup-form").addEventListener("submit", function(e) {
+            const checkbox = document.getElementById("privacy_policy");
+            const error = document.getElementById("privacy-error");
+
+            if (!checkbox.checked) {
+                e.preventDefault();
+                error.style.display = "block";
+            } else {
+                error.style.display = "none";
+            }
+        });
+    </script>
 
 </body>
 </html>

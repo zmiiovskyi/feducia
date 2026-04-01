@@ -14,3 +14,6 @@ def about_view(request):
 
 def contacts_view(request):
     return render(request, 'dashboard/contacts.html')
+
+def password_reset_view(request):
+    return render(request, 'dashboard/password_reset.html')
