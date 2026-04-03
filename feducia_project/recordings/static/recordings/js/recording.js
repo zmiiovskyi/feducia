@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function closeModal() {
         modal.style.display = 'none';
         if(teleInput.value.trim() !== "") {
-            openModalBtn.innerHTML = `${svgIcon} Change Text`;
+            openModalBtn.innerHTML = `${svgIcon} Change Teleprompter`;
             deleteTextBtn.style.display = 'flex';
             teleText.innerText = teleInput.value.trim();
         } else {

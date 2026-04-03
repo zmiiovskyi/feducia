@@ -14,7 +14,7 @@
             display: flex;
             flex-direction: column;
         }
-        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; }
+        .navbar { display: flex; justify-content: flex-start; align-items: center; padding: 20px 40px; }
         .btn-back { display: inline-flex; align-items: center; gap: 8px; background-color: #f7fbff; color: #0d4a70; padding: 10px 24px; border-radius: 30px; text-decoration: none; font-size: 16px; font-weight: 500; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .btn-back:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08); }
         .profile-container { background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%); padding: 40px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); width: 90%; max-width: 800px; margin: 20px auto; flex-grow: 1; margin-bottom: 40px; display: flex; flex-direction: column; }
@@ -53,12 +53,6 @@
 
     <header class="navbar">
         <a href="/dashboard/" class="btn-back"><span>&larr;</span> Back</a>
-        <nav class="nav-links">
-            <a href="/about">About Us</a>
-            <a href="/contacts">Contacts</a>
-            <a href="/profile" class="active">Profile</a>
-        </nav>
-        <a href="/" class="btn-back"><span>&larr;</span> Back</a>
     </header>
 
     <main class="profile-container">
