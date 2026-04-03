@@ -41,7 +41,7 @@ def contacts_view(request):
 
 def password_reset_view(request):
     return render(request, 'dashboard/password_reset.html')
-    return render(request, 'dashboard/contacts.html')
+    
 
 def logout_view(request):
     logout(request)
