@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
+from .forms import ProfileUpdateForm
 
 @login_required
 def main_page(request):
@@ -52,3 +53,16 @@ def delete_account_view(request):
     user = request.user
     user.delete()
     return redirect('Main_Page')
+
+
+@login_required
+def edit_profile_view(request):
+    if request.method == 'POST':
+        form = ProfileUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileUpdateForm(instance=request.user)
+
+    return render(request, 'dashboard/edit_profile.html', {'form': form})
