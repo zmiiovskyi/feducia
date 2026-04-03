@@ -15,7 +15,7 @@ def user_login(request):
 
        if user is not None:
            login(request, user)
-           return redirect("/")
+           return redirect("/dashboard/")
        else:
            error = "Incorrect username or password."
 
@@ -42,7 +42,7 @@ def user_signup(request):
         else:
             user = User.objects.create_user(username=username, email=email, password=password)
             login(request, user)
-            return redirect("/")
+            return redirect('/dashboard/')
 
     print(error)
 

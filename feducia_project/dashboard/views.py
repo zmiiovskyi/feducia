@@ -42,16 +42,20 @@ def contacts_view(request):
 
 def password_reset_view(request):
     return render(request, 'dashboard/password_reset.html')
-    return render(request, 'dashboard/contacts.html')
+
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('landing')
 
 @login_required
 def delete_account_view(request):
     user = request.user
     user.delete()
+    return redirect('landing')
+
+def landing_view(request):
+    return render(request, 'dashboard/landing.html')
     return redirect('Main_Page')
 
 
