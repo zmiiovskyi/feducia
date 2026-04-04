@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 try {
-                    const response = await fetch("/recording/save-recording/", {
+                    const response = await fetch("/save-recording/", {
                         method: "POST",
                         body: formData,
                         headers: {
