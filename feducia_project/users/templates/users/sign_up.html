@@ -153,6 +153,8 @@
         <div class="slogan">trust in Ai trust in you</div>
 
         <form id="signup-form" method="POST" action="">
+            {% csrf_token %}
+
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
