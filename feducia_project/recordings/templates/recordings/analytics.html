@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Report — FIDUCIA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #e0f2f7 0%, #b2d8e5 100%);
+            --glass-white: rgba(255, 255, 255, 0.75);
+            --text-blue: #1a2b3c;
+            --muted-text: #7f8c8d;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: white;
+            padding: 10px 25px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #1d3557;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .feedback-container {
+            width: 750px;
+            background: var(--glass-white);
+            border-radius: 45px;
+            padding: 40px 60px 60px 60px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.06);
+            /* Ефект розмиття заднього фону */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 34px;
+            font-weight: 300;
+            color: #1a2b3c;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            margin: 0 0 50px 0;
+            padding-left: 12px;
+        }
+        .analysis-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 35px;
+            border-radius: 25px;
+            text-align: left;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            border: 1px solid rgba(241, 245, 248, 0.5);
+        }
+
+        .info-box h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-top: 0;
+            margin-bottom: 18px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--muted-text);
+        }
+
+        .info-box p {
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .observations h3 { color: #e67e22; }
+        .corrections h3 { color: #27ae60; }
+
+        .observations h3::before,
+        .corrections h3::before {
+            content: '●';
+            font-size: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <a href="#" class="back-btn">← Back</a>
+
+    <div class="feedback-container">
+        <div class="header">
+            <h1>Analysis</h1>
+        </div>
+
+        <div class="analysis-section">
+            <div class="info-box observations">
+                <h3>Observations</h3>
+                <p>
+                    The system detected a noticeable shoulder imbalance and moderate head movement.
+                    These patterns were most consistent during the middle section of the recording.
+                </p>
+            </div>
+
+            <div class="info-box corrections">
+                <h3>Corrections</h3>
+                <p>
+                    To improve stability, focus on relaxing your shoulder muscles and keeping your
+                    eye level consistent. Small adjustments will significantly enhance your posture.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -20,3 +20,14 @@ def save_recording_view(request):
             'status': 'success',
             'id': session.id
         })
+
+def loading_view(request):
+    return render(
+        request,
+        "dashboard/loading_menu.html",)
+
+def analytics_view(request):
+    return render(
+        request,
+        "recordings/analytics.html",
+    )

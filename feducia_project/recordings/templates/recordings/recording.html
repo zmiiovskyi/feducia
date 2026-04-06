@@ -28,5 +28,16 @@
     </div>
 
     <script src="{% static 'recordings/js/recording.js' %}"></script>
+{% include 'dashboard/loading_menu.html' %}
+
+    <script>
+        const stopBtn = document.getElementById('stop-btn');
+
+        stopBtn.addEventListener('click', function() {
+            if (typeof startFiduciaLoader === "function") {
+                startFiduciaLoader();
+            }
+        });
+    </script>
 </body>
 </html>
