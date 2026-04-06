@@ -1,7 +1,9 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
+import os
+
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
 
 from .models import SpeechSession
 from .video_analysis import VideoAnalyzer
@@ -14,42 +16,103 @@ def recording_view(request):
 
 @login_required
 def save_recording_view(request):
-    if request.method == "POST" and request.FILES.get("video_file"):
-        video = request.FILES["video_file"]
-
-        session = SpeechSession.objects.create(
-            user=request.user,
-            video=video
+    if request.method != "POST":
+        return JsonResponse(
+            {"status": "error", "message": "Only POST method is allowed."},
+            status=405
         )
 
-        print(f"[SAVE] Session {session.id} saved")
+    video_file = request.FILES.get("video_file")
 
-        model_path = settings.BASE_DIR / "models" / "pose_landmarker_lite.task"
-        analyzer = VideoAnalyzer(str(model_path))
+    if not video_file:
+        return JsonResponse(
+            {"status": "error", "message": "No video file provided."},
+            status=400
+        )
 
-        try:
-            result = analyzer.analyze(session.video.path)
+    session = SpeechSession.objects.create(
+        user=request.user,
+        video=video_file
+    )
 
-            print(f"[ANALYSIS] Session {session.id} done")
-            print("  success:", result.get("success"))
-            print("  frames:", result.get("processed_frames"), "/", result.get("total_frames"))
-            print("  detection_rate:", result.get("detection_rate"))
+    analyzer = None
 
-            feedback = result.get("feedback", [])
-            if feedback:
-                print("  feedback:")
-                for f in feedback:
-                    print("   -", f)
+    try:
+        video_path = session.video.path
+        model_path = os.path.join(settings.BASE_DIR, "models", "pose_landmarker_full.task")
 
-        except Exception as error:
-            print(f"[ERROR] Session {session.id}: {error}")
+        analyzer = VideoAnalyzer(model_path=model_path)
+        analysis_result = analyzer.analyze(video_path)
 
-        finally:
-            analyzer.close()
+        session.feedback = analysis_result
+        session.save()
+
+        if not analysis_result.get("success"):
+            return JsonResponse(
+                {
+                    "status": "error",
+                    "message": analysis_result.get("error", "Video analysis failed."),
+                    "id": session.id
+                },
+                status=500
+            )
 
         return JsonResponse({
             "status": "success",
             "id": session.id
         })
 
-    return JsonResponse({"status": "error"}, status=400)
+    except Exception as error:
+        session.feedback = {
+            "success": False,
+            "error": str(error)
+        }
+        session.save()
+
+        return JsonResponse(
+            {
+                "status": "error",
+                "message": "Server error during video analysis.",
+                "details": str(error)
+            },
+            status=500
+        )
+
+    finally:
+        if analyzer is not None:
+            analyzer.close()
+
+
+@login_required
+def loading_view(request, session_id):
+    session = get_object_or_404(
+        SpeechSession,
+        id=session_id,
+        user=request.user
+    )
+
+    return render(
+        request,
+        "dashboard/loading_menu.html",
+        {"session": session}
+    )
+
+
+@login_required
+def analytics_view(request, session_id):
+    session = get_object_or_404(
+        SpeechSession,
+        id=session_id,
+        user=request.user
+    )
+
+    feedback_data = session.feedback or {}
+    return render(
+        request,
+        "recordings/analytics.html",
+        {
+            "session": session,
+            "result": feedback_data,
+            "feedback_list": feedback_data.get("feedback", [])
+        }
+    )

@@ -13,6 +13,7 @@ class SpeechSession(models.Model):
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
+    feedback = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return f"Session {self.id} by {self.user.username}"

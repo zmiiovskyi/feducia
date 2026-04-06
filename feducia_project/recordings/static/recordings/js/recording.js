@@ -27,6 +27,56 @@ document.addEventListener("DOMContentLoaded", () => {
         statusText.style.color = color;
     }
 
+    async function saveRecording() {
+        setStatus("Saving video...");
+
+        const blob = new Blob(recordedChunks, { type: "video/webm" });
+        recordedChunks = [];
+
+        const formData = new FormData();
+        formData.append("video_file", blob, "rehearsal.webm");
+
+        const csrfToken = getCookie("csrftoken");
+
+        if (!csrfToken) {
+            setStatus("CSRF token not found.", "#ff5252");
+            return;
+        }
+
+        try {
+            const response = await fetch("/save-recording/", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": csrfToken
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error("Save error:", data);
+                setStatus("Error saving video.", "#ff5252");
+                startBtn.disabled = false;
+                return;
+            }
+
+            if (data.status === "success" && data.id) {
+                setStatus("Video saved. Redirecting...");
+                window.location.href = `/loading/${data.id}/`;
+                return;
+            }
+
+            setStatus("Unexpected server response.", "#ff5252");
+            console.error("Unexpected response:", data);
+            startBtn.disabled = false;
+        } catch (error) {
+            console.error("Network error:", error);
+            setStatus("Network error while saving.", "#ff5252");
+            startBtn.disabled = false;
+        }
+    }
+
     async function initCamera() {
         try {
             stream = await navigator.mediaDevices.getUserMedia({
@@ -45,50 +95,22 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             mediaRecorder.onstop = async () => {
-                setStatus("Saving video...");
+                stopBtn.disabled = true;
+                startBtn.disabled = true;
 
-                const blob = new Blob(recordedChunks, { type: "video/webm" });
-                recordedChunks = [];
-
-                const formData = new FormData();
-                formData.append("video_file", blob, "rehearsal.webm");
-
-                const csrfToken = getCookie("csrftoken");
-
-                if (!csrfToken) {
-                    setStatus("CSRF token not found.");
-                    return;
-                }
-
-                try {
-                    const response = await fetch("/save-recording/", {
-                        method: "POST",
-                        body: formData,
-                        headers: {
-                            "X-CSRFToken": csrfToken
-                        }
-                    });
-
-                    if (response.ok) {
-                        setStatus("Saved successfully! Ready for next recording.");
-                    } else {
-                        setStatus("Error saving video.");
-                        console.error("Save error:", response.status, response.statusText);
-                    }
-                } catch (error) {
-                    console.error("Network error:", error);
-                    setStatus("Network error while saving.");
-                }
+                await saveRecording();
             };
+
+            setStatus("Camera is ready.");
         } catch (error) {
             console.error("Camera error:", error);
 
             if (error.name === "NotAllowedError") {
-                setStatus("Camera access denied. Please allow camera permission.");
+                setStatus("Camera access denied. Please allow camera permission.", "#ff5252");
             } else if (error.name === "NotFoundError") {
-                setStatus("No camera found on this device.");
+                setStatus("No camera found on this device.", "#ff5252");
             } else {
-                setStatus("Error accessing camera.");
+                setStatus("Error accessing camera.", "#ff5252");
             }
 
             startBtn.disabled = true;
@@ -98,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     startBtn.addEventListener("click", () => {
         if (!mediaRecorder) {
-            setStatus("Camera is not ready.");
+            setStatus("Camera is not ready.", "#ff5252");
             return;
         }
 
@@ -112,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
         startBtn.disabled = true;
         stopBtn.disabled = false;
 
-        setStatus("🔴 Recording... Speak clearly.", "#ff5252");
+        setStatus("Recording... Speak clearly.", "#ff5252");
     });
 
     stopBtn.addEventListener("click", () => {
@@ -124,12 +146,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        setStatus("Stopping recording...");
         mediaRecorder.stop();
-
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        statusText.style.color = "#2c3e50";
     });
 
+    stopBtn.disabled = true;
     initCamera();
 });

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading Bubbles Light</title>
+<title>Loading Feedback</title>
 
 <style>
 body {
@@ -12,7 +12,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; /* Більш сучасний шрифт */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
     overflow: hidden;
 }
@@ -24,15 +24,13 @@ body {
     z-index: 10;
 }
 
-/* СВІТЛА ЛІНІЯ (ОНОВЛЕНО) */
 .progress-container {
     width: 100%;
     height: 10px;
-    background: rgba(255, 255, 255, 0.2); /* Напівпрозорий фон */
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
     overflow: hidden;
     margin: 0 auto;
-    /* Світла обводка замість темної */
     border: 1.5px solid rgba(255, 255, 255, 0.6);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
@@ -41,22 +39,19 @@ body {
     height: 100%;
     width: 0%;
     background: #ffffff;
-    /* Ефект внутрішнього світіння */
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
     transition: width 0.1s linear;
 }
 
-/* ВІДСОТКИ (ОНОВЛЕНО) */
 .percent {
     margin-top: 15px;
     font-size: 20px;
-    font-weight: 300; /* Тонший шрифт для елегантності */
+    font-weight: 300;
     color: #ffffff;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легка тінь для читабельності на світлому */
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     letter-spacing: 3px;
 }
 
-/* БУЛЬБАШКИ */
 .bubble {
     position: absolute;
     bottom: -100px;
@@ -96,8 +91,8 @@ const bar = document.getElementById("bar");
 const percent = document.getElementById("percent");
 
 function createBubble() {
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
 
     const size = Math.random() * 50 + 15;
     const left = Math.random() * 100;
@@ -107,12 +102,14 @@ function createBubble() {
     bubble.style.width = `${size}px`;
     bubble.style.height = `${size}px`;
     bubble.style.left = `${left}%`;
-    bubble.style.setProperty('--duration', `${duration}s`);
-    bubble.style.setProperty('--drift', drift);
+    bubble.style.setProperty("--duration", `${duration}s`);
+    bubble.style.setProperty("--drift", drift);
 
     document.body.appendChild(bubble);
 
-    setTimeout(() => { bubble.remove(); }, duration * 1000);
+    setTimeout(() => {
+        bubble.remove();
+    }, duration * 1000);
 }
 
 let spawnRate = 140;
@@ -120,11 +117,16 @@ let bubbleInterval = setInterval(createBubble, spawnRate);
 
 const loadingInterval = setInterval(() => {
     progress++;
+
     if (progress > 100) {
         progress = 100;
         clearInterval(loadingInterval);
-        // Залишаємо трохи бульбашок після кінця для "живого" ефекту
+
         setTimeout(() => clearInterval(bubbleInterval), 2000);
+
+        setTimeout(() => {
+            window.location.href = "{% url 'recordings:result' session.id %}";
+        }, 500);
     }
 
     bar.style.width = progress + "%";

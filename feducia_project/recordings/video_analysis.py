@@ -27,32 +27,71 @@ class VideoAnalyzer:
         self.landmarker = vision.PoseLandmarker.create_from_options(options)
 
     def generate_feedback(
-            self,
-            avg_shoulder_diff,
-            avg_head_movement,
-            avg_left_hand_movement,
-            avg_right_hand_movement
+        self,
+        avg_shoulder_diff,
+        avg_head_movement,
+        avg_left_hand_movement,
+        avg_right_hand_movement
     ):
-        feedback = []
+        strengths = []
+        issues = []
+        advice = []
 
+        # POSTURE
         if avg_shoulder_diff is None:
-            feedback.append("Could not evaluate posture.")
+            issues.append(
+                "The system could not fully evaluate your posture."
+            )
+            advice.append(
+                "Make sure your upper body and shoulders are clearly visible in the frame during the whole recording."
+            )
         elif avg_shoulder_diff < 0.02:
-            feedback.append("Posture is quite straight.")
+            strengths.append(
+                "Your posture looks straight and balanced. This creates a confident and stable impression."
+            )
         elif avg_shoulder_diff < 0.05:
-            feedback.append("Slight shoulder imbalance detected.")
+            issues.append(
+                "A slight shoulder imbalance was detected. Your posture is generally acceptable, but it may look a little uneven."
+            )
+            advice.append(
+                "Try to keep both shoulders relaxed and at a similar level while speaking."
+            )
         else:
-            feedback.append("Noticeable shoulder imbalance.")
+            issues.append(
+                "A noticeable shoulder imbalance was detected. This can make your posture look tense or less confident."
+            )
+            advice.append(
+                "Practice standing straighter and check whether you lean more to one side during your speech."
+            )
 
+        # HEAD MOVEMENT
         if avg_head_movement is None:
-            feedback.append("Could not evaluate head movement.")
+            issues.append(
+                "The system could not evaluate your head movement."
+            )
+            advice.append(
+                "Keep your face visible and try not to move out of the frame."
+            )
         elif avg_head_movement < 0.01:
-            feedback.append("Head is stable.")
+            strengths.append(
+                "Your head movement is well controlled. This helps you look calm and focused."
+            )
         elif avg_head_movement < 0.03:
-            feedback.append("Moderate head movement.")
+            issues.append(
+                "Your head movement is moderate. Some movement is natural, but too much of it may distract the audience."
+            )
+            advice.append(
+                "Try to keep your head a little more stable and avoid unnecessary movements when speaking."
+            )
         else:
-            feedback.append("High head movement.")
+            issues.append(
+                "A high level of head movement was detected. This may make your presentation look nervous or less controlled."
+            )
+            advice.append(
+                "Practice speaking with slower and more controlled head movements, and keep your attention directed forward."
+            )
 
+        # HAND GESTURES
         hand_values = []
 
         if avg_left_hand_movement is not None:
@@ -62,18 +101,79 @@ class VideoAnalyzer:
             hand_values.append(avg_right_hand_movement)
 
         if not hand_values:
-            feedback.append("Could not evaluate hand gestures.")
+            issues.append(
+                "The system could not evaluate your hand gestures."
+            )
+            advice.append(
+                "Make sure your hands are visible in the frame if you want gesture analysis."
+            )
         else:
             avg_hand_movement = sum(hand_values) / len(hand_values)
 
             if avg_hand_movement < 0.01:
-                feedback.append("Very few gestures.")
+                issues.append(
+                    "Very few hand gestures were detected. This may make your speech look too stiff or not expressive enough."
+                )
+                advice.append(
+                    "Try to add a few natural gestures to support your main ideas and make your delivery more lively."
+                )
             elif avg_hand_movement < 0.03:
-                feedback.append("Moderate gestures.")
+                strengths.append(
+                    "Your hand gestures look moderate and natural. This usually helps support your speech without distracting the audience."
+                )
             else:
-                feedback.append("Active gestures.")
+                issues.append(
+                    "A high level of hand movement was detected. Too many gestures may distract the audience from your message."
+                )
+                advice.append(
+                    "Try to use fewer but more meaningful gestures, especially when you want to emphasize important points."
+                )
 
-        return feedback
+        # SUMMARY
+        if strengths and not issues:
+            summary = (
+                "This recording shows a confident and controlled presentation style. "
+                "Your body language looks stable and supports your speech well."
+            )
+        elif strengths and issues:
+            summary = (
+                "Your presentation already has some strong points, but there are also a few areas that could be improved. "
+                "With a bit more control over body language, your delivery can become stronger and more professional."
+            )
+        else:
+            summary = (
+                "This recording shows several areas that need improvement. "
+                "Working on posture, movement control, and gesture usage can make your presentation clearer and more confident."
+            )
+
+        return {
+            "summary": summary,
+            "strengths": strengths,
+            "issues": issues,
+            "advice": advice,
+        }
+
+    def build_report_text(self, feedback):
+        parts = []
+
+        summary = feedback.get("summary")
+        strengths = feedback.get("strengths", [])
+        issues = feedback.get("issues", [])
+        advice = feedback.get("advice", [])
+
+        if summary:
+            parts.append(f"Summary: {summary}")
+
+        if strengths:
+            parts.append("What you did well: " + " ".join(strengths))
+
+        if issues:
+            parts.append("What needs improvement: " + " ".join(issues))
+
+        if advice:
+            parts.append("Advice: " + " ".join(advice))
+
+        return "\n\n".join(parts)
 
     def analyze(self, video_path, frame_step=10):
         cap = cv2.VideoCapture(video_path)
@@ -170,8 +270,6 @@ class VideoAnalyzer:
         avg_left_hand_movement = sum(left_hand_movements) / len(left_hand_movements) if left_hand_movements else None
         avg_right_hand_movement = sum(right_hand_movements) / len(right_hand_movements) if right_hand_movements else None
 
-        detection_rate = detected_frames / processed_frames if processed_frames > 0 else 0
-
         feedback = self.generate_feedback(
             avg_shoulder_diff,
             avg_head_movement,
@@ -179,24 +277,21 @@ class VideoAnalyzer:
             avg_right_hand_movement
         )
 
+        report_text = self.build_report_text(feedback)
+
         return {
             "success": True,
-            "video_path": video_path,
-            "total_frames": total_frames,
-            "processed_frames": processed_frames,
-            "detected_frames": detected_frames,
-            "detection_rate": round(detection_rate, 4),
-            "frame_step": frame_step,
-            "avg_shoulder_diff": round(avg_shoulder_diff, 4) if avg_shoulder_diff is not None else None,
-            "avg_head_movement": round(avg_head_movement, 4) if avg_head_movement is not None else None,
-            "avg_left_hand_movement": round(avg_left_hand_movement, 4) if avg_left_hand_movement is not None else None,
-            "avg_right_hand_movement": round(avg_right_hand_movement, 4) if avg_right_hand_movement is not None else None,
-            "feedback": feedback
+            "report": report_text
         }
 
     def save_result_to_json(self, result, output_path):
+        clean_result = {
+            "success": result.get("success"),
+            "report": result.get("report")
+        }
+
         with open(output_path, "w", encoding="utf-8") as file:
-            json.dump(result, file, ensure_ascii=False, indent=4)
+            json.dump(clean_result, file, ensure_ascii=False, indent=4)
 
     def close(self):
         self.landmarker.close()
