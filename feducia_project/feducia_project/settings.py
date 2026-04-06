@@ -39,8 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'recordings',
-    'dashboard'
+    'dashboard',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google'
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -50,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'feducia_project.urls'
@@ -139,3 +147,26 @@ EMAIL_HOST_PASSWORD = 'tapd rzoy fuap widi'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTHENTICATION_BACKENDS = [
+    # Стандартний вхід Django (по юзернейму і паролю)
+    'django.contrib.auth.backends.ModelBackend',
+    # Вхід через Allauth (через Google)
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '343226654909-60312tbcjcoekglj4hqo3r2f9eoaonqq.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
+
+LOGIN_REDIRECT_URL = '/dashboard/'
+
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+SOCIALACCOUNT_LOGIN_ON_GET = True

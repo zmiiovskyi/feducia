@@ -1,30 +1,38 @@
-<!DOCTYPE html>
-<html lang="uk">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading Feedback</title>
+<div id="loader-overlay">
+    <div class="loader-container">
+        <div class="progress-container">
+            <div class="progress-bar" id="bar"></div>
+        </div>
+        <div id="percent" class="percent">0%</div>
+    </div>
+</div>
 
 <style>
-body {
-    margin: 0;
+#loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
     height: 100vh;
-    display: flex;
+    background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+    display: none;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+    z-index: 10000;
     overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-.container {
+#loader-overlay .loader-container {
     text-align: center;
     position: relative;
     width: 280px;
     z-index: 10;
 }
 
-.progress-container {
+#loader-overlay .progress-container {
     width: 100%;
     height: 10px;
     background: rgba(255, 255, 255, 0.2);
@@ -35,7 +43,7 @@ body {
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
 }
 
-.progress-bar {
+#loader-overlay .progress-bar {
     height: 100%;
     width: 0%;
     background: #ffffff;
@@ -43,7 +51,7 @@ body {
     transition: width 0.1s linear;
 }
 
-.percent {
+#loader-overlay .percent {
     margin-top: 15px;
     font-size: 20px;
     font-weight: 300;
@@ -52,7 +60,7 @@ body {
     letter-spacing: 3px;
 }
 
-.bubble {
+#loader-overlay .bubble {
     position: absolute;
     bottom: -100px;
     background: rgba(255, 255, 255, 0.25);
@@ -64,81 +72,67 @@ body {
 }
 
 @keyframes rise {
-    0% {
-        transform: translateY(0) scale(0.3) translateX(0);
-        opacity: 0;
-    }
+    0% { transform: translateY(0) scale(0.3) translateX(0); opacity: 0; }
     15% { opacity: 0.5; }
-    100% {
-        transform: translateY(-120vh) scale(1.2) translateX(var(--drift));
-        opacity: 0;
-    }
+    100% { transform: translateY(-120vh) scale(1.2) translateX(var(--drift)); opacity: 0; }
 }
 </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="progress-container">
-        <div class="progress-bar" id="bar"></div>
-    </div>
-    <div class="percent" id="percent">0%</div>
-</div>
 
 <script>
-let progress = 0;
-const bar = document.getElementById("bar");
-const percent = document.getElementById("percent");
+function startFiduciaLoader() {
+    const overlay = document.getElementById("loader-overlay");
+    const bar = document.getElementById("bar");
+    const percent = document.getElementById("percent");
 
-function createBubble() {
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
+    overlay.style.display = "flex";
 
-    const size = Math.random() * 50 + 15;
-    const left = Math.random() * 100;
-    const duration = Math.random() * 3 + 2;
-    const drift = (Math.random() - 0.5) * 150 + "px";
+    let progress = 0;
+    let spawnRate = 140;
 
-    bubble.style.width = `${size}px`;
-    bubble.style.height = `${size}px`;
-    bubble.style.left = `${left}%`;
-    bubble.style.setProperty("--duration", `${duration}s`);
-    bubble.style.setProperty("--drift", drift);
+    function createBubble() {
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
 
-    document.body.appendChild(bubble);
+        const size = Math.random() * 50 + 15;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 3 + 2;
+        const drift = (Math.random() - 0.5) * 150 + "px";
 
-    setTimeout(() => {
-        bubble.remove();
-    }, duration * 1000);
-}
+        bubble.style.width = `${size}px`;
+        bubble.style.height = `${size}px`;
+        bubble.style.left = `${left}%`;
+        bubble.style.setProperty("--duration", `${duration}s`);
+        bubble.style.setProperty("--drift", drift);
 
-let spawnRate = 140;
-let bubbleInterval = setInterval(createBubble, spawnRate);
-
-const loadingInterval = setInterval(() => {
-    progress++;
-
-    if (progress > 100) {
-        progress = 100;
-        clearInterval(loadingInterval);
-
-        setTimeout(() => clearInterval(bubbleInterval), 2000);
+        overlay.appendChild(bubble);
 
         setTimeout(() => {
-            window.location.href = "{% url 'recordings:result' session.id %}";
-        }, 500);
+            bubble.remove();
+        }, duration * 1000);
     }
 
-    bar.style.width = progress + "%";
-    percent.textContent = progress + "%";
+    let bubbleInterval = setInterval(createBubble, spawnRate);
 
-    if (progress % 10 === 0 && progress < 100) {
-        clearInterval(bubbleInterval);
-        spawnRate = Math.max(20, 140 - (progress * 1.2));
-        bubbleInterval = setInterval(createBubble, spawnRate);
-    }
-}, 50);
+    const loadingInterval = setInterval(() => {
+        progress++;
+
+        if (progress > 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+            setTimeout(() => clearInterval(bubbleInterval), 2000);
+            window.location.href = "/analytics/{{ session.id }}/";
+        }
+
+        bar.style.width = progress + "%";
+        percent.textContent = progress + "%";
+
+        if (progress % 10 === 0 && progress < 100) {
+            clearInterval(bubbleInterval);
+            spawnRate = Math.max(20, 140 - (progress * 1.2));
+            bubbleInterval = setInterval(createBubble, spawnRate);
+        }
+    }, 60);
+}
+
+document.addEventListener("DOMContentLoaded", startFiduciaLoader);
 </script>
-
-</body>
-</html>

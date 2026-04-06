@@ -1,3 +1,4 @@
+{% load socialaccount %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,6 +133,58 @@
             box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
         }
 
+        /* --- Нові стилі для Google кнопки --- */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #7f8c8d;
+        }
+
+        .divider span {
+            padding: 0 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .google-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            background-color: white;
+            color: #2c3e50;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            border: 1px solid rgba(94, 181, 213, 0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .google-btn img {
+            width: 20px;
+            margin-right: 12px;
+        }
+
+        .google-btn:hover {
+            box-shadow: 0 6px 15px rgba(94, 181, 213, 0.2);
+            transform: translateY(-1px);
+        }
+        /* ----------------------------------- */
+
         .login-link {
             text-align: center;
             margin-top: 25px;
@@ -181,6 +234,15 @@
 
             <button type="submit">Create Account</button>
         </form>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <a href="{% provider_login_url 'google' %}" class="google-btn">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+            Continue with Google
+        </a>
 
         <div class="login-link">
             Already have an account? <a href="/login/">Log in</a>

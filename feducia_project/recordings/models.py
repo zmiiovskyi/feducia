@@ -11,7 +11,11 @@ class SpeechSession(models.Model):
         upload_to='recordings/%Y/%m/%d/',
         help_text="Repeat recording in format mp4/webm"
     )
-
+    text = models.TextField(
+        blank=True,
+        null=True,
+        help_text="Optional speech text to be displayed on the teleprompter during recording."
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     feedback = models.JSONField(null=True, blank=True)
 
