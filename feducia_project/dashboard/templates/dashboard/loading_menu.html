@@ -83,13 +83,16 @@ function startFiduciaLoader() {
     const overlay = document.getElementById("loader-overlay");
     const bar = document.getElementById("bar");
     const percent = document.getElementById("percent");
-    overlay.style.display = 'flex';
+
+    overlay.style.display = "flex";
+
     let progress = 0;
     let spawnRate = 140;
 
     function createBubble() {
-        const bubble = document.createElement('div');
-        bubble.className = 'bubble';
+        const bubble = document.createElement("div");
+        bubble.className = "bubble";
+
         const size = Math.random() * 50 + 15;
         const left = Math.random() * 100;
         const duration = Math.random() * 3 + 2;
@@ -98,11 +101,14 @@ function startFiduciaLoader() {
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         bubble.style.left = `${left}%`;
-        bubble.style.setProperty('--duration', `${duration}s`);
-        bubble.style.setProperty('--drift', drift);
+        bubble.style.setProperty("--duration", `${duration}s`);
+        bubble.style.setProperty("--drift", drift);
 
         overlay.appendChild(bubble);
-        setTimeout(() => { bubble.remove(); }, duration * 1000);
+
+        setTimeout(() => {
+            bubble.remove();
+        }, duration * 1000);
     }
 
     let bubbleInterval = setInterval(createBubble, spawnRate);
@@ -113,8 +119,8 @@ function startFiduciaLoader() {
         if (progress > 100) {
             progress = 100;
             clearInterval(loadingInterval);
-            window.location.href = "/analytics/";
             setTimeout(() => clearInterval(bubbleInterval), 2000);
+            window.location.href = "/analytics/{{ session.id }}/";
         }
 
         bar.style.width = progress + "%";
@@ -127,4 +133,6 @@ function startFiduciaLoader() {
         }
     }, 60);
 }
+
+document.addEventListener("DOMContentLoaded", startFiduciaLoader);
 </script>

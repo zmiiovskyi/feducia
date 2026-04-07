@@ -41,7 +41,7 @@ def user_signup(request):
             error = "This email is already registered."
         else:
             user = User.objects.create_user(username=username, email=email, password=password)
-            login(request, user)
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('/dashboard/')
 
     print(error)

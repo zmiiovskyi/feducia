@@ -6,6 +6,6 @@ app_name = "recordings"
 urlpatterns = [
     path('recording/', views.recording_view, name='record'),
     path('save-recording/', views.save_recording_view, name='save_recording'),
-    path("analytics/", views.analytics_view, name="analytics"),
-    path("loading/", views.loading_view, name="loading"),
+    path("analytics/<int:session_id>/", views.analytics_view, name="analytics"),
+    path("loading/<int:session_id>/", views.loading_view, name="loading"),
 ]

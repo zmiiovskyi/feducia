@@ -1,7 +1,15 @@
 Django==6.0.3
+django-allauth==65.15.1
+
 mediapipe==0.10.33
 opencv-contrib-python==4.13.0.92
+
 numpy==2.4.3
 matplotlib==3.10.8
+
 pillow==12.1.1
 sounddevice==0.5.5
+
+requests==2.33.1
+PyJWT==2.12.1
+cryptography==46.0.6
