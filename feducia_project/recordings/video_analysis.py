@@ -16,7 +16,12 @@ RIGHT_WRIST_IDX = 16
 
 class VideoAnalyzer:
     def __init__(self, model_path):
-        base_options = python.BaseOptions(model_asset_path=model_path)
+        with open(model_path, "rb") as f:
+            model_data = f.read()
+
+        base_options = python.BaseOptions(
+            model_asset_buffer=model_data
+        )
 
         options = vision.PoseLandmarkerOptions(
             base_options=base_options,
@@ -25,6 +30,7 @@ class VideoAnalyzer:
         )
 
         self.landmarker = vision.PoseLandmarker.create_from_options(options)
+
 
     def generate_feedback(
         self,
