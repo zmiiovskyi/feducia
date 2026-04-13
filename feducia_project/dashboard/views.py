@@ -127,3 +127,10 @@ def password_reset_confirm(request, uidb64, token):
         return render(request, 'dashboard/email_change_password.html')
     else:
         return render(request, "dashboard/password_reset.html", {"message": "Invalid link."})
+
+# Додані функції
+def privacy_view(request):
+    return render(request, 'dashboard/private_policy.html')
+
+def terms_view(request):
+    return render(request, 'dashboard/terms_of_use.html')

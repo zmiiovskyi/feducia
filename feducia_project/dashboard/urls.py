@@ -17,4 +17,6 @@ urlpatterns = [
     path('change-profile/', views.edit_profile_view, name='edit_profile'),
     path('password-reset/', views.password_reset_request, name='password_reset'),
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
+    path('privacy/', views.privacy_view, name='private_policy'),
+    path('terms/', views.terms_view, name='terms_of_use'),
 ]
