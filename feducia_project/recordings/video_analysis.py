@@ -6,7 +6,6 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-
 NOSE_IDX = 0
 LEFT_SHOULDER_IDX = 11
 RIGHT_SHOULDER_IDX = 12
@@ -16,7 +15,13 @@ RIGHT_WRIST_IDX = 16
 
 class VideoAnalyzer:
     def __init__(self, model_path):
-        base_options = python.BaseOptions(model_asset_path=model_path)
+        with open(model_path, "rb") as f:
+            model_data = f.read()
+
+
+        base_options = python.BaseOptions(
+            model_asset_buffer=model_data
+        )
 
         options = vision.PoseLandmarkerOptions(
             base_options=base_options,
@@ -26,12 +31,13 @@ class VideoAnalyzer:
 
         self.landmarker = vision.PoseLandmarker.create_from_options(options)
 
+
     def generate_feedback(
-        self,
-        avg_shoulder_diff,
-        avg_head_movement,
-        avg_left_hand_movement,
-        avg_right_hand_movement
+            self,
+            avg_shoulder_diff,
+            avg_head_movement,
+            avg_left_hand_movement,
+            avg_right_hand_movement
     ):
         strengths = []
         issues = []
@@ -64,7 +70,6 @@ class VideoAnalyzer:
                 "Practice standing straighter and check whether you lean more to one side during your speech."
             )
 
-        # HEAD MOVEMENT
         if avg_head_movement is None:
             issues.append(
                 "The system could not evaluate your head movement."
@@ -91,7 +96,6 @@ class VideoAnalyzer:
                 "Practice speaking with slower and more controlled head movements, and keep your attention directed forward."
             )
 
-        # HAND GESTURES
         hand_values = []
 
         if avg_left_hand_movement is not None:
@@ -129,7 +133,6 @@ class VideoAnalyzer:
                     "Try to use fewer but more meaningful gestures, especially when you want to emphasize important points."
                 )
 
-        # SUMMARY
         if strengths and not issues:
             summary = (
                 "This recording shows a confident and controlled presentation style. "
@@ -179,15 +182,21 @@ class VideoAnalyzer:
         cap = cv2.VideoCapture(video_path)
 
         if not cap.isOpened():
-            return {
-                "success": False,
-                "error": "Failed to open video"
-            }
+            return {"success": False, "error": "Failed to open video"}
 
         shoulder_diffs = []
         head_movements = []
         left_hand_movements = []
         right_hand_movements = []
+
+        velocities = []
+        body_movements = []
+        timestamps = []
+        timeline_head = []
+        timeline_hands = []
+
+        gesture_count = 0
+        freeze_frames = 0
 
         total_frames = 0
         processed_frames = 0
@@ -196,10 +205,11 @@ class VideoAnalyzer:
         prev_nose = None
         prev_left_wrist = None
         prev_right_wrist = None
+        prev_mid_shoulder = None
+        prev_time = None
 
         while True:
             ret, frame = cap.read()
-
             if not ret:
                 break
 
@@ -235,54 +245,135 @@ class VideoAnalyzer:
                 left_wrist_point = (left_wrist.x, left_wrist.y)
                 right_wrist_point = (right_wrist.x, right_wrist.y)
 
+                mid_shoulder = (
+                    (left_shoulder.x + right_shoulder.x) / 2,
+                    (left_shoulder.y + right_shoulder.y) / 2
+                )
+
                 shoulder_diff = abs(left_shoulder.y - right_shoulder.y)
                 shoulder_diffs.append(shoulder_diff)
 
-                if prev_nose is not None:
-                    head_movement = math.sqrt(
-                        (nose_point[0] - prev_nose[0]) ** 2 +
-                        (nose_point[1] - prev_nose[1]) ** 2
-                    )
-                    head_movements.append(head_movement)
+                if prev_nose:
+                    head_move = self._distance(nose_point, prev_nose)
+                    head_movements.append(head_move)
+                    timeline_head.append(head_move)
 
-                if prev_left_wrist is not None:
-                    left_hand_movement = math.sqrt(
-                        (left_wrist_point[0] - prev_left_wrist[0]) ** 2 +
-                        (left_wrist_point[1] - prev_left_wrist[1]) ** 2
-                    )
-                    left_hand_movements.append(left_hand_movement)
+                    if head_move < 0.002:
+                        freeze_frames += 1
 
-                if prev_right_wrist is not None:
-                    right_hand_movement = math.sqrt(
-                        (right_wrist_point[0] - prev_right_wrist[0]) ** 2 +
-                        (right_wrist_point[1] - prev_right_wrist[1]) ** 2
-                    )
-                    right_hand_movements.append(right_hand_movement)
+                if prev_left_wrist:
+                    move = self._distance(left_wrist_point, prev_left_wrist)
+                    left_hand_movements.append(move)
+                    timeline_hands.append(move)
 
-                prev_nose = nose_point
-                prev_left_wrist = left_wrist_point
-                prev_right_wrist = right_wrist_point
+                    if move > 0.01:
+                        gesture_count += 1
+
+                if prev_right_wrist:
+                    move = self._distance(right_wrist_point, prev_right_wrist)
+                    right_hand_movements.append(move)
+
+                if prev_mid_shoulder:
+                    body_move = self._distance(mid_shoulder, prev_mid_shoulder)
+                    body_movements.append(body_move)
+
+                if prev_nose and prev_time:
+                    dt = max((timestamp_ms - prev_time) / 1000, 0.001)
+                    vel = self._distance(nose_point, prev_nose) / dt
+                    velocities.append(vel)
+
+            timestamps.append(timestamp_ms / 1000)
+
+            prev_nose = nose_point
+            prev_left_wrist = left_wrist_point
+            prev_right_wrist = right_wrist_point
+            prev_mid_shoulder = mid_shoulder
+            prev_time = timestamp_ms
 
         cap.release()
 
-        avg_shoulder_diff = sum(shoulder_diffs) / len(shoulder_diffs) if shoulder_diffs else None
-        avg_head_movement = sum(head_movements) / len(head_movements) if head_movements else None
-        avg_left_hand_movement = sum(left_hand_movements) / len(left_hand_movements) if left_hand_movements else None
-        avg_right_hand_movement = sum(right_hand_movements) / len(right_hand_movements) if right_hand_movements else None
+        avg_shoulder_diff = self._safe_mean(shoulder_diffs)
+        avg_head = self._safe_mean(head_movements)
+        avg_left = self._safe_mean(left_hand_movements)
+        avg_right = self._safe_mean(right_hand_movements)
+
+        symmetry = None
+        if avg_left and avg_right:
+            symmetry = 1 - abs(avg_left - avg_right)
+
+        gesture_frequency = gesture_count / max(processed_frames, 1)
+        freeze_ratio = freeze_frames / max(processed_frames, 1)
+
+        posture_drift = None
+        if shoulder_diffs:
+            posture_drift = shoulder_diffs[-1] - shoulder_diffs[0]
+
+        confidence = 10
+        if avg_head and avg_head > 0.04:
+            confidence -= 2
+        if symmetry and symmetry < 0.7:
+            confidence -= 2
+        if freeze_ratio > 0.2:
+            confidence -= 1
+        confidence = max(0, min(confidence, 10))
+
+        if gesture_frequency > 0.05:
+            style = "Expressive"
+        elif freeze_ratio > 0.3:
+            style = "Stiff"
+        elif avg_head and avg_head > 0.05:
+            style = "Nervous"
+        else:
+            style = "Calm"
+
+        highlights = []
+        for i, val in enumerate(timeline_head):
+            if val > 0.05:
+                highlights.append({
+                    "time": timestamps[i],
+                    "event": "Head movement spike"
+                })
 
         feedback = self.generate_feedback(
             avg_shoulder_diff,
-            avg_head_movement,
-            avg_left_hand_movement,
-            avg_right_hand_movement
+            avg_head,
+            avg_left,
+            avg_right
         )
 
         report_text = self.build_report_text(feedback)
 
         return {
             "success": True,
-            "report": report_text
+            "report": report_text,
+            "score": confidence,
+            "style": style,
+            "metrics": {
+                "posture": avg_shoulder_diff,
+                "head": avg_head,
+                "left_hand": avg_left,
+                "right_hand": avg_right,
+                "velocity": self._safe_mean(velocities),
+                "body_movement": self._safe_mean(body_movements),
+                "gesture_frequency": gesture_frequency,
+                "symmetry": symmetry,
+                "freeze_ratio": freeze_ratio,
+                "posture_drift": posture_drift
+            },
+            "timeline": {
+                "time": timestamps,
+                "head": timeline_head,
+                "hands": timeline_hands
+            },
+            "highlights": highlights,
+            "feedback": feedback
         }
+
+    def _distance(self, p1, p2):
+        return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+    def _safe_mean(self, arr):
+        return sum(arr) / len(arr) if arr else None
 
     def save_result_to_json(self, result, output_path):
         clean_result = {

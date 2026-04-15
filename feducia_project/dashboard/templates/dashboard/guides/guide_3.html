@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Speech Warm-up - FIDUCIA</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+            min-height: 100vh; margin: 0; color: #2c3e50; display: flex; flex-direction: column;
+        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; }
+        .logo-container { display: flex; flex-direction: column; }
+        .logo-title { font-size: 28px; font-weight: 300; color: #1a2b3c; letter-spacing: 2px; margin: 0; }
+        .header-slogan { font-size: 10px; color: #5a6a7a; font-style: italic; letter-spacing: 0.5px; margin-top: 2px; }
+
+        .guide-container {
+            background: #ffffff; padding: 50px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 90%; max-width: 850px; margin: 20px auto 40px auto; flex-grow: 1;
+        }
+
+        .back-btn { text-decoration: none; color: #5eb5d5; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; margin-bottom: 30px; cursor: pointer; }
+        h1 { color: #1a2b3c; font-size: 32px; margin: 0; }
+        .subtitle { color: #7f8c8d; font-size: 18px; margin: 10px 0 30px 0; }
+
+        h3 { color: #5eb5d5; margin-top: 45px; font-size: 24px; display: flex; align-items: center; gap: 12px; }
+
+        /* Science Card - оновлено на блакитний */
+        .science-card {
+            background: #f0faff; border-left: 5px solid #5eb5d5; padding: 25px; border-radius: 15px; margin: 25px 0;
+        }
+        .science-card h4 { margin: 0 0 10px 0; color: #1a2b3c; display: flex; align-items: center; gap: 8px; }
+
+        .exercise-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 25px 0; }
+        .exercise-item {
+            border: 2px solid #f0faff; padding: 20px; border-radius: 20px; transition: all 0.3s ease; background: #ffffff;
+        }
+        .exercise-item:hover { border-color: #8ad3e6; background: #fafdff; transform: translateY(-3px); }
+        .tag { font-size: 11px; font-weight: bold; text-transform: uppercase; color: #5eb5d5; margin-bottom: 8px; display: block; }
+
+        /* Animation - оновлено на блакитний */
+        .breathing-box {
+            background: linear-gradient(135deg, #5eb5d5 0%, #8ad3e6 100%); border-radius: 30px; padding: 40px; color: white; text-align: center; margin: 30px 0;
+        }
+        .breathing-circle {
+            width: 65px; height: 65px; border: 4px solid white; border-radius: 50%;
+            margin: 0 auto 20px; animation: expand 4s infinite alternate ease-in-out;
+        }
+        @keyframes expand {
+            from { transform: scale(1); box-shadow: 0 0 0 rgba(255,255,255, 0); }
+            to { transform: scale(1.6); box-shadow: 0 0 40px rgba(255,255,255, 0.6); }
+        }
+
+        .tips-list { background: #fff9e6; padding: 25px; border-radius: 25px; margin-top: 30px; }
+        .tips-list li { margin-bottom: 10px; color: #856404; }
+
+        /* Фінальний блок оновлено на блакитний */
+        .footer-quote {
+            margin-top: 50px; padding: 35px; background: #5eb5d5; border-radius: 30px; color: white; text-align: center; box-shadow: 0 10px 20px rgba(94, 181, 213, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo-container">
+            <div class="logo-title">FIDUCIA</div>
+            <div class="header-slogan">Trust in AI trust in you</div>
+        </div>
+    </header>
+
+    <main class="guide-container">
+        <a href="#" onclick="window.history.back(); return false;" class="back-btn">⬅ Back to Guides</a>
+
+        <h1>Mastering Your Voice: The Science of Impact</h1>
+        <p class="subtitle">Transform your speech from ordinary to extraordinary in 5 minutes.</p>
+
+        <div class="science-card">
+            <h4>🧠 Brain & Voice Sync</h4>
+            <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #2c3e50;">
+                The <strong>"Fight-or-Flight"</strong> response tightens your throat muscles. By doing a 5-minute warm-up, you consciously override your nervous system, allowing your voice to sound <strong>grounded and resonant</strong> instead of shaky and high-pitched.
+            </p>
+        </div>
+
+        <h3>1. The Rhythmic Expansion</h3>
+        <p>Before the first word, find your center. Follow the circle's rhythm to synchronize your heart rate with your speech tempo.</p>
+
+        <div class="breathing-box">
+            <div class="breathing-circle"></div>
+            <div style="font-size: 20px; font-weight: bold; letter-spacing: 1px;">BREATHE WITH FIDUCIA</div>
+            <p style="opacity: 0.9; font-size: 14px; margin-top: 10px;">Deep Inhale (4s) • Hold (4s) • Smooth Exhale (4s)</p>
+        </div>
+
+        <h3>2. Diction & Articulation Gym</h3>
+        <div class="exercise-grid">
+            <div class="exercise-item">
+                <span class="tag">The "Wine Cork" Trick</span>
+                <strong>Articulation:</strong> Imagine a cork between your teeth. Speak your intro aloud. Now "remove" it. Your mouth muscles will feel incredibly light and precise.
+            </div>
+            <div class="exercise-item">
+                <span class="tag">Lip Power</span>
+                <strong>Lip Trills:</strong> Make a "Brrrrr" sound (like a toy car). This relaxes the lips and prevents "clicking" sounds that cameras often pick up.
+            </div>
+        </div>
+
+        <h3>3. Psychological "Anchor" Warm-up</h3>
+        <p>Public speaking is 80% mindset. Try this technique used by Hollywood actors:</p>
+        <div class="exercise-item" style="background: #f0faff; border: none;">
+            <strong>The "Power Pose" & Smile:</strong>
+            <p style="font-size: 14px; margin-top: 10px;">Stand tall for 30 seconds with your hands on your hips. Then, smile widely (even if you don't feel like it). This releases <strong>endorphins</strong> and makes your vocal tone sound naturally more friendly and trustworthy.</p>
+        </div>
+
+        <h3>4. The Authority Resonator</h3>
+        <p>authoritative voices vibrate in the chest, not the nose. </p>
+        <div class="science-card" style="border-left-color: #8ad3e6;">
+            <strong>Humming Exercise:</strong> Hum a low note. Place your hand on your chest. If you feel a vibration, you've found your "Power Voice." Practice your first sentence while keeping that vibration.
+        </div>
+
+        <h3>5. Elite Tongue Twisters</h3>
+        <p>Speed up your mental processing with these classics:</p>
+        <ul style="line-height: 2; color: #4a5a6a;">
+            <li><em>"Truly rural, truly rural, truly rural."</em> (Repeat 5 times)</li>
+            <li><em>"She sells seashells by the seashore."</em></li>
+            <li><em>"The 33 thieves thought that they thrilled the throne throughout Thursday."</em></li>
+        </ul>
+
+        <div class="tips-list">
+            <strong style="display: block; margin-bottom: 10px;">🚀 Pro Tip:</strong>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>Hydrate with room-temperature water (never ice-cold before speaking).</li>
+                <li>Avoid dairy or sugary drinks 1 hour before speaking to keep your throat clear.</li>
+                <li>Record your warm-up once to hear how your voice changes!</li>
+            </ul>
+        </div>
+
+        <div class="footer-quote">
+            <p style="margin: 0; font-style: italic; font-size: 18px; font-weight: 500;">"Confidence is a muscle. The warm-up is your training."</p>
+        </div>
+
+    </main>
+
+</body>
+</html>

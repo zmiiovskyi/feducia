@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiducia - Get in Touch</title>
     <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        }
+
         html, body {
             height: 100%;
             margin: 0;
@@ -12,7 +16,6 @@
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%) no-repeat center center fixed;
             background-size: cover;
             display: flex;
@@ -21,24 +24,31 @@
             position: relative;
         }
 
-        .back-btn {
+        .back-button {
             position: absolute;
             top: 30px;
             left: 30px;
-            background: white;
-            padding: 10px 25px;
-            border-radius: 20px;
+            z-index: 1000;
             text-decoration: none;
-            color: #1d3557;
-            font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
-            z-index: 10;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: #2c3e50 !important;
+            line-height: 1 !important;
+            background: rgba(255, 255, 255, 0.8) !important;
+            padding: 12px 24px !important;
+            border-radius: 20px !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+            transition: all 0.3s ease !important;
+            box-sizing: border-box !important;
         }
 
-        .back-btn:hover {
-            transform: translateX(-5px);
+        .back-button:hover {
+            background: #ffffff !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15) !important;
         }
 
         .main-card {
@@ -155,8 +165,8 @@
             background: #fcfdfe;
             margin-bottom: 15px;
             outline: none;
-            font-family: inherit;
             box-sizing: border-box;
+            font-size: 14px;
         }
 
         textarea {
@@ -164,35 +174,41 @@
             resize: none;
         }
 
-        button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 20px;
-            border: none;
-            background-color: #89c4d9;
-            color: white;
-            font-weight: bold;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 6px 15px rgba(137, 196, 217, 0.3);
-            margin-top: auto;
+        .btn-primary {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100% !important;
+            height: 54px !important;
+            background: linear-gradient(90deg, #8ad3e6, #5eb5d5) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 30px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            letter-spacing: 1px !important;
+            cursor: pointer !important;
+            box-shadow: 0 8px 20px rgba(137, 196, 217, 0.4) !important;
+            transition: all 0.2s ease !important;
+            box-sizing: border-box !important;
+            margin-top: auto !important;
         }
 
-        button:hover {
-            background-color: #72bcd4;
-            transform: translateY(-2px);
+        .btn-primary:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 10px 25px rgba(137, 196, 217, 0.5) !important;
+            background: linear-gradient(90deg, #7ecae0, #4eaacd) !important;
         }
     </style>
 </head>
 <body>
 
-    <a href="/dashboard/" class="back-btn">← Back</a>
+    <a href="/dashboard/" class="back-button">← Back</a>
 
     <div class="main-card">
         <div>
             <h1>GET IN TOUCH</h1>
-            <div class="subtitle">trust in ai trust in you</div>
+            <div class="subtitle">trust in AI trust in you</div>
         </div>
 
         <div class="content-grid">
@@ -235,7 +251,7 @@
                     <label>Message</label>
                     <textarea name="message" placeholder="How can we help you?"></textarea>
 
-                    <button type="submit">SEND MESSAGE</button>
+                    <button type="submit" class="btn-primary">SEND MESSAGE</button>
                 </form>
             </div>
         </div>

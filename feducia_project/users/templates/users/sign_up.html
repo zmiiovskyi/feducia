@@ -9,259 +9,90 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            color: #2c3e50;
+            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: #2c3e50;
         }
-
         .signup-container {
             background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 50%);
-            padding: 45px 30px;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            width: 100%;
-            max-width: 320px;
-            text-align: center;
-            position: relative;
+            padding: 45px 30px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%; max-width: 320px; text-align: center;
         }
-
-        .logo-title {
-            font-size: 34px;
-            font-weight: 300;
-            color: #1a2b3c;
-            margin-bottom: 2px;
-            letter-spacing: 2px;
-        }
-
-        .slogan {
-            font-size: 11px;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            font-style: italic;
-            letter-spacing: 0.5px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #5a6a7a;
-            font-size: 13px;
-            padding-left: 12px;
-            font-weight: 500;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 14px 16px;
-            background-color: #ffffff;
-            border: none;
-            color: #2c3e50;
-            border-radius: 20px;
-            box-sizing: border-box;
-            outline: none;
-            font-size: 14px;
+        .logo-title { font-size: 34px; font-weight: 300; color: #1a2b3c; letter-spacing: 2px; text-transform: uppercase; }
+        .slogan { font-size: 11px; color: #7f8c8d; margin-bottom: 30px; font-style: italic; }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        label { display: block; margin-bottom: 6px; color: #5a6a7a; font-size: 13px; padding-left: 12px; font-weight: 500; }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%; padding: 14px 16px; border: none; border-radius: 20px; outline: none; font-size: 14px;
             box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15);
-            transition: all 0.3s ease;
         }
-
-        .privacy-container {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            margin: 20px 0 20px 10px;
-            gap: 10px;
-            font-size: 12px;
-            color: #556b7d;
-        }
-
-        .privacy-container input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: #72b9d0;
-        }
-
-        .privacy-container label {
-            padding-left: 0;
-            cursor: pointer;
-            line-height: 1.4;
-            font-weight: normal;
-        }
-
-        .privacy-container a {
-            color: #72b9d0;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        #privacy-error {
-            color: #e74c3c;
-            font-size: 11px;
-            margin-top: -15px;
-            margin-bottom: 15px;
-            display: none;
-            text-align: left;
-            padding-left: 12px;
-        }
-
+        .privacy-container { display: flex; align-items: center; justify-content: flex-start; margin: 20px 0; gap: 10px; font-size: 12px; color: #556b7d; }
+        .privacy-container input { width: 16px; height: 16px; cursor: pointer; }
+        .privacy-container a { color: #72b9d0; text-decoration: none; font-weight: 600; }
+        #privacy-error { color: #e74c3c; font-size: 11px; display: none; text-align: left; padding-left: 12px; margin-bottom: 10px; }
         button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
-            transition: all 0.2s ease;
+            width: 100%; padding: 16px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
+            color: white; border: none; border-radius: 30px; font-size: 16px; font-weight: 600; cursor: pointer;
         }
-
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
-        }
-
-        /* --- Нові стилі для Google кнопки --- */
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 20px 0;
-            color: #7f8c8d;
-            font-size: 12px;
-            opacity: 0.7;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #7f8c8d;
-        }
-
-        .divider span {
-            padding: 0 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
+        .divider { display: flex; align-items: center; margin: 20px 0; color: #7f8c8d; font-size: 12px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #7f8c8d; opacity: 0.3; }
         .google-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 14px;
-            border-radius: 30px;
-            background-color: white;
-            color: #2c3e50;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 600;
-            border: 1px solid rgba(94, 181, 213, 0.4);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-            transition: all 0.3s ease;
-            box-sizing: border-box;
+            display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px;
+            border-radius: 30px; background: white; color: #2c3e50; text-decoration: none; font-weight: 600;
+            border: 1px solid rgba(94, 181, 213, 0.4); box-sizing: border-box;
         }
-
-        .google-btn img {
-            width: 20px;
-            margin-right: 12px;
-        }
-
-        .google-btn:hover {
-            box-shadow: 0 6px 15px rgba(94, 181, 213, 0.2);
-            transform: translateY(-1px);
-        }
-        /* ----------------------------------- */
-
-        .login-link {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 13px;
-            color: #7f8c8d;
-        }
-
-        .login-link a {
-            color: #5eb5d5;
-            text-decoration: none;
-            font-weight: 600;
-        }
+        .google-btn img { width: 20px; margin-right: 12px; }
+        .login-link { margin-top: 25px; font-size: 13px; color: #7f8c8d; }
+        .login-link a { color: #5eb5d5; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
-
     <div class="signup-container">
         <div class="logo-title">FIDUCIA</div>
         <div class="slogan">trust in Ai trust in you</div>
 
         <form id="signup-form" method="POST" action="">
             {% csrf_token %}
-
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
             </div>
-
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="mail@example.com" required>
             </div>
-
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="••••••••" required>
             </div>
 
             <div class="privacy-container">
-                <input type="checkbox" id="privacy_policy" name="privacy_policy">
-                <label for="privacy_policy">
-                    I agree to the <a href="#">Privacy Policy</a> and <a href="#">Terms of Use</a>
+                <input type="checkbox" id="privacy_policy_check" name="privacy_policy">
+                <label for="privacy_policy_check">
+                    I agree to the <a href="{% url 'private_policy' %}" target="_blank">Privacy Policy</a> and <a href="{% url 'terms_of_use' %}" target="_blank">Terms of Use</a>
                 </label>
             </div>
-
-            <div id="privacy-error">You must agree to the terms to continue.</div>
+            <div id="privacy-error">You must agree to the terms.</div>
 
             <button type="submit">Create Account</button>
         </form>
 
-        <div class="divider">
-            <span>or</span>
-        </div>
-
+        <div class="divider"><span>or</span></div>
         <a href="{% provider_login_url 'google' %}" class="google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
             Continue with Google
         </a>
 
         <div class="login-link">
-            Already have an account? <a href="/login/">Log in</a>
+            Already have an account? <a href="{% url 'landing' %}">Log in</a>
         </div>
     </div>
 
     <script>
         document.getElementById("signup-form").addEventListener("submit", function(e) {
-            const checkbox = document.getElementById("privacy_policy");
-            const error = document.getElementById("privacy-error");
-
-            if (!checkbox.checked) {
+            if (!document.getElementById("privacy_policy_check").checked) {
                 e.preventDefault();
-                error.style.display = "block";
-            } else {
-                error.style.display = "none";
+                document.getElementById("privacy-error").style.display = "block";
             }
         });
     </script>
-
 </body>
 </html>

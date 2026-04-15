@@ -4,198 +4,301 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis Report — FIDUCIA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #e0f2f7 0%, #b2d8e5 100%);
-            --glass-white: rgba(255, 255, 255, 0.75);
-            --text-blue: #1a2b3c;
-            --muted-text: #7f8c8d;
-        }
+            --bg-color: #d8ebf2;
+            --card-white: #ffffff;
+            --text-main: #1a2b3c;
+            --text-muted: #7d858d;
 
-        * {
-            box-sizing: border-box;
+            --blue-primary: #3498db;
+            --blue-fill: rgba(173, 216, 230, 0.7);
+            --highlight-gold: #f39c12;
+            --success-green: #2ecc71;
+            --error-red: #e74c3c;
+
+            --glass: rgba(255, 255, 255, 0.85);
         }
 
         body {
             margin: 0;
             padding: 40px 20px;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: var(--bg-gradient);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
-            align-items: center;
         }
+
+        .container { width: 100%; max-width: 1000px; }
 
         .back-btn {
-            position: fixed;
-            top: 30px;
-            left: 30px;
+            display: inline-block;
             background: white;
             padding: 10px 25px;
-            border-radius: 20px;
+            border-radius: 50px;
             text-decoration: none;
-            color: #1d3557;
+            color: var(--text-main);
             font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            font-size: 13px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             transition: 0.3s;
-            z-index: 10;
+        }
+        .back-btn:hover { transform: translateY(-2px); }
+
+        .analytics-paper {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-radius: 40px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
         }
 
-        .back-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .feedback-container {
-            width: 100%;
-            max-width: 750px;
-            background: var(--glass-white);
-            border-radius: 45px;
-            padding: 40px 60px 60px;
+        .header-logo {
             text-align: center;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.06);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-        }
-
-        .header h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 34px;
-            font-weight: 300;
-            color: #1a2b3c;
+            font-family: 'Montserrat';
+            letter-spacing: 15px;
+            font-size: 32px;
             text-transform: uppercase;
-            letter-spacing: 12px;
-            margin: 0 0 50px 0;
-            padding-left: 12px;
+            margin-bottom: 40px;
+            font-weight: 300;
         }
 
-        .analysis-section {
+        .top-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
+            margin-bottom: 25px;
+        }
+
+        .score-display {
+            text-align: center;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            justify-content: center;
         }
 
-        .info-box {
-            background: rgba(255, 255, 255, 0.85);
-            padding: 35px;
-            border-radius: 25px;
-            text-align: left;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(241, 245, 248, 0.5);
-        }
-
-        .info-box h3 {
+        .score-label {
             font-size: 11px;
             text-transform: uppercase;
-            margin-top: 0;
-            margin-bottom: 18px;
             letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .score-circle {
+            font-size: 64px;
+            font-weight: 700;
+            color: var(--blue-primary);
+            margin: 5px 0;
+        }
+
+        .style-badge {
+            background: #f0f7ff;
+            color: var(--blue-primary);
+            padding: 5px 15px;
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--muted-text);
+            margin-top: 10px;
         }
 
-        .info-box p {
-            font-size: 16px;
-            line-height: 1.8;
-            margin: 0;
-            color: #2c3e50;
-            white-space: pre-line;
-        }
+        .progress-row { margin-bottom: 22px; }
+        .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; font-weight: 500; }
+        .bar-container { position: relative; height: 12px; background: rgba(0, 0, 0, 0.04); border-radius: 10px; overflow: hidden; }
+        .norm-zone { position: absolute; height: 100%; background: rgba(0, 0, 0, 0.06); border-left: 1px dashed rgba(0, 0, 0, 0.1); border-right: 1px dashed rgba(0, 0, 0, 0.1); z-index: 1; }
+        .bar-fill { position: absolute; height: 100%; border-radius: 10px; z-index: 2; background: var(--blue-fill); transition: 1.2s cubic-bezier(0.1, 0.5, 0.5, 1); }
 
-        .observations h3 {
-            color: #e67e22;
-        }
+        .analysis-item { margin-bottom: 20px; }
+        .report-box { padding: 15px 20px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
+        .analysis-item h4 { font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 1px; }
 
-        .corrections h3 {
-            color: #27ae60;
-        }
-
-        .observations h3::before,
-        .corrections h3::before {
-            content: '●';
-            font-size: 10px;
-        }
-
-        .empty-box {
+        .highlight-banner {
+            background: linear-gradient(90deg, #f39c12, #f1c40f);
+            color: white;
+            padding: 22px;
+            border-radius: 20px;
             text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.2);
         }
 
-        .empty-box p {
-            text-align: center;
-            color: #5f6b77;
-        }
-
-        @media (max-width: 768px) {
-            .feedback-container {
-                padding: 30px 20px 40px;
-                border-radius: 30px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-                letter-spacing: 6px;
-                margin-bottom: 30px;
-                padding-left: 6px;
-            }
-
-            .info-box {
-                padding: 24px;
-            }
-
-            .back-btn {
-                top: 20px;
-                left: 20px;
-                padding: 8px 18px;
-                font-size: 13px;
-            }
-        }
+        .chart-box { height: 320px; }
     </style>
 </head>
 <body>
 
+<div class="container">
     <a href="/dashboard/" class="back-btn">← Back</a>
 
-    <div class="feedback-container">
-        <div class="header">
-            <h1>Analysis</h1>
-        </div>
+    <div class="analytics-paper">
+        <div class="header-logo">FIDUCIA</div>
 
         {% if result %}
-            <div class="analysis-section">
+        <div class="top-grid">
+            <div class="card score-display">
+                <div class="score-label">Confidence Score</div>
+                <div class="score-circle">{{ score }}/10</div>
+                <p style="color: var(--text-muted); font-size: 13px; margin: 0;">Body language control level</p>
+                <div><span class="style-badge">{{ style }} Speaker</span></div>
+            </div>
 
-                <div class="info-box observations">
-                    <h3>Observations</h3>
-                    <p>
-                        {% if result.report %}
-                            {{ result.report }}
+            <div class="card">
+                <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px;">Body Language Balance</h3>
+
+                <div class="progress-row">
+                    <div class="progress-label"><span>Posture Stability</span><span>{{ metrics.posture_score|default:"85" }}%</span></div>
+                    <div class="bar-container">
+                        <div class="norm-zone" style="left: 75%; width: 20%;"></div>
+                        <div class="bar-fill" style="width: {{ metrics.posture_score|default:85 }}%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-row">
+                    <div class="progress-label"><span>Gesture Control</span><span>{{ metrics.gesture_frequency_score|default:"70" }}%</span></div>
+                    <div class="bar-container">
+                        <div class="norm-zone" style="left: 40%; width: 35%;"></div>
+                        <div class="bar-fill" style="width: {{ metrics.gesture_frequency_score|default:70 }}%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-row">
+                    <div class="progress-label"><span>Shoulder Symmetry</span><span>{{ metrics.symmetry_score|default:"92" }}%</span></div>
+                    <div class="bar-container">
+                        <div class="norm-zone" style="left: 80%; width: 20%;"></div>
+                        <div class="bar-fill" style="width: {{ metrics.symmetry_score|default:92 }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="highlight-banner">
+            ✨ THE GOLDEN 10 SECONDS <br>
+            <span style="font-size: 18px; font-weight: 400; opacity: 0.9;">Best performance started at {{ highlights.0.time|floatformat:1|default:"0.0" }}s</span>
+        </div>
+
+        <div class="card">
+            <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 25px;">Detailed Analysis</h3>
+
+            <div class="analysis-grid" style="display: flex; flex-direction: column; gap: 20px;">
+
+                <div class="analysis-item">
+                    <h4>📋 Summary</h4>
+                    <div class="report-box" style="background: rgba(248, 250, 252, 0.8); border-left: 5px solid var(--blue-primary);">
+                        {{ result.feedback.summary|default:"Analysis summary not available." }}
+                    </div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4 style="color: var(--success-green);">✅ What you did well</h4>
+                    <div class="report-box" style="background: rgba(46, 204, 113, 0.05); border-left: 5px solid var(--success-green);">
+                        <ul style="margin: 0; padding-left: 20px; color: #27ae60;">
+                            {% if result.feedback.strengths %}
+                                {% for strength in result.feedback.strengths %}
+                                    <li>{{ strength }}</li>
+                                {% endfor %}
+                            {% else %}
+                                <li>No specific strengths identified yet.</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4 style="color: var(--error-red);">⚠️ What needs improvement</h4>
+                    <div class="report-box" style="background: rgba(231, 76, 60, 0.05); border-left: 5px solid var(--error-red);">
+                        <ul style="margin: 0; padding-left: 20px; color: #c0392b;">
+                            {% if result.feedback.issues %}
+                                {% for issue in result.feedback.issues %}
+                                    <li>{{ issue }}</li>
+                                {% endfor %}
+                            {% else %}
+                                <li>No major issues detected. Great job!</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="analysis-item">
+                    <h4 style="color: var(--highlight-gold);">💡 Professional Advice</h4>
+                    <div class="report-box" style="background: rgba(243, 156, 18, 0.05); border-left: 5px solid var(--highlight-gold); font-style: italic;">
+                        {% if result.feedback.advice %}
+                            {{ result.feedback.advice|join:" " }}
                         {% else %}
-                            No observations available.
+                            Keep practicing to refine your style further.
                         {% endif %}
-                    </p>
-                </div>
-
-                <div class="info-box corrections">
-                    <h3>Corrections</h3>
-                    <p>
-                        Practice again and focus on keeping your posture stable, your head movement controlled, and your gestures natural.
-                    </p>
+                    </div>
                 </div>
 
             </div>
+        </div>
+
+        <div class="card chart-box">
+            <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px;">Activity Heatmap</h3>
+            <canvas id="timelineChart"></canvas>
+        </div>
+
         {% else %}
-            <div class="info-box empty-box">
-                <h3>Feedback</h3>
-                <p>No feedback available.</p>
-            </div>
+        <div class="card" style="text-align: center; padding: 100px;">
+            <h2>No Analysis Found</h2>
+            <p>Please upload a video to generate your report.</p>
+        </div>
         {% endif %}
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const timelineData = {{ timeline|safe }};
+    new Chart(document.getElementById('timelineChart'), {
+        type: 'line',
+        data: {
+            labels: timelineData.time.map(t => t.toFixed(1) + 's'),
+            datasets: [
+                {
+                    label: 'Head Stability',
+                    data: timelineData.head,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                },
+                {
+                    label: 'Gesture Activity',
+                    data: timelineData.hands,
+                    borderColor: '#f39c12',
+                    backgroundColor: 'transparent',
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 0
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom' } },
+            scales: {
+                x: { display: true, grid: { display: false } },
+                y: { beginAtZero: true, display: false }
+            }
+        }
+    });
+</script>
 
 </body>
 </html>
