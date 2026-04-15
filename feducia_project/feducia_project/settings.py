@@ -140,13 +140,13 @@ LOGIN_URL = '/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'fiducia.futurum@gmail.com'
-EMAIL_HOST_PASSWORD = 'tapd rzoy fuap widi'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+EMAIL_HOST_PASSWORD = 'tapdrzoyfuapwidi'
+DEFAULT_FROM_EMAIL = 'FIDUCIA <fiducia.futurum@gmail.com>'
+EMAIL_TIMEOUT = 10
 
 AUTHENTICATION_BACKENDS = [
     # Стандартний вхід Django (по юзернейму і паролю)
