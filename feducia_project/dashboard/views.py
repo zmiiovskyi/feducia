@@ -3,10 +3,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from .forms import ProfileUpdateForm
+from recordings.models import SpeechSession
 
 @login_required
+@login_required
 def main_page(request):
-    return render(request, "dashboard/main_page.html")
+    all_sessions = SpeechSession.objects.filter(user=request.user).order_by('-created_at')
+
+    context = {
+        'sessions': all_sessions
+    }
+    return render(request, "dashboard/main_page.html", context)
 
 @never_cache
 @login_required
@@ -70,3 +77,9 @@ def edit_profile_view(request):
         form = ProfileUpdateForm(instance=request.user)
 
     return render(request, 'dashboard/edit_profile.html', {'form': form})
+
+def guide_view(request, guide_id):
+    if 1 <= guide_id <= 10:
+        return render(request, f'dashboard/guides/guide_{guide_id}.html')
+    else:
+        return redirect('Main_Page')

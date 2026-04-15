@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIDUCIA - Dashboard</title>
     <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
             min-height: 100vh;
             margin: 0;
@@ -14,138 +17,61 @@
             display: flex;
             flex-direction: column;
         }
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-        }
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; }
+        .logo-container { display: flex; flex-direction: column; }
+        .logo-title { font-size: 28px; font-weight: 300; color: #1a2b3c; letter-spacing: 2px; margin: 0; }
+        .header-slogan { font-size: 10px; color: #5a6a7a; font-style: italic; letter-spacing: 0.5px; margin-top: 2px; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #2c3e50; font-size: 15px; font-weight: 500; transition: color 0.3s ease; }
+        .nav-links a:hover { color: #5eb5d5; }
+        .nav-links a.active-profile { font-weight: 700; color: #5eb5d5; }
 
-        .logo-title {
-            font-size: 28px;
-            font-weight: 300;
-            color: #1a2b3c;
-            letter-spacing: 2px;
-            margin: 0;
-        }
+        .dashboard-container { background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%); padding: 40px; border-radius: 40px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); width: 90%; max-width: 800px; margin: 20px auto; flex-grow: 1; margin-bottom: 40px; display: flex; flex-direction: column; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid #d0e4f0; }
 
-        .header-slogan {
-            font-size: 10px;
-            color: #5a6a7a;
-            font-style: italic;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-        }
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
+        .tab-btn { text-decoration: none; font-size: 24px; cursor: pointer; transition: all 0.2s ease; padding-bottom: 5px; margin: 0; }
+        .tab-active { color: #1a2b3c; border-bottom: 3px solid #5eb5d5; font-weight: 600; }
+        .tab-inactive { color: #95a5a6; border-bottom: 3px solid transparent; font-weight: 500; }
+        .tab-inactive:hover { color: #5eb5d5; }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #2c3e50;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+        .btn-primary { padding: 12px 24px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5); color: white; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; text-decoration: none; display: inline-block; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4); }
 
-        .nav-links a:hover {
-            color: #5eb5d5;
-        }
+        .empty-state { background-color: #ffffff; border-radius: 20px; padding: 60px 20px; text-align: center; box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15); flex-grow: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .empty-icon { font-size: 48px; margin-bottom: 15px; color: #8ad3e6; }
+        .empty-state h3 { margin: 0 0 10px 0; font-size: 20px; color: #2c3e50; }
+        .empty-state p { margin: 0; font-size: 14px; color: #7f8c8d; max-width: 300px; line-height: 1.5; }
 
-        .nav-links a.active-profile {
-            font-weight: 700;
-            color: #5eb5d5;
-        }
+        .rehearsal-list { display: flex; flex-direction: column; gap: 15px; width: 100%; max-height: 450px; overflow-y: auto; padding-right: 10px; }
+        .rehearsal-list::-webkit-scrollbar { width: 6px; }
+        .rehearsal-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .rehearsal-list::-webkit-scrollbar-thumb { background-color: #8ad3e6; border-radius: 10px; }
 
-        .nav-links a.active-profile:hover {
-            color: #2c3e50;
-        }
+        .rehearsal-card { background-color: #ffffff; border-radius: 20px; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(130, 180, 210, 0.1); transition: transform 0.2s ease, box-shadow 0.2s ease; flex-shrink: 0; }
+        .rehearsal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(130, 180, 210, 0.2); }
+        .rehearsal-info { display: flex; align-items: center; gap: 15px; }
+        .rehearsal-icon { font-size: 24px; background: #e0f2f8; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 15px; }
+        .rehearsal-details h4 { margin: 0 0 5px 0; color: #1a2b3c; font-size: 16px; }
+        .rehearsal-details p { margin: 0; color: #7f8c8d; font-size: 13px; }
 
-        .dashboard-container {
-            background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%);
-            padding: 40px;
-            border-radius: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-            width: 90%;
-            max-width: 800px;
-            margin: 20px auto;
-            flex-grow: 1;
-            margin-bottom: 40px;
-            display: flex;
-            flex-direction: column;
-        }
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #d0e4f0;
-        }
+        .rehearsal-actions { display: flex; gap: 10px; }
+        .btn-outline { padding: 10px 20px; background-color: transparent; color: #5eb5d5; border: 2px solid #a8dfef; border-radius: 25px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .btn-outline:hover { background-color: #e0f2f8; border-color: #5eb5d5; }
+        .btn-action { padding: 10px 20px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5); color: white; border: none; border-radius: 25px; font-size: 14px; font-weight: 600; text-decoration: none; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(94, 181, 213, 0.3); display: flex; align-items: center; gap: 6px; }
+        .btn-action:hover { transform: translateY(-1px); box-shadow: 0 6px 15px rgba(94, 181, 213, 0.4); }
 
-        .dashboard-title {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a2b3c;
-            margin: 0;
-        }
-        .btn-primary {
-            padding: 12px 24px;
-            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4);
-        }
-        .empty-state {
-            background-color: #ffffff;
-            border-radius: 20px;
-            padding: 60px 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15);
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .empty-icon {
-            font-size: 48px;
-            margin-bottom: 15px;
-            color: #8ad3e6;
-        }
-
-        .empty-state h3 {
-            margin: 0 0 10px 0;
-            font-size: 20px;
-            color: #2c3e50;
-        }
-        .empty-state p {
-            margin: 0;
-            font-size: 14px;
-            color: #7f8c8d;
-            max-width: 300px;
-            line-height: 1.5;
-        }
-
+        /* === КРАСИВЕ ВІКОНЦЕ (MODAL) ДЛЯ ВИДАЛЕННЯ === */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(13, 74, 112, 0.6); backdrop-filter: blur(4px); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); text-align: center; max-width: 350px; width: 90%; animation: modalFadeIn 0.3s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-title { margin: 0 0 10px 0; color: #1a2b3c; font-size: 22px; font-weight: 600; }
+        .modal-title.danger { color: #ff5252; }
+        .modal-text { color: #5a6a7a; margin-bottom: 30px; font-size: 14px; line-height: 1.5; font-weight: 500;}
+        .modal-actions { display: flex; gap: 15px; justify-content: center; }
+        .btn-cancel { padding: 10px 24px; border: 1px solid #d0e4f0; background: white; color: #5a6a7a; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+        .btn-cancel:hover { background: #f0f4f8; color: #1a2b3c; }
+        .btn-confirm-delete { padding: 10px 24px; background: linear-gradient(90deg, #ff7e7e, #ff5252); color: white; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3); transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center;}
+        .btn-confirm-delete:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 82, 82, 0.4); }
     </style>
 </head>
 <body>
@@ -165,19 +91,250 @@
     <main class="dashboard-container">
 
         <div class="dashboard-header">
-            <h1 class="dashboard-title">My Rehearsals</h1>
+            <div style="display: flex; gap: 30px; align-items: baseline;">
+                <a id="tab-rehearsals" onclick="switchTab('rehearsals')" class="tab-btn tab-active">My Rehearsals</a>
+                <a id="tab-guides" onclick="switchTab('guides')" class="tab-btn tab-inactive">Guides 💡</a>
+            </div>
+
             <a href="/recording/" class="btn-primary">
                 + New Rehearsal
             </a>
         </div>
 
-        <div class="empty-state">
-            <div class="empty-icon">🎙️</div>
-            <h3>No rehearsals yet</h3>
-            <p>You haven't recorded any practice sessions. Click the button above to start your first rehearsal with FIDUCIA!</p>
+        <div id="content-rehearsals" style="display: block;">
+            {% if sessions %}
+                <div class="rehearsal-list">
+                    {% for session in sessions %}
+                    <div class="rehearsal-card" style="flex-direction: column; align-items: stretch; gap: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div class="rehearsal-info">
+                                <div class="rehearsal-icon">🎙️</div>
+                                <div class="rehearsal-details">
+                                    <h4>Session #{{ forloop.revcounter }}</h4>
+                                    <p>{{ session.created_at|date:"d M Y" }} • {{ session.created_at|time:"H:i" }}</p>
+                                </div>
+                            </div>
+                            <div class="rehearsal-actions">
+                                {% if session.video %}
+                                    <button onclick="toggleVideo('vid-{{ session.id }}')" class="btn-outline">
+                                        ▶ Watch
+                                    </button>
+                                {% endif %}
+                                <a href="{% url 'recordings:analytics' session.id %}" class="btn-action">📊 Analytics</a>
+
+                                <form action="{% url 'recordings:delete_session' session.id %}" method="POST" style="margin: 0;" class="delete-session-form">
+                                    {% csrf_token %}
+                                    <button type="button" class="btn-outline trigger-delete-btn" style="color: #e74c3c; border-color: #fadbd8; padding: 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 42px; height: 42px;" title="Delete">
+                                        🗑️
+                                    </button>
+                                </form>
+                                </div>
+                        </div>
+                        {% if session.video %}
+                        <div id="vid-{{ session.id }}" style="display: none; margin-top: 15px;">
+                            <video controls playsinline style="width: 100%; border-radius: 10px; background-color: #1a2b3c;">
+                                <source src="{{ session.video.url }}">
+                                Your browser does not support video playback.
+                            </video>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">🎙️</div>
+                    <h3>No rehearsals yet</h3>
+                    <p>You haven't recorded any practice sessions. Click the button above to start your first rehearsal with FIDUCIA!</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="content-guides" style="display: none;">
+            <div class="rehearsal-list">
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/1/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #e0f2f8;">👀</div>
+                        <div class="rehearsal-details">
+                            <h4>The Magic of Focus: Where to Look?</h4>
+                            <p>Eye contact with the camera and the audience</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/2/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #fff3cd;">👐</div>
+                        <div class="rehearsal-details">
+                            <h4>Micro-gestures: How to Hide Nervousness</h4>
+                            <p>Learning to control your body language</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/3/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #d4edda;">🧘‍♀️</div>
+                        <div class="rehearsal-details">
+                            <h4>Warm-up: Preparing for Your Speech</h4>
+                            <p>Physical and vocal exercises before starting</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/4/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #cce5ff;">💡</div>
+                        <div class="rehearsal-details">
+                            <h4>Digital Etiquette: Framing and Lighting</h4>
+                            <p>How to set up the perfect picture at home</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/5/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #f8d7da;">🗣️</div>
+                        <div class="rehearsal-details">
+                            <h4>Filler Words: How to Clean Up Your Speech</h4>
+                            <p>Getting rid of unnecessary sounds and awkward pauses</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/6/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #e2e3e5;">⚡</div>
+                        <div class="rehearsal-details">
+                            <h4>Speech Energy: How Not to Sound Monotonous</h4>
+                            <p>Adding dynamics and passion to your words</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/7/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #d1ecf1;">📚</div>
+                        <div class="rehearsal-details">
+                            <h4>The Art of Storytelling: A Structure That Holds Attention</h4>
+                            <p>How to tell a story they will definitely remember</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/8/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #e0f2f8;">👔</div>
+                        <div class="rehearsal-details">
+                            <h4>Appearance: What to Wear for Different Speeches?</h4>
+                            <p>The dress code of a successful and confident speaker</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/9/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #fff3cd;">🆘</div>
+                        <div class="rehearsal-details">
+                            <h4>Handling Surprises: What if You Lose Your Train of Thought?</h4>
+                            <p>How to elegantly and calmly handle any situation</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+                <div class="rehearsal-card" style="cursor: pointer;" onclick="window.location.href='/guide/10/'">
+                    <div class="rehearsal-info">
+                        <div class="rehearsal-icon" style="background: #cce5ff;">🎢</div>
+                        <div class="rehearsal-details">
+                            <h4>Intonation Patterns: How Not to Lull Your Listener to Sleep</h4>
+                            <p>Controlling the tone and pitch of your voice to keep focus</p>
+                        </div>
+                    </div>
+                    <div class="rehearsal-actions"><span class="btn-outline">Read 📖</span></div>
+                </div>
+            </div>
         </div>
 
     </main>
+
+    <div class="modal-overlay" id="deleteSessionModal">
+        <div class="modal-content">
+            <h3 class="modal-title danger">Delete Rehearsal</h3>
+            <p class="modal-text">Are you sure you want to delete this rehearsal? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" id="cancelSessionDelete">Cancel</button>
+                <button class="btn-confirm-delete" id="confirmSessionDelete">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            const tabRehearsals = document.getElementById('tab-rehearsals');
+            const tabGuides = document.getElementById('tab-guides');
+            const contentRehearsals = document.getElementById('content-rehearsals');
+            const contentGuides = document.getElementById('content-guides');
+
+            if (tabName === 'rehearsals') {
+                contentRehearsals.style.display = 'block';
+                contentGuides.style.display = 'none';
+                tabRehearsals.className = 'tab-btn tab-active';
+                tabGuides.className = 'tab-btn tab-inactive';
+            } else if (tabName === 'guides') {
+                contentRehearsals.style.display = 'none';
+                contentGuides.style.display = 'block';
+                tabGuides.className = 'tab-btn tab-active';
+                tabRehearsals.className = 'tab-btn tab-inactive';
+            }
+        }
+
+        function toggleVideo(videoId) {
+            const videoContainer = document.getElementById(videoId);
+            if (videoContainer.style.display === "none") {
+                videoContainer.style.display = "block";
+            } else {
+                videoContainer.style.display = "none";
+                const video = videoContainer.querySelector("video");
+                if (video) { video.pause(); }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteSessionModal = document.getElementById('deleteSessionModal');
+            const cancelSessionDelete = document.getElementById('cancelSessionDelete');
+            const confirmSessionDelete = document.getElementById('confirmSessionDelete');
+            let formToSubmit = null; // Змінна для запам'ятовування, яку саме форму відправляти
+
+            const triggerBtns = document.querySelectorAll('.trigger-delete-btn');
+
+            triggerBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Знаходимо форму, в якій лежить ця кнопка
+                    formToSubmit = this.closest('form.delete-session-form');
+                    deleteSessionModal.style.display = 'flex';
+                });
+            });
+
+            cancelSessionDelete.addEventListener('click', () => {
+                deleteSessionModal.style.display = 'none';
+                formToSubmit = null;
+            });
+
+            deleteSessionModal.addEventListener('click', (e) => {
+                if (e.target === deleteSessionModal) {
+                    deleteSessionModal.style.display = 'none';
+                    formToSubmit = null;
+                }
+            });
+
+            confirmSessionDelete.addEventListener('click', () => {
+                if (formToSubmit) {
+                    formToSubmit.submit();
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

@@ -1,10 +1,8 @@
 import os
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import SpeechSession
 from .video_analysis import VideoAnalyzer
 
@@ -116,3 +114,11 @@ def analytics_view(request, session_id):
             "feedback_list": feedback_data.get("feedback", [])
         }
     )
+
+
+@login_required
+def delete_session_view(request, session_id):
+    if request.method == 'POST':
+        session = get_object_or_404(SpeechSession, id=session_id, user=request.user)
+        session.delete()
+    return redirect('Main_Page')
