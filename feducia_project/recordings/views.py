@@ -1,10 +1,8 @@
 import os
-
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
-
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import SpeechSession
 from .video_analysis import VideoAnalyzer
 
@@ -106,16 +104,15 @@ def analytics_view(request, session_id):
         user=request.user
     )
 
+
     result = session.feedback or {}
 
     metrics = result.get("metrics", {})
     timeline = result.get("timeline", {})
-
-    # --- SAFE VALUES ---
+    
     def safe(val, default=0):
         return val if val is not None else default
 
-    # --- SCORE BREAKDOWN (для progress bars) ---
     chart = {
         "posture": round((1 - safe(metrics.get("posture"))) * 100),
         "head": round((1 - safe(metrics.get("head"))) * 100),
@@ -134,3 +131,12 @@ def analytics_view(request, session_id):
     }
 
     return render(request, "recordings/analytics.html", context)
+
+   
+@login_required
+def delete_session_view(request, session_id):
+    if request.method == 'POST':
+        session = get_object_or_404(SpeechSession, id=session_id, user=request.user)
+        session.delete()
+    return redirect('Main_Page')
+
