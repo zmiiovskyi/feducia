@@ -104,21 +104,39 @@ def analytics_view(request, session_id):
         user=request.user
     )
 
-    feedback_data = session.feedback or {}
-    return render(
-        request,
-        "recordings/analytics.html",
-        {
-            "session": session,
-            "result": feedback_data,
-            "feedback_list": feedback_data.get("feedback", [])
-        }
-    )
 
+    result = session.feedback or {}
 
+    metrics = result.get("metrics", {})
+    timeline = result.get("timeline", {})
+    
+    def safe(val, default=0):
+        return val if val is not None else default
+
+    chart = {
+        "posture": round((1 - safe(metrics.get("posture"))) * 100),
+        "head": round((1 - safe(metrics.get("head"))) * 100),
+        "gesture": round((1 - safe(metrics.get("gesture_frequency"))) * 100),
+        "symmetry": round(safe(metrics.get("symmetry")) * 100),
+    }
+
+    context = {
+        "result": result,
+        "metrics": metrics,
+        "timeline": timeline,
+        "chart": chart,
+        "score": result.get("score"),
+        "style": result.get("style"),
+        "highlights": result.get("highlights", [])
+    }
+
+    return render(request, "recordings/analytics.html", context)
+
+   
 @login_required
 def delete_session_view(request, session_id):
     if request.method == 'POST':
         session = get_object_or_404(SpeechSession, id=session_id, user=request.user)
         session.delete()
     return redirect('Main_Page')
+
