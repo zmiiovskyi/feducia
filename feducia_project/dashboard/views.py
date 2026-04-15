@@ -4,6 +4,9 @@ from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
 from .forms import ProfileUpdateForm
 from recordings.models import SpeechSession
+from django.contrib.auth import get_user_model
+from django.contrib import messages
+
 
 User = get_user_model()
 
