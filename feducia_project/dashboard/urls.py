@@ -17,5 +17,5 @@ urlpatterns = [
         success_url='/profile/'
     ), name='password_change'),
     path('change-profile/', views.edit_profile_view, name='edit_profile'),
-
+    path('guide/<int:guide_id>/', views.guide_view, name='guide'),
 ]

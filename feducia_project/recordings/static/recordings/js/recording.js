@@ -171,7 +171,20 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             videoElement.srcObject = stream;
-            mediaRecorder = new MediaRecorder(stream);
+
+            let options = { mimeType: 'video/webm' };
+            let fileExtension = 'webm';
+
+            if (MediaRecorder.isTypeSupported('video/mp4')) {
+                options = { mimeType: 'video/mp4' };
+                fileExtension = 'mp4';
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp9')) {
+                options = { mimeType: 'video/webm;codecs=vp9' };
+            } else if (MediaRecorder.isTypeSupported('video/webm;codecs=vp8')) {
+                options = { mimeType: 'video/webm;codecs=vp8' };
+            }
+
+            mediaRecorder = new MediaRecorder(stream, options);
 
             mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
@@ -182,11 +195,11 @@ document.addEventListener("DOMContentLoaded", () => {
             mediaRecorder.onstop = async () => {
                 setStatus("Saving video...");
 
-                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const blob = new Blob(recordedChunks, { type: options.mimeType });
                 recordedChunks = [];
 
                 const formData = new FormData();
-                formData.append("video_file", blob, "rehearsal.webm");
+                formData.append("video_file", blob, `rehearsal.${fileExtension}`);
                 formData.append("teleprompter_text", teleInput.value.trim());
 
                 const csrfToken = getCsrfToken();
