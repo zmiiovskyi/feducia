@@ -1,16 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout, update_session_auth_hash, get_user_model
+from django.contrib.auth import logout
 from django.views.decorators.cache import never_cache
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.core.mail import EmailMultiAlternatives, send_mail
-from django.template.loader import render_to_string
-from django.conf import settings
-from django.contrib import messages
-from django.urls import reverse
 from .forms import ProfileUpdateForm
+from recordings.models import SpeechSession
 
 User = get_user_model()
 
@@ -21,7 +14,17 @@ def landing_view(request):
 
 @login_required
 def main_page(request):
-    return render(request, "dashboard/main_page.html")
+    all_sessions = SpeechSession.objects.filter(user=request.user).order_by('-created_at')
+
+    context = {
+        'sessions': all_sessions
+    }
+    return render(request, "dashboard/main_page.html", context)
+
+@never_cache
+@login_required
+def profile_page(request):
+    return render(request, "dashboard/profile_page.html")
 
 def about_view(request):
     return render(request, 'dashboard/about_us.html')
@@ -31,8 +34,10 @@ def contacts_view(request):
         name = request.POST.get('name')
         email = request.POST.get('email')
         message = request.POST.get('message')
+
         subject = f"New message from {name}"
         full_content = f"Sender: {name}\nEmail: {email}\n\nMessage:\n{message}"
+
         try:
             send_mail(
                 subject,
@@ -63,6 +68,12 @@ def edit_profile_view(request):
     else:
         form = ProfileUpdateForm(instance=request.user)
     return render(request, 'dashboard/edit_profile.html', {'form': form})
+
+def guide_view(request, guide_id):
+    if 1 <= guide_id <= 10:
+        return render(request, f'dashboard/guides/guide_{guide_id}.html')
+    else:
+        return redirect('Main_Page')
 
 def logout_view(request):
     logout(request)
@@ -128,7 +139,6 @@ def password_reset_confirm(request, uidb64, token):
     else:
         return render(request, "dashboard/password_reset.html", {"message": "Invalid link."})
 
-# Додані функції
 def privacy_view(request):
     return render(request, 'dashboard/private_policy.html')
 
