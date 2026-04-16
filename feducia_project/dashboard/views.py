@@ -6,7 +6,8 @@ from .forms import ProfileUpdateForm
 from recordings.models import SpeechSession
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-
+from django.http import JsonResponse
+from .models import Profile
 
 User = get_user_model()
 
@@ -18,7 +19,6 @@ def landing_view(request):
 @login_required
 def main_page(request):
     all_sessions = SpeechSession.objects.filter(user=request.user).order_by('-created_at')
-
     context = {
         'sessions': all_sessions
     }
@@ -54,11 +54,6 @@ def contacts_view(request):
         except Exception as e:
             messages.error(request, f'Mail Error: {str(e)}')
     return render(request, "dashboard/contacts.html")
-
-@never_cache
-@login_required
-def profile_page(request):
-    return render(request, "dashboard/profile_page.html")
 
 @login_required
 def edit_profile_view(request):
@@ -147,3 +142,21 @@ def privacy_view(request):
 
 def terms_view(request):
     return render(request, 'dashboard/terms_of_use.html')
+
+@login_required
+def upload_avatar_view(request):
+    if request.method == 'POST' and request.FILES.get('avatar'):
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile.avatar = request.FILES['avatar']
+        profile.save()
+        return JsonResponse({'status': 'success', 'avatar_url': profile.avatar.url})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
+@login_required
+def delete_avatar_view(request):
+    if request.method == 'POST':
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        if profile.avatar:
+            profile.avatar.delete(save=True)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
