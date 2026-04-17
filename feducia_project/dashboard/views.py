@@ -73,7 +73,7 @@ def edit_profile_view(request):
     return render(request, 'dashboard/edit_profile.html', {'form': form})
 
 def guide_view(request, guide_id):
-    if 1 <= guide_id <= 10:
+    if 1 <= guide_id <= 11:
         return render(request, f'dashboard/guides/guide_{guide_id}.html')
     else:
         return redirect('Main_Page')

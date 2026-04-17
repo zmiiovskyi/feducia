@@ -20,13 +20,19 @@
         .slogan { font-size: 11px; color: #7f8c8d; margin-bottom: 30px; font-style: italic; }
         .form-group { margin-bottom: 16px; text-align: left; }
         label { display: block; margin-bottom: 6px; color: #5a6a7a; font-size: 13px; padding-left: 12px; font-weight: 500; }
+
         input[type="text"], input[type="email"], input[type="password"] {
             width: 100%; padding: 14px 16px; border: none; border-radius: 20px; outline: none; font-size: 14px;
             box-shadow: 0 4px 15px rgba(130, 180, 210, 0.15);
+            box-sizing: border-box;
         }
+
         .privacy-container { display: flex; align-items: center; justify-content: flex-start; margin: 20px 0; gap: 10px; font-size: 12px; color: #556b7d; }
         .privacy-container input { width: 16px; height: 16px; cursor: pointer; }
         .privacy-container a { color: #72b9d0; text-decoration: none; font-weight: 600; }
+
+        .privacy-container label { display: inline; margin: 0; padding: 0; }
+
         #privacy-error { color: #e74c3c; font-size: 11px; display: none; text-align: left; padding-left: 12px; margin-bottom: 10px; }
         button {
             width: 100%; padding: 16px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
@@ -82,7 +88,7 @@
         </a>
 
         <div class="login-link">
-            Already have an account? <a href="{% url 'landing' %}">Log in</a>
+            Already have an account? <a href="{% url 'login' %}">Log in</a>
         </div>
     </div>
 
