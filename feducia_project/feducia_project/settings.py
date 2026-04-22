@@ -144,7 +144,7 @@ EMAIL_PORT = 465
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'fiducia.futurum@gmail.com'
-EMAIL_HOST_PASSWORD = 'tapdrzoyfuapwidi'
+EMAIL_HOST_PASSWORD = 'tapd rzoy fuap widi'
 DEFAULT_FROM_EMAIL = 'FIDUCIA <fiducia.futurum@gmail.com>'
 EMAIL_TIMEOUT = 10
 
