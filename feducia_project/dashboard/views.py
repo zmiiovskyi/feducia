@@ -6,14 +6,13 @@ from .forms import ProfileUpdateForm
 from recordings.models import SpeechSession
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Profile
 
 User = get_user_model()
 
 def landing_view(request):
-    if request.user.is_authenticated:
-        return redirect('Main_Page')
     return render(request, 'dashboard/landing.html')
 
 @login_required
@@ -45,15 +44,16 @@ def contacts_view(request):
             send_mail(
                 subject,
                 full_content,
-                settings.EMAIL_HOST_USER,
+                'fiducia.futurum@gmail.com',
                 ['fiducia.futurum@gmail.com'],
                 fail_silently=False,
             )
             messages.success(request, 'Message successfully sent!')
-            return redirect('contacts_page')
+            return redirect('contacts')
         except Exception as e:
             messages.error(request, f'Mail Error: {str(e)}')
     return render(request, "dashboard/contacts.html")
+
 
 @login_required
 def edit_profile_view(request):
@@ -68,7 +68,7 @@ def edit_profile_view(request):
     return render(request, 'dashboard/edit_profile.html', {'form': form})
 
 def guide_view(request, guide_id):
-    if 1 <= guide_id <= 10:
+    if 1 <= guide_id <= 11:
         return render(request, f'dashboard/guides/guide_{guide_id}.html')
     else:
         return redirect('Main_Page')

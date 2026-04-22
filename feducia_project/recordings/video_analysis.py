@@ -178,7 +178,7 @@ class VideoAnalyzer:
 
         return "\n\n".join(parts)
 
-    def analyze(self, video_path, frame_step=10):
+    def analyze(self, video_path, frame_step=3):
         cap = cv2.VideoCapture(video_path)
 
         if not cap.isOpened():
