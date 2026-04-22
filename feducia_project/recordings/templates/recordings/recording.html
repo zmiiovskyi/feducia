@@ -8,7 +8,9 @@
     <title>FIDUCIA - Record Rehearsal</title>
 </head>
 <body>
-    <form style="display: none;">{% csrf_token %}</form>
+    <form id="upload-form" action="/save_recording/" method="POST" enctype="multipart/form-data" style="display: none;">
+    {% csrf_token %}
+    </form>
 
     <a href="/dashboard/" class="btn-back"><span>&larr;</span> Back</a>
     <div class="header-space"></div>
@@ -53,7 +55,6 @@
     <div id="text-modal" class="modal-overlay">
         <div class="modal-content">
             <h2>Teleprompter Script</h2>
-
             <div class="speed-control-group">
                 <label>Reading Speed:</label>
                 <div class="speed-buttons">
@@ -62,19 +63,20 @@
                     <button type="button" class="btn-speed" data-speed="185">Fast</button>
                 </div>
             </div>
-
             <textarea id="teleprompter-input" placeholder="Paste your script here..."></textarea>
-
             <div class="modal-actions">
                 <button id="save-text-btn" type="button" class="btn-modal-save">Save & Close</button>
             </div>
         </div>
     </div>
 
+    <script>
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
     <script src="{% static 'recordings/js/recording.js' %}"></script>
     <script>
         const stopBtn = document.getElementById('stop-btn');
-
         stopBtn.addEventListener('click', function() {
             if (typeof startFiduciaLoader === "function") {
                 startFiduciaLoader();
