@@ -160,26 +160,26 @@
                 <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px;">Body Language Balance</h3>
 
                 <div class="progress-row">
-                    <div class="progress-label"><span>Posture Stability</span><span>{{ metrics.posture_score|default:"85" }}%</span></div>
-                    <div class="bar-container">
-                        <div class="norm-zone" style="left: 75%; width: 20%;"></div>
-                        <div class="bar-fill" style="width: {{ metrics.posture_score|default:85 }}%"></div>
-                    </div>
-                </div>
-
-                <div class="progress-row">
-                    <div class="progress-label"><span>Gesture Control</span><span>{{ metrics.gesture_frequency_score|default:"70" }}%</span></div>
-                    <div class="bar-container">
-                        <div class="norm-zone" style="left: 40%; width: 35%;"></div>
-                        <div class="bar-fill" style="width: {{ metrics.gesture_frequency_score|default:70 }}%"></div>
-                    </div>
-                </div>
-
-                <div class="progress-row">
-                    <div class="progress-label"><span>Shoulder Symmetry</span><span>{{ metrics.symmetry_score|default:"92" }}%</span></div>
+                    <div class="progress-label"><span>Posture Stability</span><span id="label-posture">--%</span></div>
                     <div class="bar-container">
                         <div class="norm-zone" style="left: 80%; width: 20%;"></div>
-                        <div class="bar-fill" style="width: {{ metrics.symmetry_score|default:92 }}%"></div>
+                        <div class="bar-fill" id="bar-posture" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-row">
+                    <div class="progress-label"><span>Gesture Control</span><span id="label-gestures">--%</span></div>
+                    <div class="bar-container">
+                        <div class="norm-zone" style="left: 30%; width: 45%;"></div>
+                        <div class="bar-fill" id="bar-gestures" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-row">
+                    <div class="progress-label"><span>Shoulder Symmetry</span><span id="label-symmetry">--%</span></div>
+                    <div class="bar-container">
+                        <div class="norm-zone" style="left: 85%; width: 15%;"></div>
+                        <div class="bar-fill" id="bar-symmetry" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -262,7 +262,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    // Отримуємо метрики з Django контексту
+    const rawMetrics = {{ result.metrics|safe }};
     const timelineData = {{ timeline|safe }};
+
+    // Функція для оновлення шкал на основі реальних даних
+    function updateProgressBars() {
+        // 1. Posture Stability (чим менший diff, тим вищий відсоток)
+        // 0.00 = 100%, 0.10 = 0%
+        let posturePercent = Math.max(0, 100 - (rawMetrics.posture * 1000));
+        document.getElementById('bar-posture').style.width = posturePercent + '%';
+        document.getElementById('label-posture').innerText = Math.round(posturePercent) + '%';
+
+        // 2. Gesture Control (частота жестів)
+        // 2. Gesture Control (частота жестів)
+        // Тепер ми множимо на 200 або 300, щоб 100% досягалося лише при дуже інтенсивній жестикуляції
+        let gesturePercent = Math.min(100, (rawMetrics.gesture_frequency * 300));
+        document.getElementById('bar-gestures').style.width = gesturePercent + '%';
+        document.getElementById('label-gestures').innerText = Math.round(gesturePercent) + '%';
+
+        // 3. Symmetry (пряме значення від 0 до 1)
+        let symmetryPercent = (rawMetrics.symmetry || 0) * 100;
+        document.getElementById('bar-symmetry').style.width = symmetryPercent + '%';
+        document.getElementById('label-symmetry').innerText = Math.round(symmetryPercent) + '%';
+    }
+
+    // Запуск оновлення шкал
+    if (rawMetrics) {
+        updateProgressBars();
+    }
+
+    // Малювання графіку
     new Chart(document.getElementById('timelineChart'), {
         type: 'line',
         data: {

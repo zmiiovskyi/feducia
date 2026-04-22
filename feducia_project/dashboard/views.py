@@ -6,6 +6,7 @@ from .forms import ProfileUpdateForm
 from recordings.models import SpeechSession
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.core.mail import send_mail
 
 
 User = get_user_model()
@@ -43,7 +44,7 @@ def contacts_view(request):
             send_mail(
                 subject,
                 full_content,
-                settings.EMAIL_HOST_USER,
+                'fiducia.futurum@gmail.com',
                 ['fiducia.futurum@gmail.com'],
                 fail_silently=False,
             )
