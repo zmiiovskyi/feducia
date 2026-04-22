@@ -55,6 +55,10 @@ def save_recording_view(request):
                 status=500
             )
 
+        profile = request.user.profile
+        profile.points += 50
+        profile.save()
+
         return JsonResponse({
             "status": "success",
             "id": session.id
@@ -79,7 +83,6 @@ def save_recording_view(request):
     finally:
         if analyzer is not None:
             analyzer.close()
-
 
 @login_required
 def loading_view(request, session_id):
