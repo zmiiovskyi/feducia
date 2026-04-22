@@ -2,7 +2,6 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
-
 urlpatterns = [
     path('', views.landing_view, name='landing'),
     path('profile/', views.profile_page, name='profile'),
@@ -25,4 +24,7 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
     path('privacy/', views.privacy_view, name='private_policy'),
     path('terms/', views.terms_view, name='terms_of_use'),
+
+    path('profile/upload-avatar/', views.upload_avatar_view, name='upload_avatar'),
+    path('profile/delete-avatar/', views.delete_avatar_view, name='delete_avatar'),
 ]
