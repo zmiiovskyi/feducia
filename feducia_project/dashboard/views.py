@@ -12,8 +12,6 @@ from django.core.mail import send_mail
 User = get_user_model()
 
 def landing_view(request):
-    if request.user.is_authenticated:
-        return redirect('Main_Page')
     return render(request, 'dashboard/landing.html')
 
 @login_required
@@ -51,15 +49,11 @@ def contacts_view(request):
                 fail_silently=False,
             )
             messages.success(request, 'Message successfully sent!')
-            return redirect('contacts_page')
+            return redirect('contacts')
         except Exception as e:
             messages.error(request, f'Mail Error: {str(e)}')
     return render(request, "dashboard/contacts.html")
 
-@never_cache
-@login_required
-def profile_page(request):
-    return render(request, "dashboard/profile_page.html")
 
 @login_required
 def edit_profile_view(request):
@@ -74,7 +68,7 @@ def edit_profile_view(request):
     return render(request, 'dashboard/edit_profile.html', {'form': form})
 
 def guide_view(request, guide_id):
-    if 1 <= guide_id <= 10:
+    if 1 <= guide_id <= 11:
         return render(request, f'dashboard/guides/guide_{guide_id}.html')
     else:
         return redirect('Main_Page')
