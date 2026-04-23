@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analysis Report — FIDUCIA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
@@ -12,131 +13,227 @@
             --card-white: #ffffff;
             --text-main: #1a2b3c;
             --text-muted: #7d858d;
-
             --blue-primary: #3498db;
-            --blue-fill: rgba(173, 216, 230, 0.7);
+            --blue-soft: #eef7fd;
+            --blue-fill: rgba(173, 216, 230, 0.78);
             --highlight-gold: #f39c12;
+            --gold-soft: rgba(243, 156, 18, 0.08);
             --success-green: #2ecc71;
+            --green-soft: rgba(46, 204, 113, 0.08);
             --error-red: #e74c3c;
-
-            --glass: rgba(255, 255, 255, 0.85);
+            --red-soft: rgba(231, 76, 60, 0.08);
+            --glass: rgba(255, 255, 255, 0.88);
+            --border-soft: rgba(26, 43, 60, 0.06);
+            --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.04);
         }
+
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
-            padding: 40px 20px;
+            padding: 36px 18px;
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background: linear-gradient(180deg, #d8ebf2 0%, #ebf6fa 100%);
             color: var(--text-main);
             display: flex;
             justify-content: center;
         }
 
-        .container { width: 100%; max-width: 1000px; }
+        .container { width: 100%; max-width: 1120px; }
 
         .back-btn {
             display: inline-block;
             background: white;
-            padding: 10px 25px;
-            border-radius: 50px;
+            padding: 10px 22px;
+            border-radius: 999px;
             text-decoration: none;
             color: var(--text-main);
-            font-weight: bold;
+            font-weight: 700;
             font-size: 13px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            transition: 0.3s;
+            box-shadow: var(--shadow-card);
+            transition: 0.25s ease;
         }
+
         .back-btn:hover { transform: translateY(-2px); }
 
         .analytics-paper {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border-radius: 40px;
-            padding: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            backdrop-filter: blur(16px);
+            border-radius: 36px;
+            padding: 42px;
+            box-shadow: var(--shadow-main);
         }
 
         .header-logo {
             text-align: center;
-            font-family: 'Montserrat';
-            letter-spacing: 15px;
-            font-size: 32px;
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 12px;
+            font-size: 30px;
             text-transform: uppercase;
-            margin-bottom: 40px;
+            margin-bottom: 34px;
             font-weight: 300;
         }
 
-        .top-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.02);
-            margin-bottom: 25px;
-        }
-
-        .score-display {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .score-label {
+        .section-title {
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--text-muted);
-            margin-bottom: 10px;
+            margin: 0 0 18px;
+            font-weight: 700;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1.55fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .vertical-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: var(--card-white);
+            border-radius: 26px;
+            padding: 26px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-soft);
+        }
+
+        .score-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            min-height: 260px;
         }
 
         .score-circle {
-            font-size: 64px;
+            font-size: 66px;
             font-weight: 700;
             color: var(--blue-primary);
-            margin: 5px 0;
+            line-height: 1;
+            margin-bottom: 10px;
         }
 
         .style-badge {
-            background: #f0f7ff;
+            background: var(--blue-soft);
             color: var(--blue-primary);
-            padding: 5px 15px;
-            border-radius: 12px;
+            padding: 7px 14px;
+            border-radius: 999px;
             display: inline-block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 14px;
         }
 
-        .progress-row { margin-bottom: 22px; }
-        .progress-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; font-weight: 500; }
-        .bar-container { position: relative; height: 12px; background: rgba(0, 0, 0, 0.04); border-radius: 10px; overflow: hidden; }
-        .norm-zone { position: absolute; height: 100%; background: rgba(0, 0, 0, 0.06); border-left: 1px dashed rgba(0, 0, 0, 0.1); border-right: 1px dashed rgba(0, 0, 0, 0.1); z-index: 1; }
-        .bar-fill { position: absolute; height: 100%; border-radius: 10px; z-index: 2; background: var(--blue-fill); transition: 1.2s cubic-bezier(0.1, 0.5, 0.5, 1); }
+        .mini-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
 
-        .analysis-item { margin-bottom: 20px; }
-        .report-box { padding: 15px 20px; border-radius: 12px; font-size: 14px; line-height: 1.6; }
-        .analysis-item h4 { font-size: 13px; margin-bottom: 10px; display: flex; align-items: center; text-transform: uppercase; letter-spacing: 1px; }
-
-        .highlight-banner {
-            background: linear-gradient(90deg, #f39c12, #f1c40f);
-            color: white;
-            padding: 22px;
-            border-radius: 20px;
+        .mini-stat {
+            background: #f8fbfd;
+            border-radius: 18px;
+            padding: 15px 14px;
             text-align: center;
-            margin-bottom: 25px;
-            font-weight: 600;
-            box-shadow: 0 10px 20px rgba(243, 156, 18, 0.2);
+            border: 1px solid rgba(26, 43, 60, 0.04);
         }
 
-        .chart-box { height: 320px; }
+        .mini-stat-value { font-size: 22px; font-weight: 700; color: var(--text-main); }
+        .mini-stat-label { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+        /* --- ШКАЛИ ТА НОРМИ --- */
+        .progress-row { margin-bottom: 18px; }
+        .progress-label { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; font-weight: 600; }
+        .norm-range-text { font-size: 10px; color: var(--success-green); text-transform: uppercase; font-weight: 700; margin-right: 8px; }
+
+        .bar-container {
+            position: relative;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .bar-container::after {
+            content: "";
+            position: absolute;
+            left: 40%;
+            width: 40%;
+            height: 100%;
+            background: rgba(46, 204, 113, 0.12);
+            border-left: 1px dashed rgba(46, 204, 113, 0.3);
+            border-right: 1px dashed rgba(46, 204, 113, 0.3);
+            z-index: 1;
+        }
+
+        .bar-fill {
+            position: absolute;
+            height: 100%;
+            border-radius: 999px;
+            background: var(--blue-fill);
+            transition: width 1s ease;
+            z-index: 2;
+        }
+
+        .report-box { padding: 16px 18px; border-radius: 16px; font-size: 14px; line-height: 1.7; }
+        .report-box.blue { background: rgba(248, 250, 252, 0.92); border-left: 5px solid var(--blue-primary); }
+        .report-box.green { background: var(--green-soft); border-left: 5px solid var(--success-green); }
+        .report-box.red { background: var(--red-soft); border-left: 5px solid var(--error-red); }
+        .report-box.gold { background: var(--gold-soft); border-left: 5px solid var(--highlight-gold); }
+
+        .block-title { font-size: 13px; text-transform: uppercase; font-weight: 700; margin: 0 0 10px; }
+        .block-title.blue { color: var(--blue-primary); }
+        .block-title.gold { color: var(--highlight-gold); }
+
+        .clean-list { margin: 0; padding-left: 18px; }
+        .clean-list li { margin-bottom: 9px; }
+
+        .tooltip { position: relative; display: inline-flex; width: 18px; height: 18px; border-radius: 50%; background: #edf4f8; justify-content: center; align-items: center; cursor: pointer; font-size: 11px; margin-left: 5px; }
+        .tooltip-text {
+            visibility: hidden;
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 240px;
+            background: #173042;
+            color: #fff;
+            padding: 10px 12px;
+            border-radius: 12px;
+            z-index: 100;
+            opacity: 0;
+            transition: 0.2s ease;
+            font-size: 12px;
+            line-height: 1.5;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            text-align: left;
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+
+        .transcript-box { max-height: 220px; overflow: auto; white-space: pre-wrap; }
+
+        @media (max-width: 960px) { .main-grid, .two-col { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -148,111 +245,229 @@
         <div class="header-logo">FIDUCIA</div>
 
         {% if result %}
-        <div class="top-grid">
-            <div class="card score-display">
-                <div class="score-label">Confidence Score</div>
-                <div class="score-circle">{{ score }}/10</div>
-                <p style="color: var(--text-muted); font-size: 13px; margin: 0;">Body language control level</p>
-                <div><span class="style-badge">{{ style }} Speaker</span></div>
+        <div class="main-grid">
+            <div class="card score-card">
+                <div class="score-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">
+                    Overall Score
+                    <span class="tooltip">? <span class="tooltip-text">Combined result of body language and voice analysis. A higher score usually means more stable, confident, and clear delivery.</span></span>
+                </div>
+                <div class="score-circle">{{ score|default:"0" }}/10</div>
+                <p class="score-note" style="color: var(--text-muted); font-size: 13px;">Combined speaking result based on body language and audio delivery.</p>
+                {% if style %}<div><span class="style-badge">{{ style }} Speaker</span></div>{% endif %}
+
+                <div class="mini-stats">
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ result.video_score|default:score|default:"0" }}/10</div>
+                        <div class="mini-stat-label">
+                            Video score
+                            <span class="tooltip">? <span class="tooltip-text">This score reflects posture, head control, gesture balance, and symmetry during your presentation.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.confidence_score|default:"0" }}/10</div>
+                        <div class="mini-stat-label">
+                            Audio score
+                            <span class="tooltip">? <span class="tooltip-text">This score reflects speech pace, filler words, and hesitation in pauses.</span></span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="card">
-                <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px;">Body Language Balance</h3>
+                <h3 class="section-title">Body Language Overview</h3>
 
+                {% for label, val in chart.items %}
                 <div class="progress-row">
-                    <div class="progress-label"><span>Posture Stability</span><span id="label-posture">--%</span></div>
+                    <div class="progress-label">
+                        <span style="display: flex; align-items: center;">
+                            {{ label|capfirst }}
+                            <span class="tooltip">
+                                ?
+                                <span class="tooltip-text">
+                                    {% if label == 'posture' %}A higher value means your posture looked more stable and controlled during the talk.{% endif %}
+                                    {% if label == 'head' %}This reflects how steady and controlled your head movement was throughout the recording.{% endif %}
+                                    {% if label == 'gesture' %}This reflects how balanced and controlled your visible gestures were.{% endif %}
+                                    {% if label == 'symmetry' %}A higher symmetry score usually means your upper body looked more balanced and aligned.{% endif %}
+                                </span>
+                            </span>
+                        </span>
+                        <span>
+                            <span class="norm-range-text">Normal: 40-80%</span>
+                            {{ val|default:"0" }}%
+                        </span>
+                    </div>
                     <div class="bar-container">
-                        <div class="norm-zone" style="left: 80%; width: 20%;"></div>
-                        <div class="bar-fill" id="bar-posture" style="width: 0%"></div>
+                        <div class="bar-fill" style="width: {{ val|default:0 }}%"></div>
                     </div>
                 </div>
+                {% endfor %}
+            </div>
+        </div>
 
-                <div class="progress-row">
-                    <div class="progress-label"><span>Gesture Control</span><span id="label-gestures">--%</span></div>
-                    <div class="bar-container">
-                        <div class="norm-zone" style="left: 30%; width: 45%;"></div>
-                        <div class="bar-fill" id="bar-gestures" style="width: 0%"></div>
+        <div class="card" style="margin-bottom: 22px;">
+            <h3 class="section-title">Speaker Style Description</h3>
+            <div class="report-box blue">
+                {{ result.style_description|default:"Your body language and posture were analyzed to determine your speaking style." }}
+            </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 22px;">
+            <h3 class="section-title">Quick Summary</h3>
+            <div class="report-box blue">{{ audio_summary }}</div>
+        </div>
+
+        <div class="vertical-stack">
+            <div class="card">
+                <h3 class="section-title">Strengths</h3>
+                <div class="report-box green">
+                    <ul class="clean-list">
+                        {% if audio_strengths %}{% for item in audio_strengths %}<li>{{ item }}</li>{% endfor %}
+                        {% else %}<li>Your speaking delivery already shows a useful foundation.</li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title">Needs Improvement</h3>
+                <div class="report-box red">
+                    <ul class="clean-list">
+                        {% if audio_weaknesses %}{% for item in audio_weaknesses %}<li>{{ item }}</li>{% endfor %}
+                        {% else %}<li>No major voice issues were detected.</li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="section-title">Practical Advice</h3>
+                <div class="report-box gold">
+                    <ul class="clean-list">
+                        {% if audio_advice %}{% for item in audio_advice %}<li>{{ item }}</li>{% endfor %}
+                        {% else %}<li>Focus on steady pace and intentional pauses.</li>{% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div class="card">
+                <h3 class="section-title">Voice Analysis</h3>
+                <div class="mini-stats" style="margin-top: 0;">
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.confidence_score|default:"0" }}/10</div>
+                        <div class="mini-stat-label">
+                            Voice confidence
+                            <span class="tooltip">? <span class="tooltip-text">A higher score means your speech sounded steadier, cleaner, and less hesitant overall.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.words_per_minute|default:"0" }}</div>
+                        <div class="mini-stat-label">
+                            Speaking pace
+                            <span class="tooltip">? <span class="tooltip-text">This shows your speaking speed (Words Per Minute).</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.filler_count|default:"0" }}</div>
+                        <div class="mini-stat-label">
+                            Filler words
+                            <span class="tooltip">? <span class="tooltip-text">Words like “um” or “like” that can reduce clarity if used too often.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{% if audio.sounds_nervous %}Yes{% else %}No{% endif %}</div>
+                        <div class="mini-stat-label">
+                            Nervousness
+                            <span class="tooltip">? <span class="tooltip-text">Signal based on pace, pauses, and filler patterns.</span></span>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="progress-row">
-                    <div class="progress-label"><span>Shoulder Symmetry</span><span id="label-symmetry">--%</span></div>
-                    <div class="bar-container">
-                        <div class="norm-zone" style="left: 85%; width: 15%;"></div>
-                        <div class="bar-fill" id="bar-symmetry" style="width: 0%"></div>
+            <div class="card">
+                <h3 class="section-title">Speech Flow</h3>
+                <div class="mini-stats" style="margin-top: 0;">
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.pause_analysis.long_pause_count|default:"0" }}</div>
+                        <div class="mini-stat-label">
+                            Long pauses
+                            <span class="tooltip">? <span class="tooltip-text">Pauses longer than 2 seconds, which may suggest hesitation.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.pause_analysis.max_pause|default:"0" }}s</div>
+                        <div class="mini-stat-label">
+                            Max pause
+                            <span class="tooltip">? <span class="tooltip-text">The duration of the longest detected pause.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{{ audio.repeat_count|default:"0" }}</div>
+                        <div class="mini-stat-label">
+                            Repeats
+                            <span class="tooltip">? <span class="tooltip-text">Number of times words or phrases were repeated consecutively.</span></span>
+                        </div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-value">{% if audio.sounds_nervous %}Tense{% else %}Stable{% endif %}</div>
+                        <div class="mini-stat-label">
+                            State
+                            <span class="tooltip">? <span class="tooltip-text">Overall stability of your verbal flow.</span></span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="highlight-banner">
-            ✨ THE GOLDEN 10 SECONDS <br>
-            <span style="font-size: 18px; font-weight: 400; opacity: 0.9;">Best performance started at {{ highlights.0.time|floatformat:1|default:"0.0" }}s</span>
-        </div>
+        <div class="vertical-stack">
+            <div class="card">
+                <h3 class="section-title">Combined Feedback</h3>
+                <div class="block-title blue">Overall Report</div>
+                <div class="report-box blue">{{ audio_summary }}</div>
 
-        <div class="card">
-            <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 25px;">Detailed Analysis</h3>
-
-            <div class="analysis-grid" style="display: flex; flex-direction: column; gap: 20px;">
-
-                <div class="analysis-item">
-                    <h4>📋 Summary</h4>
-                    <div class="report-box" style="background: rgba(248, 250, 252, 0.8); border-left: 5px solid var(--blue-primary);">
-                        {{ result.feedback.summary|default:"Analysis summary not available." }}
-                    </div>
+                <div class="block-title gold" style="margin-top: 20px;">Extra Coaching Tip</div>
+                <div class="report-box gold">
+                    {% if result.feedback.advice %}{{ result.feedback.advice|join:" " }}
+                    {% else %}A strong opening and intentional pauses help you sound more professional.{% endif %}
                 </div>
+            </div>
 
-                <div class="analysis-item">
-                    <h4 style="color: var(--success-green);">✅ What you did well</h4>
-                    <div class="report-box" style="background: rgba(46, 204, 113, 0.05); border-left: 5px solid var(--success-green);">
-                        <ul style="margin: 0; padding-left: 20px; color: #27ae60;">
-                            {% if result.feedback.strengths %}
-                                {% for strength in result.feedback.strengths %}
-                                    <li>{{ strength }}</li>
-                                {% endfor %}
-                            {% else %}
-                                <li>No specific strengths identified yet.</li>
-                            {% endif %}
-                        </ul>
-                    </div>
+            <div class="card">
+                <h3 class="section-title">Body Language Strengths</h3>
+                <div class="report-box green">
+                    <ul class="clean-list">
+                        {% if result.feedback.strengths %}{% for s in result.feedback.strengths %}<li>{{ s }}</li>{% endfor %}
+                        {% else %}<li>Your movements were stable and supported your speech.</li>{% endif %}
+                    </ul>
                 </div>
+            </div>
 
-                <div class="analysis-item">
-                    <h4 style="color: var(--error-red);">⚠️ What needs improvement</h4>
-                    <div class="report-box" style="background: rgba(231, 76, 60, 0.05); border-left: 5px solid var(--error-red);">
-                        <ul style="margin: 0; padding-left: 20px; color: #c0392b;">
-                            {% if result.feedback.issues %}
-                                {% for issue in result.feedback.issues %}
-                                    <li>{{ issue }}</li>
-                                {% endfor %}
-                            {% else %}
-                                <li>No major issues detected. Great job!</li>
-                            {% endif %}
-                        </ul>
-                    </div>
+            <div class="card">
+                <h3 class="section-title">Body Language Improvements</h3>
+                <div class="report-box red">
+                    <ul class="clean-list">
+                        {% if result.feedback.issues %}{% for i in result.feedback.issues %}<li>{{ i }}</li>{% endfor %}
+                        {% else %}<li>Try to maintain a relaxed posture throughout.</li>{% endif %}
+                    </ul>
                 </div>
-
-                <div class="analysis-item">
-                    <h4 style="color: var(--highlight-gold);">💡 Professional Advice</h4>
-                    <div class="report-box" style="background: rgba(243, 156, 18, 0.05); border-left: 5px solid var(--highlight-gold); font-style: italic;">
-                        {% if result.feedback.advice %}
-                            {{ result.feedback.advice|join:" " }}
-                        {% else %}
-                            Keep practicing to refine your style further.
-                        {% endif %}
-                    </div>
-                </div>
-
             </div>
         </div>
 
-        <div class="card chart-box">
-            <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 20px;">Activity Heatmap</h3>
+        <div class="card" style="margin-bottom: 22px;">
+            <h3 class="section-title">Transcript</h3>
+            <div class="report-box blue transcript-box">
+                {{ audio.text|default:"Transcript is not available." }}
+            </div>
+        </div>
+
+        {% if timeline.time %}
+        <div class="card" style="height: 400px;">
+            <h3 class="section-title">Activity Timeline</h3>
             <canvas id="timelineChart"></canvas>
         </div>
+        {% endif %}
 
         {% else %}
-        <div class="card" style="text-align: center; padding: 100px;">
+        <div class="card" style="text-align: center; padding: 90px 30px;">
             <h2>No Analysis Found</h2>
             <p>Please upload a video to generate your report.</p>
         </div>
@@ -260,39 +475,10 @@
     </div>
 </div>
 
+{% if timeline.time %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Отримуємо метрики з Django контексту
-    const rawMetrics = {{ result.metrics|safe }};
     const timelineData = {{ timeline|safe }};
-
-    // Функція для оновлення шкал на основі реальних даних
-    function updateProgressBars() {
-        // 1. Posture Stability (чим менший diff, тим вищий відсоток)
-        // 0.00 = 100%, 0.10 = 0%
-        let posturePercent = Math.max(0, 100 - (rawMetrics.posture * 1000));
-        document.getElementById('bar-posture').style.width = posturePercent + '%';
-        document.getElementById('label-posture').innerText = Math.round(posturePercent) + '%';
-
-        // 2. Gesture Control (частота жестів)
-        // 2. Gesture Control (частота жестів)
-        // Тепер ми множимо на 200 або 300, щоб 100% досягалося лише при дуже інтенсивній жестикуляції
-        let gesturePercent = Math.min(100, (rawMetrics.gesture_frequency * 300));
-        document.getElementById('bar-gestures').style.width = gesturePercent + '%';
-        document.getElementById('label-gestures').innerText = Math.round(gesturePercent) + '%';
-
-        // 3. Symmetry (пряме значення від 0 до 1)
-        let symmetryPercent = (rawMetrics.symmetry || 0) * 100;
-        document.getElementById('bar-symmetry').style.width = symmetryPercent + '%';
-        document.getElementById('label-symmetry').innerText = Math.round(symmetryPercent) + '%';
-    }
-
-    // Запуск оновлення шкал
-    if (rawMetrics) {
-        updateProgressBars();
-    }
-
-    // Малювання графіку
     new Chart(document.getElementById('timelineChart'), {
         type: 'line',
         data: {
@@ -302,18 +488,17 @@
                     label: 'Head Stability',
                     data: timelineData.head,
                     borderColor: '#3498db',
-                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    backgroundColor: 'rgba(52, 152, 219, 0.10)',
                     fill: true,
-                    tension: 0.4,
+                    tension: 0.35,
                     pointRadius: 0
                 },
                 {
                     label: 'Gesture Activity',
                     data: timelineData.hands,
                     borderColor: '#f39c12',
-                    backgroundColor: 'transparent',
                     fill: false,
-                    tension: 0.4,
+                    tension: 0.35,
                     pointRadius: 0
                 }
             ]
@@ -322,13 +507,11 @@
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { position: 'bottom' } },
-            scales: {
-                x: { display: true, grid: { display: false } },
-                y: { beginAtZero: true, display: false }
-            }
+            scales: { x: { display: true, grid: { display: false } }, y: { beginAtZero: true, display: false } }
         }
     });
 </script>
+{% endif %}
 
 </body>
 </html>
