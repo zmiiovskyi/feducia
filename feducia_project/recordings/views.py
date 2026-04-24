@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import SpeechSession
 from .video_analysis import VideoAnalyzer
+from .audio_utils import extract_audio_from_video
+from .audio_analysis import analyze_audio
 
 
 @login_required
@@ -37,10 +39,29 @@ def save_recording_view(request):
 
     try:
         video_path = session.video.path
-        model_path = os.path.join(settings.BASE_DIR, "models", "pose_landmarker_full.task")
+        audio_path = extract_audio_from_video(video_path)
+        audio_result = analyze_audio(audio_path)
+        model_path = os.path.join(
+            settings.BASE_DIR,
+            "models",
+            "pose_landmarker_full.task"
+        )
 
         analyzer = VideoAnalyzer(model_path=model_path)
         analysis_result = analyzer.analyze(video_path)
+
+        video_score = analysis_result.get("score", 0)
+        audio_score = audio_result.get("confidence_score", 0)
+
+        final_score = round((video_score * 0.6) + (audio_score * 0.4))
+
+        analysis_result["video_score"] = video_score
+        analysis_result["audio_score"] = audio_score
+        analysis_result["score"] = final_score
+
+        analysis_result["audio"] = audio_result
+        analysis_result["audio_extracted"] = True
+        analysis_result["audio_file"] = os.path.basename(audio_path)
 
         session.feedback = analysis_result
         session.save()
@@ -55,10 +76,12 @@ def save_recording_view(request):
                 status=500
             )
 
-        return JsonResponse({
-            "status": "success",
-            "id": session.id
-        })
+        return JsonResponse(
+            {
+                "status": "success",
+                "id": session.id
+            }
+        )
 
     except Exception as error:
         session.feedback = {
@@ -70,7 +93,7 @@ def save_recording_view(request):
         return JsonResponse(
             {
                 "status": "error",
-                "message": "Server error during video analysis.",
+                "message": "Server error during analysis.",
                 "details": str(error)
             },
             status=500
@@ -79,7 +102,6 @@ def save_recording_view(request):
     finally:
         if analyzer is not None:
             analyzer.close()
-
 
 @login_required
 def loading_view(request, session_id):
@@ -104,12 +126,12 @@ def analytics_view(request, session_id):
         user=request.user
     )
 
-
     result = session.feedback or {}
 
     metrics = result.get("metrics", {})
     timeline = result.get("timeline", {})
-    
+    audio = result.get("audio", {})
+
     def safe(val, default=0):
         return val if val is not None else default
 
@@ -127,16 +149,20 @@ def analytics_view(request, session_id):
         "chart": chart,
         "score": result.get("score"),
         "style": result.get("style"),
-        "highlights": result.get("highlights", [])
+        "audio": audio,
     }
 
     return render(request, "recordings/analytics.html", context)
 
-   
+
 @login_required
 def delete_session_view(request, session_id):
-    if request.method == 'POST':
-        session = get_object_or_404(SpeechSession, id=session_id, user=request.user)
+    if request.method == "POST":
+        session = get_object_or_404(
+            SpeechSession,
+            id=session_id,
+            user=request.user
+        )
         session.delete()
-    return redirect('Main_Page')
 
+    return redirect("Main_Page")

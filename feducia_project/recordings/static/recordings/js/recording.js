@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const videoElement = document.getElementById("camera-preview");
     const startBtn = document.getElementById("start-btn");
     const stopBtn = document.getElementById("stop-btn");
+    const restartBtn = document.getElementById("restart-btn");
     const openModalBtn = document.getElementById("open-modal-btn");
     const deleteTextBtn = document.getElementById("delete-text-btn");
     const saveTextBtn = document.getElementById("save-text-btn");
@@ -12,6 +13,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const timerDisplay = document.getElementById("timer-display");
     const statusText = document.getElementById("status-text");
     const speedButtons = document.querySelectorAll(".btn-speed");
+    const teleprompterBtnText = document.getElementById("teleprompter-btn-text");
+    const textActionGroup = document.getElementById("text-action-group");
 
     let stream = null;
     let mediaRecorder = null;
@@ -19,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let timerInterval = null;
     let seconds = 0;
     let pausedByModal = false;
+    let isRestarting = false;
 
     let currentWpm = 145;
     let isScrolling = false;
@@ -113,11 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
         modal.style.display = "none";
 
         if (teleInput.value.trim() !== "") {
-            openModalBtn.innerHTML = `${svgIcon} Change Teleprompter`;
+            if(teleprompterBtnText) teleprompterBtnText.innerHTML = `Change Teleprompter`;
             deleteTextBtn.style.display = "flex";
             teleText.innerText = teleInput.value.trim();
         } else {
-            openModalBtn.innerHTML = `${svgIcon} Add Teleprompter`;
+            if(teleprompterBtnText) teleprompterBtnText.innerHTML = `Add Teleprompter`;
             deleteTextBtn.style.display = "none";
             teleOverlay.style.display = "none";
             teleText.innerText = "";
@@ -156,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     deleteTextBtn.addEventListener("click", () => {
         teleInput.value = "";
-        openModalBtn.innerHTML = `${svgIcon} Add Teleprompter`;
+        if(teleprompterBtnText) teleprompterBtnText.innerHTML = `Add Teleprompter`;
         deleteTextBtn.style.display = "none";
         teleOverlay.style.display = "none";
         teleText.innerText = "";
@@ -193,6 +197,12 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             mediaRecorder.onstop = async () => {
+                if (isRestarting) {
+                    recordedChunks = [];
+                    isRestarting = false;
+                    return;
+                }
+
                 setStatus("Saving video...");
 
                 const blob = new Blob(recordedChunks, { type: options.mimeType });
@@ -243,11 +253,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     setStatus("Error saving video.");
                     startBtn.disabled = false;
                     stopBtn.disabled = true;
+                    restartBtn.style.display = "none";
+                    textActionGroup.style.display = "flex";
                 } catch (error) {
                     console.error("Network error:", error);
                     setStatus("Network error while saving.");
                     startBtn.disabled = false;
                     stopBtn.disabled = true;
+                    restartBtn.style.display = "none";
+                    textActionGroup.style.display = "flex";
                 }
             };
         } catch (error) {
@@ -263,6 +277,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             startBtn.disabled = true;
             stopBtn.disabled = true;
+            restartBtn.style.display = "none";
+            textActionGroup.style.display = "flex";
         }
     }
 
@@ -295,6 +311,10 @@ document.addEventListener("DOMContentLoaded", () => {
             startBtn.innerHTML = "⏸ Pause";
             startBtn.className = "btn btn-pause";
             stopBtn.disabled = false;
+
+            restartBtn.style.display = "flex";
+            textActionGroup.style.display = "none";
+
             return;
         }
 
@@ -341,6 +361,33 @@ document.addEventListener("DOMContentLoaded", () => {
         startBtn.className = "btn btn-start";
         startBtn.disabled = true;
         stopBtn.disabled = true;
+
+        restartBtn.style.display = "none";
+        textActionGroup.style.display = "flex";
+    });
+
+    restartBtn.addEventListener("click", () => {
+        if (!mediaRecorder || mediaRecorder.state === "inactive") return;
+
+        isRestarting = true;
+        mediaRecorder.stop();
+        clearInterval(timerInterval);
+        resetScrolling();
+        teleOverlay.style.display = "none";
+
+        seconds = 0;
+        timerDisplay.innerText = "00:00";
+        timerDisplay.style.display = "none";
+        statusText.style.display = "block";
+        setStatus("Ready to record or rehearse?");
+
+        startBtn.innerHTML = "▶ Start";
+        startBtn.className = "btn btn-start";
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
+
+        restartBtn.style.display = "none";
+        textActionGroup.style.display = "flex";
     });
 
     initCamera();
