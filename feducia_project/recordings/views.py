@@ -1,8 +1,10 @@
 import os
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+
 from .models import SpeechSession
 from .video_analysis import VideoAnalyzer
 from .audio_utils import extract_audio_from_video
@@ -103,6 +105,7 @@ def save_recording_view(request):
         if analyzer is not None:
             analyzer.close()
 
+
 @login_required
 def loading_view(request, session_id):
     session = get_object_or_404(
@@ -131,6 +134,7 @@ def analytics_view(request, session_id):
     metrics = result.get("metrics", {})
     timeline = result.get("timeline", {})
     audio = result.get("audio", {})
+    text = audio.get("text", "").strip()
 
     def safe(val, default=0):
         return val if val is not None else default
@@ -150,6 +154,7 @@ def analytics_view(request, session_id):
         "score": result.get("score"),
         "style": result.get("style"),
         "audio": audio,
+        "text": text,
     }
 
     return render(request, "recordings/analytics.html", context)

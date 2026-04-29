@@ -258,7 +258,13 @@ def build_report(feedback, is_tense):
 def analyze_audio(audio_path):
     duration = get_audio_duration(audio_path)
 
-    result = MODEL.transcribe(audio_path)
+    result = MODEL.transcribe(
+        audio_path,
+        fp16=False,
+        verbose=False,
+        condition_on_previous_text=False,
+        temperature=0,
+    )
 
     text = result.get("text", "").strip()
     segments = result.get("segments", [])
