@@ -3,6 +3,9 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.cache import cache
+import threading
+from django.db import connection
 from .models import SpeechSession, Profile
 from .video_analysis import VideoAnalyzer
 from .audio_utils import extract_audio_from_video
@@ -35,75 +38,81 @@ def save_recording_view(request):
         video=video_file
     )
 
-    analyzer = None
+    cache.set(f'progress_{session.id}', 5, timeout=300)
 
-    try:
-        video_path = session.video.path
-        audio_path = extract_audio_from_video(video_path)
-        audio_result = analyze_audio(audio_path)
-        model_path = os.path.join(
-            settings.BASE_DIR,
-            "models",
-            "pose_landmarker_full.task"
-        )
+    def run_analysis():
+        analyzer = None
+        try:
+            video_path = session.video.path
+            cache.set(f'progress_{session.id}', 10, timeout=300)
 
-        analyzer = VideoAnalyzer(model_path=model_path)
-        analysis_result = analyzer.analyze(video_path)
+            audio_path = extract_audio_from_video(video_path)
+            cache.set(f'progress_{session.id}', 18, timeout=300)
 
-        video_score = analysis_result.get("score", 0)
-        audio_score = audio_result.get("confidence_score", 0)
+            cache.set(f'progress_{session.id}', 22, timeout=300)
+            audio_result = analyze_audio(audio_path)
 
-        final_score = round((video_score * 0.6) + (audio_score * 0.4))
+            cache.set(f'progress_{session.id}', 30, timeout=300)
 
-        analysis_result["video_score"] = video_score
-        analysis_result["audio_score"] = audio_score
-        analysis_result["score"] = final_score
+            model_path = os.path.join(settings.BASE_DIR, "models", "pose_landmarker_full.task")
+            cache.set(f'progress_{session.id}', 32, timeout=300)
 
-        analysis_result["audio"] = audio_result
-        analysis_result["audio_extracted"] = True
-        analysis_result["audio_file"] = os.path.basename(audio_path)
+            analyzer = VideoAnalyzer(model_path=model_path)
 
-        session.feedback = analysis_result
-        session.save()
+            def update_progress(video_percent):
+                total_progress = int(30 + (video_percent * 0.7))
+                cache.set(f'progress_{session.id}', total_progress, timeout=300)
 
-        if not analysis_result.get("success"):
-            return JsonResponse(
-                {
-                    "status": "error",
-                    "message": analysis_result.get("error", "Video analysis failed."),
-                    "id": session.id
-                },
-                status=500
-            )
+            analysis_result = analyzer.analyze(video_path, progress_callback=update_progress)
 
-        profile, created = Profile.objects.get_or_create(user=request.user)
-        profile.points += 50
-        profile.save()
+            cache.set(f'progress_{session.id}', 100, timeout=300)
 
-        return JsonResponse({
+            video_score = analysis_result.get("score", 0)
+            audio_score = audio_result.get("confidence_score", 0)
+
+            final_score = round((video_score * 0.6) + (audio_score * 0.4))
+
+            analysis_result["video_score"] = video_score
+            analysis_result["audio_score"] = audio_score
+            analysis_result["score"] = final_score
+
+            analysis_result["audio"] = audio_result
+            analysis_result["audio_extracted"] = True
+            analysis_result["audio_file"] = os.path.basename(audio_path)
+
+            session.feedback = analysis_result
+            session.save()
+
+            if not analysis_result.get("success"):
+                cache.set(f'progress_{session.id}', -1, timeout=300)
+                return
+
+            profile, created = Profile.objects.get_or_create(user=request.user)
+            profile.points += 50
+            profile.save()
+
+        except Exception as error:
+            session.feedback = {
+                "success": False,
+                "error": str(error)
+            }
+            session.save()
+            cache.set(f'progress_{session.id}', -1, timeout=300)
+
+        finally:
+            if analyzer is not None:
+                analyzer.close()
+            connection.close()
+
+    thread = threading.Thread(target=run_analysis)
+    thread.start()
+
+    return JsonResponse(
+        {
             "status": "success",
             "id": session.id
-        })
-
-    except Exception as error:
-        session.feedback = {
-            "success": False,
-            "error": str(error)
         }
-        session.save()
-
-        return JsonResponse(
-            {
-                "status": "error",
-                "message": "Server error during analysis.",
-                "details": str(error)
-            },
-            status=500
-        )
-
-    finally:
-        if analyzer is not None:
-            analyzer.close()
+    )
 
 
 @login_required
@@ -128,7 +137,6 @@ def analytics_view(request, session_id):
         id=session_id,
         user=request.user
     )
-
 
     result = session.feedback or {}
 
@@ -168,4 +176,11 @@ def delete_session_view(request, session_id):
             user=request.user
         )
         session.delete()
-    return redirect('Main_Page')
+
+    return redirect("Main_Page")
+
+
+@login_required
+def get_progress(request, session_id):
+    progress = cache.get(f'progress_{session_id}', 0)
+    return JsonResponse({'progress': progress})

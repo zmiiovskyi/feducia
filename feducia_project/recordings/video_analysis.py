@@ -14,7 +14,7 @@ RIGHT_WRIST_IDX = 16
 
 
 class VideoAnalyzer:
-    def __init__(self, model_path):
+    def __init__(self, model_path, progress_callback=None):
         with open(model_path, "rb") as f:
             model_data = f.read()
 
@@ -178,12 +178,13 @@ class VideoAnalyzer:
 
         return "\n\n".join(parts)
 
-    def analyze(self, video_path, frame_step=3):
+    def analyze(self, video_path, frame_step=3, progress_callback=None):
         cap = cv2.VideoCapture(video_path)
 
         if not cap.isOpened():
             return {"success": False, "error": "Failed to open video"}
 
+        total_video_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
         shoulder_diffs = []
         head_movements = []
         left_hand_movements = []
@@ -214,7 +215,10 @@ class VideoAnalyzer:
                 break
 
             total_frames += 1
-
+            if progress_callback and total_video_frames > 0:
+                if total_frames % 2 == 0:
+                    current_progress = int((total_frames / total_video_frames) * 100)
+                    progress_callback(current_progress)
             if total_frames % frame_step != 0:
                 continue
 

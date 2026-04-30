@@ -48,7 +48,7 @@
     width: 0%;
     background: #ffffff;
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
-    transition: width 0.1s linear;
+    transition: width 0.2s linear;
 }
 
 #loader-overlay .percent {
@@ -86,7 +86,6 @@ function startFiduciaLoader() {
 
     overlay.style.display = "flex";
 
-    let progress = 0;
     let spawnRate = 140;
 
     function createBubble() {
@@ -113,25 +112,32 @@ function startFiduciaLoader() {
 
     let bubbleInterval = setInterval(createBubble, spawnRate);
 
-    const loadingInterval = setInterval(() => {
-        progress++;
+    function checkProgress() {
+        fetch(`/get-progress/{{ session.id }}/`)
+            .then(response => response.json())
+            .then(data => {
+                let progress = data.progress || 0;
 
-        if (progress > 100) {
-            progress = 100;
-            clearInterval(loadingInterval);
-            setTimeout(() => clearInterval(bubbleInterval), 2000);
-            window.location.href = "/analytics/{{ session.id }}/";
-        }
+                bar.style.width = progress + "%";
+                percent.textContent = progress + "%";
 
-        bar.style.width = progress + "%";
-        percent.textContent = progress + "%";
+                clearInterval(bubbleInterval);
+                spawnRate = Math.max(20, 140 - (progress * 1.2));
+                bubbleInterval = setInterval(createBubble, spawnRate);
 
-        if (progress % 10 === 0 && progress < 100) {
-            clearInterval(bubbleInterval);
-            spawnRate = Math.max(20, 140 - (progress * 1.2));
-            bubbleInterval = setInterval(createBubble, spawnRate);
-        }
-    }, 60);
+                if (progress >= 100) {
+                    setTimeout(() => clearInterval(bubbleInterval), 2000);
+                    window.location.href = "/analytics/{{ session.id }}/";
+                } else {
+                    setTimeout(checkProgress, 200);
+                }
+            })
+            .catch(error => {
+                setTimeout(checkProgress, 1000);
+            });
+    }
+
+    checkProgress();
 }
 
 document.addEventListener("DOMContentLoaded", startFiduciaLoader);
