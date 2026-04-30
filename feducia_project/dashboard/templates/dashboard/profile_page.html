@@ -66,7 +66,94 @@
         .btn-change { padding: 12px 24px; background: linear-gradient(90deg, #8ad3e6, #5eb5d5); color: white; border: none; border-radius: 30px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 8px 20px rgba(94, 181, 213, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; }
         .btn-change:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(94, 181, 213, 0.4); }
         .user-center { display: flex; flex-direction: column; align-items: center; margin: 10px 0 30px 0; flex-grow: 1; }
-        .avatar-circle { width: 110px; height: 110px; background: linear-gradient(135deg, #9caebb, #7b8b9e); border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 8px 20px rgba(123, 139, 158, 0.25); margin-bottom: 15px; }
+        .avatar-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            margin-bottom: 15px;
+        }
+        .avatar-circle {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #9caebb, #7b8b9e);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 8px 20px rgba(123, 139, 158, 0.25);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        .avatar-preview {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            z-index: 1;
+        }
+        .avatar-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(26, 43, 60, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 2;
+        }
+        .avatar-circle:hover .avatar-overlay {
+            opacity: 1;
+        }
+        .avatar-overlay svg { width: 24px; height: 24px; color: white; margin-bottom: 4px; }
+        .avatar-overlay span { color: white; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+        .photo-options-menu {
+            position: absolute;
+            top: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            width: 180px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 100;
+            border: 1px solid #e0e6ed;
+        }
+        .photo-options-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+        .photo-option {
+            padding: 14px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #2c3e50;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            border: none;
+            border-bottom: 1px solid #f0f4f8;
+            transition: background 0.2s;
+            text-align: left;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .photo-option:last-child { border-bottom: none; }
+        .photo-option:hover { background: #f0f9fb; color: #5eb5d5; }
+        .photo-option.danger { color: #ff5252; }
+        .photo-option.danger:hover { background: #fff5f5; color: #ff5252; }
+        .photo-option svg { width: 16px; height: 16px; flex-shrink: 0;}
         .user-name { font-size: 18px; font-weight: 600; color: #1a2b3c; margin-bottom: 5px; text-align: center; }
         .user-email { display: flex; align-items: center; gap: 6px; color: #5a6a7a; font-size: 14px; margin-bottom: 5px; font-weight: 500; text-align: center; }
         .user-joined-date { display: flex; align-items: center; gap: 6px; color: #8fa0b3; font-size: 13px; margin-bottom: 25px; font-weight: 500; text-align: center; }
@@ -92,14 +179,14 @@
         .btn-confirm-logout:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(94, 181, 213, 0.4); }
         .btn-confirm-delete { padding: 10px 24px; background: linear-gradient(90deg, #ff7e7e, #ff5252); color: white; border: none; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer; text-decoration: none; box-shadow: 0 5px 15px rgba(255, 82, 82, 0.3); transition: transform 0.2s ease, box-shadow 0.2s ease; display: inline-flex; align-items: center;}
         .btn-confirm-delete:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 82, 82, 0.4); }
+        .loader { width: 14px; height: 14px; border: 2px solid #5eb5d5; border-bottom-color: transparent; border-radius: 50%; display: inline-block; animation: rotation 1s linear infinite; display: none; }
+        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-
+    <div style="display: none;">{% csrf_token %}</div>
     <a href="/dashboard/" class="back-button">← Back</a>
-
     <main class="profile-container">
-
         <div class="profile-header">
             <h1 class="profile-title">User Profile</h1>
             <a href="{% url 'edit_profile' %}" class="btn-change">
@@ -112,10 +199,38 @@
         </div>
 
         <div class="user-center">
-            <div class="avatar-circle">
-                <svg width="50" height="50" viewBox="0 0 24 24" fill="#e0e6ed"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5z"/></svg>
+            <div class="avatar-wrapper">
+                <div class="avatar-circle" id="avatarBtn">
+                    <svg id="defaultIcon" width="50" height="50" viewBox="0 0 24 24" fill="#e0e6ed" style="position: absolute; z-index: 0;"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2c-3.33 0-10 1.67-10 5v2h20v-2c0-3.33-6.67-5-10-5z"/></svg>
+                    <img id="avatarPreview" class="avatar-preview" src="{% if user.profile.avatar %}{{ user.profile.avatar.url }}{% else %}#{% endif %}" alt="User Photo" style="{% if user.profile.avatar %}display: block;{% else %}display: none;{% endif %}">
+                    <div class="avatar-overlay">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                        <span>Options</span>
+                    </div>
+                </div>
+
+
+                <div class="photo-options-menu" id="photoMenu">
+                    <label for="uploadPhotoInput" class="photo-option" id="optUpload" style="{% if user.profile.avatar %}display: none;{% endif %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        Upload Photo
+                        <span class="loader" id="uploadLoader"></span>
+                    </label>
+                    <label for="uploadPhotoInput" class="photo-option" id="optChange" style="{% if not user.profile.avatar %}display: none;{% endif %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        Change Photo
+                        <span class="loader" id="changeLoader"></span>
+                    </label>
+                    <button class="photo-option danger" id="optDelete" style="{% if not user.profile.avatar %}display: none;{% endif %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                        Delete Photo
+                        <span class="loader" id="deleteLoader" style="border-color: #ff5252; border-bottom-color: transparent;"></span>
+                    </button>
+                    <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;">
+                </div>
             </div>
-        <div class="user-points" style="margin: 15px 0; padding: 10px; background: rgba(94, 181, 213, 0.1); border-radius: 15px; border: 1px solid #5eb5d5;">
+
+            <div class="user-points" style="margin: 15px 0; padding: 10px; background: rgba(94, 181, 213, 0.1); border-radius: 15px; border: 1px solid #5eb5d5;">
             <span style="font-weight: 700; color: #1a2b3c;">🏆 {{ user.profile.points|default:"0" }} Points</span>
         </div>
             <div class="user-name">
@@ -208,6 +323,122 @@
         deleteBtn.addEventListener('click', (e) => { e.preventDefault(); deleteModal.style.display = 'flex'; });
         cancelDelete.addEventListener('click', () => { deleteModal.style.display = 'none'; });
         deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) deleteModal.style.display = 'none'; });
+
+        const avatarBtn = document.getElementById('avatarBtn');
+        const photoMenu = document.getElementById('photoMenu');
+        const uploadPhotoInput = document.getElementById('uploadPhotoInput');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const defaultIcon = document.getElementById('defaultIcon');
+
+        const optUpload = document.getElementById('optUpload');
+        const optChange = document.getElementById('optChange');
+        const optDelete = document.getElementById('optDelete');
+        const uploadLoader = document.getElementById('uploadLoader');
+        const changeLoader = document.getElementById('changeLoader');
+        const deleteLoader = document.getElementById('deleteLoader');
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : getCookie('csrftoken');
+
+        function toggleMenuUI(hasPhoto) {
+            if (hasPhoto) {
+                optUpload.style.display = 'none';
+                optChange.style.display = 'flex';
+                optDelete.style.display = 'flex';
+                avatarPreview.style.display = 'block';
+                defaultIcon.style.display = 'none';
+            } else {
+                optUpload.style.display = 'flex';
+                optChange.style.display = 'none';
+                optDelete.style.display = 'none';
+                avatarPreview.style.display = 'none';
+                defaultIcon.style.display = 'block';
+                avatarPreview.src = '#';
+            }
+        }
+
+        avatarBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            photoMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!photoMenu.contains(e.target) && e.target !== avatarBtn) {
+                photoMenu.classList.remove('active');
+            }
+        });
+
+        uploadPhotoInput.addEventListener('change', async function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const isChanging = optChange.style.display === 'flex';
+            const loader = isChanging ? changeLoader : uploadLoader;
+            loader.style.display = 'inline-block';
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                avatarPreview.src = e.target.result;
+                toggleMenuUI(true);
+            };
+            reader.readAsDataURL(file);
+
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            try {
+                const response = await fetch('/profile/upload-avatar/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': csrftoken },
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Upload failed');
+            } catch (error) {
+                console.error(error);
+                alert("Could not save photo to server.");
+            } finally {
+                loader.style.display = 'none';
+                photoMenu.classList.remove('active');
+            }
+        });
+
+        optDelete.addEventListener('click', async () => {
+            deleteLoader.style.display = 'inline-block';
+
+            try {
+                const response = await fetch('/profile/delete-avatar/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) throw new Error('Delete failed');
+
+                toggleMenuUI(false);
+                uploadPhotoInput.value = "";
+            } catch (error) {
+                console.error(error);
+                alert("Could not delete photo from server.");
+            } finally {
+                deleteLoader.style.display = 'none';
+                photoMenu.classList.remove('active');
+            }
+        });
     </script>
 
 </body>
