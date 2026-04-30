@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import SpeechSession
+from .models import SpeechSession, Profile
 from .video_analysis import VideoAnalyzer
 from .audio_utils import extract_audio_from_video
 from .audio_analysis import analyze_audio
@@ -76,7 +76,7 @@ def save_recording_view(request):
                 status=500
             )
 
-        profile = request.user.profile
+        profile, created = Profile.objects.get_or_create(user=request.user)
         profile.points += 50
         profile.save()
 
