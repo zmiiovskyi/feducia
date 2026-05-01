@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.cache import cache
 import threading
 from django.db import connection
-from .models import SpeechSession
+from .models import SpeechSession, Profile
 from .video_analysis import VideoAnalyzer
 from .audio_utils import extract_audio_from_video
 from .audio_analysis import analyze_audio
@@ -83,6 +83,14 @@ def save_recording_view(request):
             session.feedback = analysis_result
             session.save()
 
+            if not analysis_result.get("success"):
+                cache.set(f'progress_{session.id}', -1, timeout=300)
+                return
+
+            profile, created = Profile.objects.get_or_create(user=request.user)
+            profile.points += 50
+            profile.save()
+
         except Exception as error:
             session.feedback = {
                 "success": False,
@@ -105,6 +113,8 @@ def save_recording_view(request):
             "id": session.id
         }
     )
+
+
 @login_required
 def loading_view(request, session_id):
     session = get_object_or_404(
