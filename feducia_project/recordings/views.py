@@ -146,6 +146,33 @@ def analytics_view(request, session_id):
         "symmetry": round(safe(metrics.get("symmetry")) * 100),
     }
 
+    if audio:
+        confidence_score = audio.get("confidence_score", 0)
+        words_per_minute = audio.get("words_per_minute", 0)
+        filler_count = audio.get("filler_count", 0)
+        filler_ratio = audio.get("filler_ratio", 0)
+
+        if confidence_score >= 8:
+            audio["confidence"] = "High"
+        elif confidence_score >= 5:
+            audio["confidence"] = "Medium"
+        else:
+            audio["confidence"] = "Low"
+
+        if words_per_minute < 100:
+            audio["pace"] = "Slow"
+        elif words_per_minute > 180:
+            audio["pace"] = "Fast"
+        else:
+            audio["pace"] = "Good"
+
+        if filler_count == 0:
+            audio["fillers"] = "None"
+        elif filler_ratio < 0.03:
+            audio["fillers"] = "Few"
+        else:
+            audio["fillers"] = "Many"
+
     context = {
         "result": result,
         "metrics": metrics,
