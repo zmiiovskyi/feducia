@@ -146,44 +146,84 @@ def analytics_view(request, session_id):
     metrics = result.get("metrics", {})
     timeline = result.get("timeline", {})
     audio = result.get("audio", {})
-    text = audio.get("text", "").strip()
 
-    def safe(val, default=0):
-        return val if val is not None else default
+    def score_posture(value):
+        if value is None:
+            return {"score": 0, "status": "Not detected"}
+
+        if value < 0.02:
+            return {"score": 95, "status": "Excellent"}
+
+        if value < 0.05:
+            return {"score": 65, "status": "Good"}
+
+        return {"score": 35, "status": "Needs Work"}
+
+
+    def score_head(value):
+        if value is None:
+            return {"score": 0, "status": "Not detected"}
+
+        if value < 0.01:
+            return {"score": 95, "status": "Excellent"}
+
+        if value < 0.03:
+            return {"score": 65, "status": "Moderate"}
+
+        return {"score": 35, "status": "Too Active"}
+
+
+    def score_gesture(left_hand, right_hand):
+        values = []
+
+        if left_hand is not None:
+            values.append(left_hand)
+
+        if right_hand is not None:
+            values.append(right_hand)
+
+        if not values:
+            return {"score": 0, "status": "Not detected"}
+
+        avg_hand = sum(values) / len(values)
+
+        if avg_hand < 0.01:
+            return {"score": 45, "status": "Too Low"}
+
+        if avg_hand < 0.03:
+            return {"score": 95, "status": "Balanced"}
+
+        return {"score": 35, "status": "Too Active"}
+
+
+    def score_symmetry(value):
+        if value is None:
+            return {"score": 0, "status": "Not detected"}
+
+        percent = round(value * 100)
+
+        if percent >= 90:
+            status = "Excellent"
+        elif percent >= 75:
+            status = "Good"
+        else:
+            status = "Needs Work"
+
+        return {
+            "score": percent,
+            "status": status
+        }
+
 
     chart = {
-        "posture": round((1 - safe(metrics.get("posture"))) * 100),
-        "head": round((1 - safe(metrics.get("head"))) * 100),
-        "gesture": round((1 - safe(metrics.get("gesture_frequency"))) * 100),
-        "symmetry": round(safe(metrics.get("symmetry")) * 100),
+        "Posture": score_posture(metrics.get("posture")),
+        "Head": score_head(metrics.get("head")),
+        "Gesture": score_gesture(
+            metrics.get("left_hand"),
+            metrics.get("right_hand")
+        ),
+        "Symmetry": score_symmetry(metrics.get("symmetry")),
     }
-
-    if audio:
-        confidence_score = audio.get("confidence_score", 0)
-        words_per_minute = audio.get("words_per_minute", 0)
-        filler_count = audio.get("filler_count", 0)
-        filler_ratio = audio.get("filler_ratio", 0)
-
-        if confidence_score >= 8:
-            audio["confidence"] = "High"
-        elif confidence_score >= 5:
-            audio["confidence"] = "Medium"
-        else:
-            audio["confidence"] = "Low"
-
-        if words_per_minute < 100:
-            audio["pace"] = "Slow"
-        elif words_per_minute > 180:
-            audio["pace"] = "Fast"
-        else:
-            audio["pace"] = "Good"
-
-        if filler_count == 0:
-            audio["fillers"] = "None"
-        elif filler_ratio < 0.03:
-            audio["fillers"] = "Few"
-        else:
-            audio["fillers"] = "Many"
 
     context = {
         "result": result,
@@ -191,7 +231,6 @@ def analytics_view(request, session_id):
         "timeline": timeline,
         "chart": chart,
         "score": result.get("score"),
-        "style": result.get("style"),
         "audio": audio,
     }
 

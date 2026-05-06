@@ -339,47 +339,30 @@
 
             <div class="card">
 
-                <h3 class="section-title">
-                    Body Language Overview
-                </h3>
+    <h3 class="section-title">
+        Body Language Overview
+    </h3>
 
-                {% for label, val in chart.items %}
+    {% for label, data in chart.items %}
 
-                <div class="progress-row">
+    <div class="progress-row">
 
-                    <div class="progress-label">
+        <div class="progress-label">
+            <span>{{ label }}</span>
+            <span>{{ data.status }}</span>
+        </div>
 
-                        <span>
-                            {{ label|capfirst }}
-                        </span>
-
-                        <span>
-
-                            {% if val >= 85 %}
-                                Excellent
-                            {% elif val >= 65 %}
-                                Good
-                            {% elif val >= 45 %}
-                                Moderate
-                            {% else %}
-                                Needs Work
-                            {% endif %}
-
-                        </span>
-
-                    </div>
-
-                    <div class="bar-container">
-                        <div class="bar-fill"
-                             style="width: {{ val|default:0 }}%">
-                        </div>
-                    </div>
-
-                </div>
-
-                {% endfor %}
-
+        <div class="bar-container">
+            <div class="bar-fill"
+                 style="width: {{ data.score|default:0 }}%">
             </div>
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
 
 
 
