@@ -11,6 +11,7 @@ urlpatterns = [
     path("analytics/<int:session_id>/", views.analytics_view, name="analytics"),
     path("loading/<int:session_id>/", views.loading_view, name="loading"),
      path("delete/<int:session_id>/", views.delete_session_view, name="delete_session"),
+    path('get-progress/<int:session_id>/', views.get_progress, name='get_progress'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
