@@ -196,25 +196,6 @@ def analytics_view(request, session_id):
         return {"score": 35, "status": "Too Active"}
 
 
-    def score_symmetry(value):
-        if value is None:
-            return {"score": 0, "status": "Not detected"}
-
-        percent = round(value * 100)
-
-        if percent >= 90:
-            status = "Excellent"
-        elif percent >= 75:
-            status = "Good"
-        else:
-            status = "Needs Work"
-
-        return {
-            "score": percent,
-            "status": status
-        }
-
-
     chart = {
         "Posture": score_posture(metrics.get("posture")),
         "Head": score_head(metrics.get("head")),
@@ -222,7 +203,6 @@ def analytics_view(request, session_id):
             metrics.get("left_hand"),
             metrics.get("right_hand")
         ),
-        "Symmetry": score_symmetry(metrics.get("symmetry")),
     }
 
     context = {

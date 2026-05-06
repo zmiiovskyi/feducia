@@ -286,15 +286,36 @@ class VideoAnalyzer:
                     vel = self._distance(nose_point, prev_nose) / dt
                     velocities.append(vel)
 
-            timestamps.append(timestamp_ms / 1000)
+                timestamps.append(timestamp_ms / 1000)
 
-            prev_nose = nose_point
-            prev_left_wrist = left_wrist_point
-            prev_right_wrist = right_wrist_point
-            prev_mid_shoulder = mid_shoulder
-            prev_time = timestamp_ms
+                prev_nose = nose_point
+                prev_left_wrist = left_wrist_point
+                prev_right_wrist = right_wrist_point
+                prev_mid_shoulder = mid_shoulder
+                prev_time = timestamp_ms
 
         cap.release()
+
+        if detected_frames == 0:
+            return {
+                "success": True,
+                "report": "No person was detected in the video.",
+                "score": 0,
+                "style": None,
+                "metrics": {},
+                "timeline": {},
+                "highlights": [],
+                "feedback": {
+                    "summary": "No person was detected in the video.",
+                    "strengths": [],
+                    "issues": [
+                        "The system could not detect a person in the frame."
+                    ],
+                    "advice": [
+                        "Make sure your face, shoulders, and upper body are visible during the recording."
+                    ],
+                }
+            }
 
         avg_shoulder_diff = self._safe_mean(shoulder_diffs)
         avg_head = self._safe_mean(head_movements)

@@ -272,6 +272,34 @@ def analyze_audio(audio_path):
     words = WORD_RE.findall(text)
     words_count = len(words)
 
+    if words_count == 0:
+        return {
+            "success": True,
+
+            "duration_seconds": duration,
+
+            "words_count": 0,
+            "words_per_minute": 0,
+
+            "confidence_score": 0,
+            "confidence": "Not detected",
+
+            "pace": "Not detected",
+
+            "filler_count": 0,
+            "filler_ratio": 0,
+            "fillers": "Not detected",
+
+            "feedback": {
+                "summary": "No speech was detected in the recording.",
+                "strengths": [],
+                "weaknesses": [],
+                "advice": [
+                    "Try speaking clearly during the recording."
+                ]
+            }
+        }
+
     if duration > 0:
         words_per_minute = round((words_count / duration) * 60, 1)
     else:
@@ -316,6 +344,27 @@ def analyze_audio(audio_path):
 
     report = build_report(feedback, is_tense)
 
+    if confidence_score >= 8:
+        confidence = "High"
+    elif confidence_score >= 5:
+        confidence = "Medium"
+    else:
+        confidence = "Low"
+
+    if words_per_minute < 100:
+        pace = "Slow"
+    elif words_per_minute > 180:
+        pace = "Fast"
+    else:
+        pace = "Good"
+
+    if filler_count == 0:
+        fillers = "None"
+    elif filler_ratio < 0.03:
+        fillers = "Few"
+    else:
+        fillers = "Many"
+
     return {
         "success": True,
         "text": text,
@@ -333,4 +382,7 @@ def analyze_audio(audio_path):
         "tension_signs": tension_signs,
         "feedback": feedback,
         "report": report,
+        "confidence": confidence,
+        "pace": pace,
+        "fillers": fillers,
     }
