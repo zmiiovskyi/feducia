@@ -1,8 +1,11 @@
 import os
+
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+
+from .models import SpeechSession
 from django.core.cache import cache
 import threading
 from django.db import connection
@@ -144,14 +147,62 @@ def analytics_view(request, session_id):
     timeline = result.get("timeline", {})
     audio = result.get("audio", {})
 
-    def safe(val, default=0):
-        return val if val is not None else default
+    def score_posture(value):
+        if value is None:
+            return {"score": 0, "status": "Not detected"}
+
+        if value < 0.02:
+            return {"score": 95, "status": "Excellent"}
+
+        if value < 0.05:
+            return {"score": 65, "status": "Good"}
+
+        return {"score": 35, "status": "Needs Work"}
+
+
+    def score_head(value):
+        if value is None:
+            return {"score": 0, "status": "Not detected"}
+
+        if value < 0.01:
+            return {"score": 95, "status": "Excellent"}
+
+        if value < 0.03:
+            return {"score": 65, "status": "Moderate"}
+
+        return {"score": 35, "status": "Too Active"}
+
+
+    def score_gesture(left_hand, right_hand):
+        values = []
+
+        if left_hand is not None:
+            values.append(left_hand)
+
+        if right_hand is not None:
+            values.append(right_hand)
+
+        if not values:
+            return {"score": 0, "status": "Not detected"}
+
+        avg_hand = sum(values) / len(values)
+
+        if avg_hand < 0.01:
+            return {"score": 45, "status": "Too Low"}
+
+        if avg_hand < 0.03:
+            return {"score": 95, "status": "Balanced"}
+
+        return {"score": 35, "status": "Too Active"}
+
 
     chart = {
-        "posture": round((1 - safe(metrics.get("posture"))) * 100),
-        "head": round((1 - safe(metrics.get("head"))) * 100),
-        "gesture": round((1 - safe(metrics.get("gesture_frequency"))) * 100),
-        "symmetry": round(safe(metrics.get("symmetry")) * 100),
+        "Posture": score_posture(metrics.get("posture")),
+        "Head": score_head(metrics.get("head")),
+        "Gesture": score_gesture(
+            metrics.get("left_hand"),
+            metrics.get("right_hand")
+        ),
     }
 
     context = {
@@ -160,7 +211,6 @@ def analytics_view(request, session_id):
         "timeline": timeline,
         "chart": chart,
         "score": result.get("score"),
-        "style": result.get("style"),
         "audio": audio,
     }
 

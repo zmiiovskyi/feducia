@@ -17,6 +17,11 @@ def extract_audio_from_video(video_path):
         audio_path,
     ]
 
-    subprocess.run(command, check=True)
+    subprocess.run(
+        command,
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL
+    )
 
     return audio_path
