@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Micro-Gestures - FIDUCIA</title>
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
+            min-height: 100vh;
+            margin: 0;
+            color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+        .logo-container { display: flex; flex-direction: column; }
+        .logo-title {
+            font-size: 28px;
+            font-weight: 300;
+            color: #1a2b3c;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .header-slogan {
+            font-size: 11px;
+            color: #7f8c8d;
+            font-style: italic;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a {
+            text-decoration: none;
+            color: #2c3e50;
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover { color: #5eb5d5; }
+        .nav-links a.active-profile { font-weight: 700; color: #5eb5d5; }
+
+        .guide-container {
+            background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 20%);
+            padding: 60px;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 95%;
+            max-width: 900px;
+            margin: 20px auto 60px auto;
+            flex-grow: 1;
+        }
+
+
+        .back-btn {
+            text-decoration: none;
+            color: #5eb5d5;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 30px;
+            transition: transform 0.2s ease;
+        }
+        .back-btn:hover { transform: translateX(-5px); }
+
+        h1 { color: #1a2b3c; font-size: 36px; margin: 0; line-height: 1.2; font-weight: 700; }
+        .subtitle { color: #5a6a7a; font-size: 18px; margin: 15px 0 40px 0; line-height: 1.5; }
+        h3 { color: #1a2b3c; margin-top: 50px; font-size: 26px; border-bottom: 2px solid #e0f2f8; padding-bottom: 10px; }
+        p { font-size: 16px; line-height: 1.7; color: #2c3e50; }
+
+        .science-card {
+            background: #f0faff;
+            border-left: 6px solid #5eb5d5;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 35px 0;
+        }
+        .science-card h4 { margin: 0 0 15px 0; color: #1a2b3c; font-size: 20px; }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .exercise-item {
+            border: 1px solid #e0f2f8;
+            padding: 30px;
+            border-radius: 25px;
+            background: #ffffff;
+            box-shadow: 0 4px 15px rgba(130, 180, 210, 0.1);
+        }
+
+        .tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: inline-block;
+            letter-spacing: 1px;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+        .tag.blue { background: #e0f2f8; color: #5eb5d5; }
+        .tag.red { background: #ffebee; color: #e74c3c; }
+
+        .tips-list {
+            background: #fff9e6;
+            padding: 40px;
+            border-radius: 30px;
+            margin-top: 40px;
+        }
+        .tips-list li {
+        margin-bottom: 15px;
+            color: #856404;
+            list-style-type: none;
+            position: relative;
+        }
+        .tips-list li::before {
+            content: "•";
+            position: absolute;
+            left: -20px;
+            font-weight: bold;
+        }
+
+        .footer-quote {
+            margin-top: 60px;
+            padding: 45px;
+            background: linear-gradient(90deg, #8ad3e6, #5eb5d5);
+            border-radius: 35px;
+            color: white;
+            text-align: center;
+        }
+        .footer-quote p { color: white; margin: 0; font-style: italic; font-size: 20px; }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo-container">
+            <div class="logo-title">FIDUCIA</div>
+            <div class="header-slogan">Trust in AI, trust in you</div>
+        </div>
+        <nav class="nav-links">
+            <a href="#">About Us</a>
+            <a href="#">Contacts</a>
+            <a href="#" class="active-profile">Profile</a>
+        </nav>
+    </header>
+
+    <main class="guide-container">
+
+        <a href="#" onclick="window.history.back(); return false;" class="back-btn">⬅ Back to Guides</a>
+
+        <h1>Micro-Gestures: Hiding Nervousness</h1>
+        <p class="subtitle">Understanding the psychology of 'leakage' and how to maintain an aura of absolute composure under pressure.</p>
+
+        <div class="science-card">
+            <h4>🧠 The Psychology of Pacifying Actions</h4>
+            <p>When our brain perceives a threat (social or physical), the <b>limbic system</b> takes over. Since we cannot escape a boardroom or an interview, our body seeks "pacifying behaviors" to lower heart rate and soothe the nervous system. These micro-gestures—like touching your neck or playing with a pen—are the subconscious trying to tell you: "It's okay, you're safe." To others, however, they scream: "I'm overwhelmed."</p>
+        </div>
+
+        <h3>1. The "Anchor" Technique for Hands</h3>
+        <p>Hands are the primary outlet for nervous energy. If they are not occupied with a meaningful gesture, they will find something to fidget with, destroying your credibility.</p>
+
+        <div class="exercise-grid">
+            <div class="exercise-item">
+                <span class="tag blue">The Steepling Power</span>
+                <p>Gently press your fingertips together to form a "Steeple." This is a high-confidence gesture used by executives globally. It creates a physical lock that prevents trembling while signaling intellectual authority.</p>
+            </div>
+            <div class="exercise-item">
+                <span class="tag red">Avoid: Grooming Gestures</span>
+                <p>Refrain from smoothing your hair, adjusting your tie, or picking at your nails. These are "preening" behaviors that signal a desperate need for social approval and high internal anxiety.</p>
+            </div>
+        </div>
+
+        <h3>2. Lower Body: The Foundation of Calm</h3>
+        <p>In high-stakes environments, we often focus on our faces but forget our feet. This is called <b>Non-Verbal Leakage</b>. Your feet usually point toward where you truly want to be—if they are pointing at the door, you look ready to flee.</p>
+
+        <div class="exercise-grid">
+            <div class="exercise-item">
+                <span class="tag blue">Solid Grounding</span>
+                <p>Keep your feet flat on the floor, shoulder-width apart. This "Planting" technique regulates your vestibular system, making you feel physically more stable and mentally less reactive.</p>
+            </div>
+            <div class="exercise-item">
+                <span class="tag red">Avoid: Leg Bouncing</span>
+                <p>Bouncing one leg (the "sewing machine" leg) creates micro-vibrations that travel up to your shoulders and head, making your entire silhouette look shaky and unstable to the observer.</p>
+            </div>
+        </div>
+
+        <h3>3. Controlling the Face & Breath</h3>
+        <p>Nervousness causes the mouth to dry and the eyes to blink faster. Controlling these micro-expressions requires conscious intervention in the body's natural stress response.</p>
+
+        <div class="tips-list">
+            <strong style="display: block; margin-bottom: 20px; font-size: 18px; color: #856404;">🚀 Advanced Checklist for High-Pressure Situations:</strong>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li><b>The Tongue Trick:</b> Press your tongue against the roof of your mouth. This prevents your jaw from clenching and keeps your facial muscles relaxed.</li>
+                <li><b>Slow Your Blinking:</b> High-frequency blinking is a sign of "cognitive load." Consciously aim for slow, deliberate blinks to project calm.</li>
+                <li><b>The 5-Second Silence:</b> When asked a tough question, wait 5 seconds. A nervous person rushes to fill the void; a confident person owns it.</li>
+                <li><b>Open Palms:</b> Keep your palms visible. It is an ancient biological signal that you are not hiding anything, which builds immediate rapport.</li>
+            </ul>
+        </div>
+
+        <div class="footer-quote">
+            <p>"True poise is the ability to maintain the appearance of calm while your internal world is in chaos. Master the vessel, and the mind will follow."</p>
+        </div>
+
+    </main>
+
+</body>
+</html>
