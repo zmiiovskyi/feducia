@@ -135,7 +135,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+feducia_project/.env
 .envrc
 .venv
 env/
