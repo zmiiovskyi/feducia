@@ -1,9 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIDUCIA - Analyzing</title>
+</head>
+<body>
 <div id="loader-overlay">
     <div class="loader-container">
         <div class="progress-container">
             <div class="progress-bar" id="bar"></div>
         </div>
         <div id="percent" class="percent">0%</div>
+        <div id="failure" class="failure" role="alert" hidden>
+            <p>We could not analyze this video.</p>
+            <a href="{% url 'Main_Page' %}">Back to dashboard</a>
+        </div>
     </div>
 </div>
 
@@ -49,6 +61,15 @@
     background: #ffffff;
     box-shadow: 0 0 12px rgba(255, 255, 255, 0.9);
     transition: width 0.2s linear;
+}
+
+#loader-overlay .failure {
+    color: #1a2b3c;
+}
+
+#loader-overlay .failure a {
+    color: #1a2b3c;
+    font-weight: 600;
 }
 
 #loader-overlay .percent {
@@ -112,11 +133,26 @@ function startFiduciaLoader() {
 
     let bubbleInterval = setInterval(createBubble, spawnRate);
 
+    function showFailure() {
+        clearInterval(bubbleInterval);
+        bar.parentElement.style.display = "none";
+        percent.style.display = "none";
+        document.getElementById("failure").hidden = false;
+    }
+
     function checkProgress() {
         fetch(`/get-progress/{{ session.id }}/`)
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) return { progress: -1 };
+                return response.json();
+            })
             .then(data => {
                 let progress = data.progress || 0;
+
+                if (progress < 0) {
+                    showFailure();
+                    return;
+                }
 
                 bar.style.width = progress + "%";
                 percent.textContent = progress + "%";
@@ -142,3 +178,5 @@ function startFiduciaLoader() {
 
 document.addEventListener("DOMContentLoaded", startFiduciaLoader);
 </script>
+</body>
+</html>

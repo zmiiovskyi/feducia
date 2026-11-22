@@ -260,7 +260,14 @@
 
         <div class="header-logo">FIDUCIA</div>
 
-        {% if result %}
+        {% if failed %}
+
+        <div class="card" style="text-align: center; padding: 90px 30px;">
+            <h2>Analysis Failed</h2>
+            <p>{{ result.error|default:"Could not analyze the video." }}</p>
+        </div>
+
+        {% elif result %}
 
         <div class="card score-card">
 
@@ -274,7 +281,7 @@
 
                 <div class="mini-stat">
                     <div class="mini-stat-value">
-                        {{ result.video_score|default:score|default:"0" }}/10
+                        {{ video_score|default:"0" }}/10
                     </div>
                     <div class="mini-stat-label">
                         Video score

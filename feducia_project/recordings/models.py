@@ -46,13 +46,8 @@ class Profile(models.Model):
     def __str__(self):
         return f"Profile of {self.user.username} - Points: {self.points}"
 
-    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-    def create_user_recordings_profile(sender, instance, created, **kwargs):
-        if created:
-            Profile.objects.get_or_create(user=instance)
 
-    @receiver(post_save, sender=settings.AUTH_USER_MODEL)
-    def save_user_recordings_profile(sender, instance, **kwargs):
-        # Перевіряємо саме recordings_profile
-        if hasattr(instance, 'recordings_profile'):
-            instance.recordings_profile.save()
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user_recordings_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.get_or_create(user=instance)

@@ -1,10 +1,14 @@
-from video_analysis import VideoAnalyzer
+import sys
+from pathlib import Path
 
+PROJECT_DIR = Path(__file__).resolve().parent / "feducia_project"
+sys.path.insert(0, str(PROJECT_DIR))
 
-VIDEO_PATH = "test_video.mp4"
-MODEL_PATH = "pose_landmarker_lite.task"
+from recordings.video_analysis import VideoAnalyzer  # noqa: E402
+
+VIDEO_PATH = sys.argv[1] if len(sys.argv) > 1 else "test_video.mp4"
+MODEL_PATH = str(PROJECT_DIR / "models" / "pose_landmarker_lite.task")
 OUTPUT_JSON_PATH = "analysis_result.json"
-
 
 analyzer = VideoAnalyzer(MODEL_PATH)
 
