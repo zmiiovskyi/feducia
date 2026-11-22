@@ -488,10 +488,13 @@
 
 {% if timeline.time %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ timeline|json_script:"timeline-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+        integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+        crossorigin="anonymous"></script>
 
 <script>
-    const timelineData = {{ timeline|safe }};
+    const timelineData = JSON.parse(document.getElementById('timeline-data').textContent);
 
     new Chart(document.getElementById('timelineChart'), {
         type: 'line',
