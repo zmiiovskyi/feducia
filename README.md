@@ -6,6 +6,11 @@
 get a report on body language and speech. The computer vision and speech models run on your own
 machine, so recordings are not sent to an AI service.
 
+> **About the project:** FIDUCIA started as a student project at the Faculty of Mechanics and
+> Mathematics, Ivan Franko National University of Lviv. We built it as a team, with the support and
+> guidance of our mentor, [arc-lena](https://github.com/arc-lena). The original team repository is
+> [arc-lena/feducia](https://github.com/arc-lena/feducia).
+
 ![Landing page](docs/screenshots/landing.png)
 
 ## Features
@@ -31,18 +36,15 @@ machine, so recordings are not sent to an AI service.
 
 ## How it works
 
-```mermaid
-flowchart LR
-    A[Browser] -->|video| B[Django]
-    B --> C[Validation]
-    C --> D[Background thread]
-    D --> E[ffmpeg] --> F[Whisper] --> G[Speech metrics]
-    D --> H[OpenCV] --> I[MediaPipe Pose] --> J[Motion metrics]
-    G -->|40%| K[Score and report]
-    J -->|60%| K
-    K --> L[(SQLite)]
-    A -.->|polls progress| B
-```
+1. **Record or upload.** You record a rehearsal in the browser or upload an existing video.
+2. **Speech analysis.** ffmpeg extracts the audio and Whisper turns it into text. The app then
+   measures pace, pauses, repeated words and filler words.
+3. **Body language analysis.** OpenCV reads the video and MediaPipe tracks the head, shoulders and
+   hands to evaluate posture, stability and gestures.
+4. **Report.** Both results are combined into a score (60% body language, 40% speech) and shown
+   with strengths, issues, advice and an activity timeline.
+
+## Tech stack
 
 | Layer | Technology |
 |---|---|
@@ -142,8 +144,6 @@ feducia_project/
 
 ## Team
 
-A student project from the Faculty of Mechanics and Mathematics, Ivan Franko National University
-of Lviv, originally developed at [arc-lena/feducia](https://github.com/arc-lena/feducia).
-
 Daria Dumanska, Liubov Vovkanets, Mykhailo Zmiiovskyi, Vitalii Otkydach, Pavlo Pfister.
+
 Mentor: [arc-lena](https://github.com/arc-lena).
