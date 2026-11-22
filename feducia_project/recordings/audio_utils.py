@@ -20,12 +20,17 @@ def extract_audio_from_video(video_path):
         audio_path,
     ]
 
-    subprocess.run(
-        command,
-        check=True,
-        timeout=300,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL
-    )
+    try:
+        subprocess.run(
+            command,
+            check=True,
+            timeout=300,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE
+        )
+    except subprocess.CalledProcessError as error:
+        if b"does not contain any stream" in error.stderr:
+            return None
+        raise
 
     return audio_path

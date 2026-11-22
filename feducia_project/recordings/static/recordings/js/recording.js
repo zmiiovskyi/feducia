@@ -168,6 +168,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     async function initCamera() {
+        startBtn.disabled = true;
+
         try {
             stream = await navigator.mediaDevices.getUserMedia({
                 video: true,
@@ -189,6 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             mediaRecorder = new MediaRecorder(stream, options);
+            startBtn.disabled = false;
 
             mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
@@ -250,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         data: data
                     });
 
-                    setStatus("Error saving video.");
+                    setStatus(data?.message || "Error saving video.");
                     startBtn.disabled = false;
                     stopBtn.disabled = true;
                     restartBtn.style.display = "none";

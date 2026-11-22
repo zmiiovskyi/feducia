@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.contrib import admin
-from django.views.generic import RedirectView
 
 from .media import protected_media_view
 from .ratelimit import rate_limit

@@ -1,0 +1,9 @@
+{% if messages %}
+<div role="status" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 1000; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+    {% for message in messages %}
+    <div style="margin-bottom: 8px; padding: 12px 24px; border-radius: 30px; background: white; font-size: 14px; font-weight: 600; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); color: {% if message.tags == 'error' %}#ff5252{% else %}#2e7d32{% endif %};">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

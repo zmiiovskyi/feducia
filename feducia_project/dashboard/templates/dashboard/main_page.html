@@ -501,7 +501,7 @@
                     }
 
                     if (data.status === "success" && data.id) {
-                        statusText.innerText = "✅ Analysis complete! Redirecting...";
+                        statusText.innerText = "✅ Upload complete! Starting analysis...";
                         statusText.style.color = "#4CAF50";
                         window.location.href = `/loading/${data.id}/`;
                     } else {
