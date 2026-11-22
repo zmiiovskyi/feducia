@@ -210,3 +210,7 @@ __marimo__/
 .idea
 
 media/
+
+# user recordings and test videos
+feducia_project/recordings/20*/
+/test_video.mp4

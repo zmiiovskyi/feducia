@@ -291,7 +291,10 @@
             <p class="modal-text">Are you sure you want to log out of your account?</p>
             <div class="modal-actions">
                 <button class="btn-cancel" id="cancelLogout">Cancel</button>
-                <a href="{% url 'logout' %}" class="btn-confirm-logout">Yes, Log Out</a>
+                <form action="{% url 'logout' %}" method="POST" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-confirm-logout">Yes, Log Out</button>
+                </form>
             </div>
         </div>
     </div>
@@ -302,7 +305,10 @@
             <p class="modal-text">Are you sure you want to permanently delete your account? All your data will be lost.</p>
             <div class="modal-actions">
                 <button class="btn-cancel" id="cancelDelete">Cancel</button>
-                <a href="{% url 'delete_account' %}" class="btn-confirm-delete">Yes, Delete</a>
+                <form action="{% url 'delete_account' %}" method="POST" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-confirm-delete">Yes, Delete</button>
+                </form>
             </div>
         </div>
     </div>

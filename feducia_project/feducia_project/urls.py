@@ -18,17 +18,15 @@ from django.urls import path, include
 from django.contrib import admin
 from django.views.generic import RedirectView
 
-from django.conf import settings
-from django.conf.urls.static import static
+from .media import protected_media_view
+from .ratelimit import rate_limit
 
 urlpatterns = [
+    path("admin/login/", rate_limit("admin_login", limit=10, window=300)(admin.site.login)),
     path("admin/", admin.site.urls),
+    path("media/<path:path>", protected_media_view, name="media"),
     path("", include("users.urls")),
     path('', include('dashboard.urls')),
     path("", include("recordings.urls")),
     path("accounts/", include("allauth.urls")),
 ]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

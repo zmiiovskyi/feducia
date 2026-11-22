@@ -1,6 +1,8 @@
 from django.conf import settings
-from django.db import models
-from django.db.models.signals import post_save
+import os
+
+from django.db import models, transaction
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 
@@ -21,6 +23,21 @@ class SpeechSession(models.Model):
 
     def __str__(self):
         return f"Session {self.id} by {self.user.username}"
+
+@receiver(post_delete, sender=SpeechSession)
+def delete_session_files(sender, instance, **kwargs):
+    name = instance.video.name
+    if not name:
+        return
+
+    storage = instance.video.storage
+
+    def delete_files():
+        storage.delete(name)
+        storage.delete(f"{os.path.splitext(name)[0]}.wav")
+
+    transaction.on_commit(delete_files)
+
 
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='recordings_profile')

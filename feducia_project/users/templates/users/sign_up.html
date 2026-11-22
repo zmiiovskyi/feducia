@@ -48,6 +48,7 @@
         .google-btn img { width: 20px; margin-right: 12px; }
         .login-link { margin-top: 25px; font-size: 13px; color: #7f8c8d; }
         .login-link a { color: #5eb5d5; text-decoration: none; font-weight: 600; }
+        .form-error { color: #e74c3c; font-size: 12px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -57,6 +58,9 @@
 
         <form id="signup-form" method="POST" action="">
             {% csrf_token %}
+            {% if error %}
+                <div class="form-error">{{ error }}</div>
+            {% endif %}
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" placeholder="Enter username" required>
@@ -82,10 +86,13 @@
         </form>
 
         <div class="divider"><span>or</span></div>
-        <a href="{% provider_login_url 'google' %}" class="google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
-            Continue with Google
-        </a>
+        <form method="POST" action="{% provider_login_url 'google' %}">
+            {% csrf_token %}
+            <button type="submit" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+                Continue with Google
+            </button>
+        </form>
 
         <div class="login-link">
             Already have an account? <a href="{% url 'login' %}">Log in</a>
