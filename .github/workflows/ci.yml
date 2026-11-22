@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SECRET_KEY: ci-only-key
+      GOOGLE_CLIENT_ID: ci-client-id
+      GOOGLE_CLIENT_SECRET: ci-client-secret
+      EMAIL_HOST_USER: ci@example.com
+      EMAIL_HOST_PASSWORD: ci-password
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ffmpeg libegl1 libgl1 libgles2 libglib2.0-0
+
+      - name: Install Python packages
+        run: |
+          # CPU-збірка torch, без кількох гігабайтів CUDA
+          pip install torch==2.13.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt ruff==0.14.0
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Check migrations
+        working-directory: feducia_project
+        run: python manage.py makemigrations --check --dry-run
+
+      - name: Test
+        working-directory: feducia_project
+        run: python manage.py test --noinput

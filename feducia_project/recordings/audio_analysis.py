@@ -1,11 +1,14 @@
 import re
+import threading
 import wave
 import whisper
 
 
-MODEL = whisper.load_model("base")
+_model = None
+# одна модель Whisper не витримує паралельних викликів
+_model_lock = threading.Lock()
 
-WORD_RE = re.compile(r"[A-Za-z']+")
+WORD_RE = re.compile(r"[^\W\d_]+(?:['’ʼ][^\W\d_]+)*")
 
 FILLER_WORDS = {
     "uh",
@@ -27,6 +30,15 @@ FILLER_PHRASES = [
 ]
 
 
+def get_model():
+    global _model
+
+    if _model is None:
+        _model = whisper.load_model("base")
+
+    return _model
+
+
 def get_audio_duration(audio_path):
     with wave.open(audio_path, "rb") as audio_file:
         frames = audio_file.getnframes()
@@ -43,7 +55,7 @@ def count_fillers(text, words):
     fillers = []
 
     for phrase in FILLER_PHRASES:
-        count = text_lower.count(phrase)
+        count = len(re.findall(rf"\b{re.escape(phrase)}\b", text_lower))
         for _ in range(count):
             fillers.append(phrase)
 
@@ -256,15 +268,19 @@ def build_report(feedback, is_tense):
 
 
 def analyze_audio(audio_path):
-    duration = get_audio_duration(audio_path)
+    # None означає, що у відео немає звукової доріжки
+    duration = get_audio_duration(audio_path) if audio_path else 0
+    result = {}
 
-    result = MODEL.transcribe(
-        audio_path,
-        fp16=False,
-        verbose=False,
-        condition_on_previous_text=False,
-        temperature=0,
-    )
+    if duration > 0:
+        with _model_lock:
+            result = get_model().transcribe(
+                audio_path,
+                fp16=False,
+                verbose=False,
+                condition_on_previous_text=False,
+                temperature=0,
+            )
 
     text = result.get("text", "").strip()
     segments = result.get("segments", [])

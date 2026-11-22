@@ -106,7 +106,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
                     Upload Video
                 </button>
-                <input type="file" id="video-file-input" accept="video/mp4,video/webm,video/x-m4v,video/*" style="display: none;">
+                <input type="file" id="video-file-input" accept=".mp4,.m4v,.mov,.webm,.mkv" style="display: none;">
                 <a href="/recording/" class="btn-primary">+ New Rehearsal</a>
             </div>
         </div>
@@ -501,7 +501,7 @@
                     }
 
                     if (data.status === "success" && data.id) {
-                        statusText.innerText = "✅ Analysis complete! Redirecting...";
+                        statusText.innerText = "✅ Upload complete! Starting analysis...";
                         statusText.style.color = "#4CAF50";
                         window.location.href = `/loading/${data.id}/`;
                     } else {

@@ -9,7 +9,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: linear-gradient(135deg, #e0f2f7 0%, #b3d9e6 40%, #89c4d9 100%);
-            display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; color: #2c3e50;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: #2c3e50;
         }
         .signup-container {
             background: linear-gradient(180deg, #e0f2f8 0%, #ffffff 50%);
@@ -48,6 +48,7 @@
         .google-btn img { width: 20px; margin-right: 12px; }
         .login-link { margin-top: 25px; font-size: 13px; color: #7f8c8d; }
         .login-link a { color: #5eb5d5; text-decoration: none; font-weight: 600; }
+        .form-error { color: #e74c3c; font-size: 12px; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -57,13 +58,16 @@
 
         <form id="signup-form" method="POST" action="">
             {% csrf_token %}
+            {% if error %}
+                <div class="form-error">{{ error }}</div>
+            {% endif %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter username" required>
+                <input type="text" id="username" name="username" placeholder="Enter username" value="{{ username }}" required>
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="mail@example.com" required>
+                <input type="email" id="email" name="email" placeholder="mail@example.com" value="{{ email }}" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -82,10 +86,13 @@
         </form>
 
         <div class="divider"><span>or</span></div>
-        <a href="{% provider_login_url 'google' %}" class="google-btn">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
-            Continue with Google
-        </a>
+        <form method="POST" action="{% provider_login_url 'google' %}">
+            {% csrf_token %}
+            <button type="submit" class="google-btn">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
+                Continue with Google
+            </button>
+        </form>
 
         <div class="login-link">
             Already have an account? <a href="{% url 'login' %}">Log in</a>

@@ -208,6 +208,7 @@ class VideoAnalyzer:
         prev_right_wrist = None
         prev_mid_shoulder = None
         prev_time = None
+        last_timestamp_ms = -1
 
         while True:
             ret, frame = cap.read()
@@ -231,7 +232,9 @@ class VideoAnalyzer:
                 data=rgb_frame
             )
 
-            timestamp_ms = int(cap.get(cv2.CAP_PROP_POS_MSEC))
+            # MediaPipe вимагає строго зростаючих міток часу
+            timestamp_ms = max(int(cap.get(cv2.CAP_PROP_POS_MSEC)), last_timestamp_ms + 1)
+            last_timestamp_ms = timestamp_ms
             result = self.landmarker.detect_for_video(mp_image, timestamp_ms)
 
             if result.pose_landmarks:
@@ -281,12 +284,14 @@ class VideoAnalyzer:
                     body_move = self._distance(mid_shoulder, prev_mid_shoulder)
                     body_movements.append(body_move)
 
-                if prev_nose and prev_time:
+                if prev_nose and prev_time is not None:
                     dt = max((timestamp_ms - prev_time) / 1000, 0.001)
                     vel = self._distance(nose_point, prev_nose) / dt
                     velocities.append(vel)
 
-                timestamps.append(timestamp_ms / 1000)
+                # рух рахується між кадрами, тому перший кадр не має точки на графіку
+                if prev_nose:
+                    timestamps.append(timestamp_ms / 1000)
 
                 prev_nose = nose_point
                 prev_left_wrist = left_wrist_point

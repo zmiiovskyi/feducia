@@ -260,7 +260,14 @@
 
         <div class="header-logo">FIDUCIA</div>
 
-        {% if result %}
+        {% if failed %}
+
+        <div class="card" style="text-align: center; padding: 90px 30px;">
+            <h2>Analysis Failed</h2>
+            <p>{{ result.error|default:"Could not analyze the video." }}</p>
+        </div>
+
+        {% elif result %}
 
         <div class="card score-card">
 
@@ -274,7 +281,7 @@
 
                 <div class="mini-stat">
                     <div class="mini-stat-value">
-                        {{ result.video_score|default:score|default:"0" }}/10
+                        {{ video_score|default:"0" }}/10
                     </div>
                     <div class="mini-stat-label">
                         Video score
@@ -488,10 +495,13 @@
 
 {% if timeline.time %}
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{{ timeline|json_script:"timeline-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"
+        integrity="sha384-jb8JQMbMoBUzgWatfe6COACi2ljcDdZQ2OxczGA3bGNeWe+6DChMTBJemed7ZnvJ"
+        crossorigin="anonymous"></script>
 
 <script>
-    const timelineData = {{ timeline|safe }};
+    const timelineData = JSON.parse(document.getElementById('timeline-data').textContent);
 
     new Chart(document.getElementById('timelineChart'), {
         type: 'line',
